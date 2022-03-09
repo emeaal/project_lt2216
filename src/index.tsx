@@ -207,11 +207,11 @@ const ReactiveButton = (props: Props): JSX.Element => {
             promptText = promptText || 'Speaking...'
             break;
         case props.state.matches({ dm: 'idle' }):
-            promptText = "Click to start!"
+            promptText = "Welcome to the game! Click the circle to start"
             circleClass = "circle-click"
             break;
         case props.state.matches({ dm: 'init' }):
-            promptText = "Click to start!"
+            promptText = "Welcome to the game! Click the circle to start"
             circleClass = "circle-click"
             break;
         default:

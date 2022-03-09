@@ -22,13 +22,13 @@ html, body {
     width: 100%;
     height: 100vh;
     background: $pnk;
-    background-size: 1500px 1000px;
+    background-size: cover;
     background-position: center;
     background-repeat: repeat;
 }
 
 .control {
-    position: relative;
+    position: center;
     height: 40vh;
     cursor: pointer;
     display: flex;
