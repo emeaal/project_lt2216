@@ -34,7 +34,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             states: {
                 prompt: {
-                    entry: say("Hello Nadina!!"),
+                    entry: say("Welcome to the game"),
                     on: { ENDSPEECH: 'ask' }
                 },
                 ask: {

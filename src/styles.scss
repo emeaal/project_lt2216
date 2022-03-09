@@ -1,5 +1,5 @@
 $yel: hsla(77, 100%, 77%, 1);
-$pnk: hsla(25, 100%, 77%, 0.7);
+$pnk: url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
 $rd: #CD1515;
 $mono: IBM Plex Mono, monospace;
 $dark: #063746;
@@ -49,8 +49,8 @@ html, body {
 	font-style: italic;
 	font-weight: light;
 	font-size: 20pt;
-	text-align: left;
-	color: $dark;
+	text-align: center;
+	color: $yel;
 	z-index: 1;
 	&-talk {
 	    @extend .status;
@@ -62,14 +62,14 @@ html, body {
 	}
     }
     .circle {
-	position: absolute;
+	position: center;
 	width: 80px;
 	height: 80px;
 	left: -40px;
 	border-radius: 50px;
 	cursor: pointer;
 	border: 0;
-	background-color: #CD1515;
+	background-color: #432bcc;
 	z-index: 0;
 	&-click {
 	    @extend .circle;
