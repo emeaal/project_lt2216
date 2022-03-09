@@ -37,21 +37,8 @@ interface SDSContext {
     audioCtx: any;
     snippet: any;
 
-    pos: string;
-    neg: string;
-    help: string;
-
-    title: any;
-    time: string;
-    day: string;
-    person: string;
-    text: string;
-
-    celeb: string;
-    meet: string;
-    username: string;
-
-    counter: number;
+    beach: string;
+    forest: string;
 }
 
 type SDSEvent =
