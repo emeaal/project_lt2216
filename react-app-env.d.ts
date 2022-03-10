@@ -39,6 +39,7 @@ interface SDSContext {
 
     beach: string;
     forest: string;
+    help: string;
 }
 
 type SDSEvent =
