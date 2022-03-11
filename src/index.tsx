@@ -335,9 +335,7 @@ function App() {
                     </div>
                 </div>
             )
-    }
-
-};
+    }};
 
 const getAuthorizationToken = () => (
     fetch(new Request(TOKEN_ENDPOINT, {
