@@ -1,5 +1,6 @@
 $yel: hsla(77, 100%, 77%, 1);
 $pnk: url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
+$hjk: rgba(173, 28, 202, 0.133);
 $rd: #CD1515;
 $mono: IBM Plex Mono, monospace;
 $dark: #063746;
@@ -25,6 +26,14 @@ html, body {
     background-size: cover;
     background-position: center;
     background-repeat: repeat;
+}
+
+.yellow {
+    background-color: #ffff00;
+  }
+
+.green {
+  background-color: #4cbb17;
 }
 
 .control {
