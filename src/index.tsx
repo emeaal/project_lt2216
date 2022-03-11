@@ -301,7 +301,8 @@ function App() {
                             type: "ASRRESULT", value:
                                 [{
                                     "utterance": result[0].transcript,
-                                    "confidence": result[0].confidence
+                                    "confidence": result[0].confidence,
+                                    "background": result[0].picture
                                 }]
                         })
                     } else {
