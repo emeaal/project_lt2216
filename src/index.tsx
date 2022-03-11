@@ -8,8 +8,13 @@ import { dmMachine } from "./dmvoicegame";
 
 import createSpeechRecognitionPonyfill from 'web-speech-cognitive-services/lib/SpeechServices/SpeechToText'
 import createSpeechSynthesisPonyfill from 'web-speech-cognitive-services/lib/SpeechServices/TextToSpeech';
+import { Url, UrlObject } from "url";
 
 
+
+const img_grammar: {[index: string]: {forest?: URL}} = {
+    "Forest.": {forest: new URL('https://res.cloudinary.com/rebelwalls/image/upload/b_black,c_fill,f_auto,fl_progressive,h_533,q_auto,w_800/v1561550231/article/R16641_image1')}
+}
 const { send, cancel } = actions
 
 const TOKEN_ENDPOINT = 'https://northeurope.api.cognitive.microsoft.com/sts/v1.0/issuetoken';
@@ -256,6 +261,10 @@ function App() {
         devTools: true,
         actions: {
 
+           
+
+
+
             changeBackground: asEffect((context) => {
                 document.body.style.background = context.recResult[0].background;
                 /* console.log('Ready to receive a voice input.'); */
@@ -302,7 +311,7 @@ function App() {
                                 [{
                                     "utterance": result[0].transcript,
                                     "confidence": result[0].confidence,
-                                    "background": result[0].picture
+                                    "background": result[0].background
                                 }]
                         })
                     } else {
