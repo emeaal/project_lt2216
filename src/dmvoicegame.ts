@@ -1,4 +1,5 @@
 import { MachineConfig, send, Action } from "xstate";
+import { assign } from "xstate/lib/actionTypes";
 
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
@@ -85,8 +86,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 on: {
                     RECOGNISED: [
                         {   target: 'repaint',
-                            cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {})
+                            cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
+                            actions: assign({ forest: (context) => context.recResult[0].background.forest! })
                         },
+
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
                         },
@@ -108,11 +111,17 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 states: {
                     prompt: {
                         entry: sayPlace,
-                        on: { ENDSPEECH: 'repaint' }
+                        on: { ENDSPEECH: 'backgroundChanger' }
                     },
+<<<<<<< HEAD
+                    backgroundChanger: {
+                        entry: 'changeBackground',
+                        // always: '#root.dm.idle'
+=======
                     repaint: {
                         entry: 'changeBackground',
                         always: '#root.dm.idle'
+>>>>>>> 17c1e934e513e5e4ca4df0d08a85e0043cb92be3
                     }
                 }
             },
@@ -120,6 +129,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 initial: 'prompt',
                 on: {
                     RECOGNISED: [
+
                         {   target: '#root.dm.init',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})},
                     ],
