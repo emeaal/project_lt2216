@@ -13,9 +13,28 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "It's a beach.": {beach: "Beach" },
     "A beach": {beach: "Beach"},
     "A forest": {forest: "Forest" },
+    "Forest.": {forest: "Forest" },
     "It's a forest.": {forest: "Forest" },
     "Help.": {help: "Help" }
 
+}
+
+function promptAndAsk(promptEvent: Action<SDSContext, SDSEvent>): MachineConfig<SDSContext, any, SDSEvent> {
+    return ({
+        initial: 'prompt',
+        states: {
+            prompt: {
+                entry: promptEvent,
+                on: { ENDSPEECH: 'ask' }
+            },
+            ask: {
+                entry: send('LISTEN'),
+            },
+            nomatch: { entry: [say("Try again")],  
+                       on: { ENDSPEECH: "prompt" } 
+            },
+        }
+    })
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -53,7 +72,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {   target: 'forest',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {})},
-                        { target: 'stop' }],
+                    ],
                     TIMEOUT: '..',
                 },
                 states: {
@@ -72,18 +91,16 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             forest: {
                 initial: 'prompt',
-                states: {
-                    prompt: {
-                        entry: sayColour,
-                        on: { ENDSPEECH: 'repaint' }
-                    },
-                    repaint: {
-                        entry: 'changeColour',
-                        always: '#root.dm.voicegameapp'
-                    }
-                }
-            }
-        }
-    }
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.init',
+                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})},
+                    ],
+                    TIMEOUT: '..',
+                },
+                ...promptAndAsk( say('This is a test') )
+            },
+        },
+    },
 }
 })
