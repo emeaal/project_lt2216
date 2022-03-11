@@ -1,4 +1,4 @@
-import { MachineConfig, send, Action } from "xstate";
+import { MachineConfig, send, Action, assign } from "xstate";
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
     type: "SPEAK", value: `Going to the ${context.recResult[0].utterance}` // not needed
@@ -78,6 +78,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {   target: 'repaint',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
+                            actions: assign({ forest: (context) => menugrammar[context.recResult[0].utterance].forest!})
                         },
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
@@ -103,11 +104,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         on: { ENDSPEECH: 'backgroundChanger' }
                     },
                     backgroundChanger: {
-                        entry: 'changeBackground',
-                        // always: '#root.dm.idle'
-                        on: { ENDSPEECH: 'backgroundchanger' }
-                    },
-                    backgroundchanger: {
                         entry: ['changeBackground']
                         //always: '..welcome'
                     }
