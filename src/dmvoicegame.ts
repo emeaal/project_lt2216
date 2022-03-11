@@ -10,6 +10,10 @@ function say(text: string): Action<SDSContext, SDSEvent> {
     return send((_context: SDSContext) => ({ type: "SPEAK", value: text }))
 }
 
+const background: { [index: string]: {imageforest?: string } } = {
+    "Forest": {imageforest: "https://res.cloudinary.com/rebelwalls/image/upload/b_black,c_fill,f_auto,fl_progressive,h_533,q_auto,w_800/v1479370857/article/R10101_image1"}
+}
+
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string } } = {
     "It's a beach.": {beach: "Beach" },
     "A beach": {beach: "Beach"},
@@ -109,9 +113,15 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         entry: sayPlace,
                         on: { ENDSPEECH: 'backgroundChanger' }
                     },
+<<<<<<< HEAD
                     backgroundChanger: {
                         entry: 'changeBackground',
                         // always: '#root.dm.idle'
+=======
+                    repaint: {
+                        entry: 'changeBackground',
+                        always: '#root.dm.idle'
+>>>>>>> 17c1e934e513e5e4ca4df0d08a85e0043cb92be3
                     }
                 }
             },
@@ -131,3 +141,4 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
     },
 }
 })
+
