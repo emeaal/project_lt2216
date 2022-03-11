@@ -78,7 +78,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {   target: 'repaint',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
-                            actions: [assign({ forest: (context) => img_grammar[context.recResult[0].background].forest!}), assign({ forest: (context) => img_grammar[context.recResult[0].utterance].forest!})]
                         },
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
