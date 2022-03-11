@@ -54,7 +54,8 @@ interface SDSContext {
 
     counter: number;
     background: any;
-    forest: any;
+    forest: URL;
+    url: URL;
 }
 
 type SDSEvent =
