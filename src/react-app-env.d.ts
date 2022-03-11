@@ -53,6 +53,8 @@ interface SDSContext {
     username: string;
 
     counter: number;
+    background: any;
+    forest: any;
 }
 
 type SDSEvent =

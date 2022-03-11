@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream
 import { MachineConfig, send, Action } from "xstate";
 import { assign } from "xstate/lib/actionTypes";
+=======
+import { MachineConfig, send, Action, assign } from "xstate";
+>>>>>>> Stashed changes
 
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
@@ -10,8 +14,8 @@ function say(text: string): Action<SDSContext, SDSEvent> {
     return send((_context: SDSContext) => ({ type: "SPEAK", value: text }))
 }
 
-const background: { [index: string]: {imageforest?: string } } = {
-    "Forest": {imageforest: "https://res.cloudinary.com/rebelwalls/image/upload/b_black,c_fill,f_auto,fl_progressive,h_533,q_auto,w_800/v1479370857/article/R10101_image1"}
+const img_grammar: {[index: string]: {forest?: URL}} = {
+    "Forest.": {forest: new URL('https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg')}
 }
 
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string } } = {
@@ -37,13 +41,6 @@ function promptAndAsk(promptEvent: Action<SDSContext, SDSEvent>): MachineConfig<
                        on: { ENDSPEECH: "prompt" } 
             },
         }
-    })
-}
-
-function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
-    return ({
-        initial: 'prompt',
-        states: { prompt: { entry: say(prompt) } }
     })
 }
 
@@ -87,7 +84,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {   target: 'repaint',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
+<<<<<<< Updated upstream
                             actions: assign({ forest: (context) => context.recResult[0].background.forest! })
+=======
+                            actions: [assign({ forest: (context) => img_grammar[context.recResult[0].background].forest!}), assign({ forest: (context) => img_grammar[context.recResult[0].utterance].forest!})]
+>>>>>>> Stashed changes
                         },
 
                         {   target: '#root.dm.getHelp',
@@ -111,6 +112,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 states: {
                     prompt: {
                         entry: sayPlace,
+<<<<<<< Updated upstream
                         on: { ENDSPEECH: 'backgroundChanger' }
                     },
 <<<<<<< HEAD
@@ -122,6 +124,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         entry: 'changeBackground',
                         always: '#root.dm.idle'
 >>>>>>> 17c1e934e513e5e4ca4df0d08a85e0043cb92be3
+=======
+                        on: { ENDSPEECH: 'backgroundchanger' }
+                    },
+                    backgroundchanger: {
+                        entry: ['changeBackground']
+                        //always: '..welcome'
+>>>>>>> Stashed changes
                     }
                 }
             },
