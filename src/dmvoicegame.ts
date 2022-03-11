@@ -15,9 +15,7 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "A forest": {forest: "Forest" },
     "Forest.": {forest: "Forest" },
     "It's a forest.": {forest: "Forest" },
-    "Help.": {help: "Help" }
-
-}
+    "Help.": {help: "Help" } }
 
 function promptAndAsk(promptEvent: Action<SDSContext, SDSEvent>): MachineConfig<SDSContext, any, SDSEvent> {
     return ({
@@ -36,6 +34,14 @@ function promptAndAsk(promptEvent: Action<SDSContext, SDSEvent>): MachineConfig<
         }
     })
 }
+
+function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
+    return ({
+        initial: 'prompt',
+        states: { prompt: { entry: say(prompt) } }
+    })
+}
+
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
     initial: 'idle',
@@ -66,12 +72,20 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 hist: {
                     type: 'history',
                 },
+            stop: {
+                entry: say("Ok"),
+                always: '#root.dm.idle'
+            },
             welcome: {
                 initial: 'prompt',
                 on: {
                     RECOGNISED: [
                         {   target: 'forest',
-                            cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {})},
+                            cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {})
+                        },
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                        },
                     ],
                     TIMEOUT: '..',
                 },
@@ -84,10 +98,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         entry: send('LISTEN'),
                     },
                 }
-            },
-            stop: {
-                entry: say("Ok"),
-                always: '#root.dm.init'
             },
             forest: {
                 initial: 'prompt',

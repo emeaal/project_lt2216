@@ -7,6 +7,7 @@ declare module 'web-speech-cognitive-services/lib/SpeechServices/SpeechToText';
 interface Hypothesis {
     "utterance": string;
     "confidence": number
+    "background": any;
 }
 
 interface MySpeechSynthesisUtterance extends SpeechSynthesisUtterance {

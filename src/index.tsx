@@ -171,7 +171,7 @@ const machine = Machine<SDSContext, any, SDSEvent>({
         actions: {
             recLogResult: (context: SDSContext) => {
                 /* context.recResult = event.recResult; */
-                console.log('U>', context.recResult[0]["utterance"], context.recResult[0]["confidence"]);
+                console.log('U>', context.recResult[0]["utterance"], context.recResult[0]["confidence"], context.recResult[0]["background"]);
             },
             logIntent: (context: SDSContext) => {
                 /* context.nluData = event.data */
@@ -256,7 +256,7 @@ function App() {
         devTools: true,
         actions: {
 
-            changeColour: asEffect((context) => {
+            changeBackground: asEffect((context) => {
                 document.body.style.background = context.recResult[0].utterance;
                 /* console.log('Ready to receive a voice input.'); */
             }),
