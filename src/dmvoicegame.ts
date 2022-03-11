@@ -1,10 +1,4 @@
-<<<<<<< Updated upstream
 import { MachineConfig, send, Action } from "xstate";
-import { assign } from "xstate/lib/actionTypes";
-=======
-import { MachineConfig, send, Action, assign } from "xstate";
->>>>>>> Stashed changes
-
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
     type: "SPEAK", value: `Going to the ${context.recResult[0].utterance}` // not needed
@@ -84,13 +78,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {   target: 'repaint',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
-<<<<<<< Updated upstream
-                            actions: assign({ forest: (context) => context.recResult[0].background.forest! })
-=======
                             actions: [assign({ forest: (context) => img_grammar[context.recResult[0].background].forest!}), assign({ forest: (context) => img_grammar[context.recResult[0].utterance].forest!})]
->>>>>>> Stashed changes
                         },
-
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
                         },
@@ -112,25 +101,16 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 states: {
                     prompt: {
                         entry: sayPlace,
-<<<<<<< Updated upstream
                         on: { ENDSPEECH: 'backgroundChanger' }
                     },
-<<<<<<< HEAD
                     backgroundChanger: {
                         entry: 'changeBackground',
                         // always: '#root.dm.idle'
-=======
-                    repaint: {
-                        entry: 'changeBackground',
-                        always: '#root.dm.idle'
->>>>>>> 17c1e934e513e5e4ca4df0d08a85e0043cb92be3
-=======
                         on: { ENDSPEECH: 'backgroundchanger' }
                     },
                     backgroundchanger: {
                         entry: ['changeBackground']
                         //always: '..welcome'
->>>>>>> Stashed changes
                     }
                 }
             },
