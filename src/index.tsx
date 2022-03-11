@@ -257,7 +257,7 @@ function App() {
         actions: {
 
             changeBackground: asEffect((context) => {
-                document.body.style.background = context.recResult[0].utterance;
+                document.body.style.background = context.recResult[0].background;
                 /* console.log('Ready to receive a voice input.'); */
             }),
 
