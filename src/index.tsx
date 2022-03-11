@@ -11,9 +11,9 @@ import createSpeechSynthesisPonyfill from 'web-speech-cognitive-services/lib/Spe
 
 
 
-//const img_grammar: {[index: string];
-  //  "Forest."; {url: "https://res.cloudinary.com/rebelwalls/image/upload/b_black,c_fill,f_auto,fl_progressive,h_533,q_auto,w_800/v1561550231/article/R16641_image1" }
-//},
+const img_grammar_2: {[index: string]: {forest?: any}} = {
+    "Forest.": {forest: new URL('https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg')}
+}
 
 const { send, cancel } = actions
 
@@ -262,7 +262,7 @@ function App() {
         actions: {
 
             changeBackground: asEffect((context) => {
-                document.body.style.background = `${context.url}`
+                document.body.style.background = (`${context.url}`)
                 /* console.log('Ready to receive a voice input.'); */
             }),
 
