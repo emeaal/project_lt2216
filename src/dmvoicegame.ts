@@ -80,7 +80,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 initial: 'prompt',
                 on: {
                     RECOGNISED: [
-                        {   target: 'forest',
+                        {   target: 'repaint',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {})
                         },
                         {   target: '#root.dm.getHelp',
