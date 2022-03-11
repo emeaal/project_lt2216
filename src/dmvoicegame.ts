@@ -1,8 +1,8 @@
 import { MachineConfig, send, Action } from "xstate";
 
 
-const sayColour: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
-    type: "SPEAK", value: `Repainting to ${context.recResult[0].utterance}` // not needed
+const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
+    type: "SPEAK", value: `Going to the ${context.recResult[0].utterance}` // not needed
 }))
 
 function say(text: string): Action<SDSContext, SDSEvent> {
@@ -103,7 +103,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 initial: 'prompt',
                 states: {
                     prompt: {
-                        entry: sayColour,
+                        entry: sayPlace,
                         on: { ENDSPEECH: 'repaint' }
                     },
                     repaint: {
