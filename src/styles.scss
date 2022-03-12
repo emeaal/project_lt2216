@@ -22,11 +22,16 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100vh;
-    background: $pnk;
+    background-image: url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: repeat;
+
+    .changeBackground {
+        background-image: url(https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg);
+    }
 }
+
 
 .background-red {
     background-color: #ffff00;
@@ -81,7 +86,7 @@ html, body {
 	border-radius: 50px;
 	cursor: pointer;
 	border: 0;
-	background-color: #432bcc;
+	background-color: #94239e;
 	z-index: 0;
 	&-click {
 	    @extend .circle;

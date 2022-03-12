@@ -24,7 +24,8 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "A forest": {forest: "Forest" },
     "Forest.": {forest: "Forest" },
     "It's a forest.": {forest: "Forest" },
-    "Help.": {help: "Help" } }
+    "Help.": {help: "Help" } 
+}
 
 function promptAndAsk(promptEvent: Action<SDSContext, SDSEvent>): MachineConfig<SDSContext, any, SDSEvent> {
     return ({
@@ -84,7 +85,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {   target: 'repaint',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
-                            actions: assign({url: (context) => img_grammar[context.recResult[0].utterance].forest!})
+                            actions: assign({forest: (context) => menugrammar[context.recResult[0].utterance].forest!})
                         },
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
@@ -110,23 +111,20 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         on: { ENDSPEECH: 'backgroundChanger' }
                     },
                     backgroundChanger: {
-                        entry: ['changeBackground']
-                        //always: '..welcome'
+                        entry: ['changeBackground'],
+                        always: '#root.dm.voicegameapp.forest'
                     }
                 }
             },
             forest: {
                 initial: 'prompt',
-                on: {
-                    RECOGNISED: [
-
-                        {   target: '#root.dm.init',
-                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})},
-                    ],
-                    TIMEOUT: '..',
-                },
-                ...promptAndAsk( say('This is a test') )
-            },
+                states: {
+                    prompt: {
+                        entry: say("This is a test"),
+                        always: '#root.dm.init'
+                    }
+                }
+                }
         },
     },
 }

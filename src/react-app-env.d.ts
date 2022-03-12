@@ -36,7 +36,6 @@ interface SDSContext {
     tdmExpectedAlternatives: any;
     azureAuthorizationToken: string;
     audioCtx: any;
-    snippet: any;
 
     pos: string;
     neg: string;
@@ -54,7 +53,7 @@ interface SDSContext {
 
     counter: number;
     background: any;
-    forest: URL;
+    forest: string;
     url: any;
 }
 
