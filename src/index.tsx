@@ -262,9 +262,11 @@ function App() {
         actions: {
 
             changeBackground: asEffect((context) => {
-                document.body.style.background = (`${context.url}`)
+                document.body.style.backgroundImage = (`${context.url}`)
                 /* console.log('Ready to receive a voice input.'); */
             }),
+
+
 
             recStart: asEffect((context) => {
                 context.asr.start()
