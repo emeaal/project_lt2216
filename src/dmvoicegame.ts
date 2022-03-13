@@ -1,5 +1,5 @@
 import { MachineConfig, send, Action, assign } from "xstate";
-import imggg from "forest.png"
+import bg from "./forest.png"
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
     type: "SPEAK", value: `Going to the ${context.recResult[0].utterance}` // not needed
@@ -8,12 +8,6 @@ const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
 function say(text: string): Action<SDSContext, SDSEvent> {
     return send((_context: SDSContext) => ({ type: "SPEAK", value: text }))
 }
-
-export type TodosContextState = {
-    todos: string[];
-    addTodo: (name: string) => void;
-  };
-
 const img_grammar: {[index: string]: {forest?: any}} = {
     "Forest.": {forest: new URL('https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg')}
 }

@@ -1,5 +1,5 @@
 $yel: hsla(77, 100%, 77%, 1);
-$pnk: url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
+$pnk: #fff; //url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
 $hjk: rgba(173, 28, 202, 0.133);
 $rd: #CD1515;
 $mono: IBM Plex Mono, monospace;
@@ -27,19 +27,20 @@ html, body {
     background-position: center;
     background-repeat: repeat;
 
+    .forest-background { // i think maybe this should be used to change backgrounds?
+        background-color: #166e25; 
+      }
+      
+    .beach-background {
+        background-color: #4cbb17;
+    }
+
     .changeBackground {
         background-image: url(https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg);
     }
 }
 
 
-.background-red {
-    background-color: #ffff00;
-  }
-
-.background-blue {
-  background-color: #4cbb17;
-}
 
 .control {
     position: center;
