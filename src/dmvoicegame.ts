@@ -21,24 +21,25 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Help.": {help: "Help" } 
 }
 
-function promptAndAsk(promptEvent: Action<SDSContext, SDSEvent>): MachineConfig<SDSContext, any, SDSEvent> {
+function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
+    return ({
+        initial: 'prompt',
+        states: { prompt: { entry: say(prompt) } }
+    })
+}
+
+function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
     return ({
         initial: 'prompt',
         states: {
             prompt: {
-                entry: promptEvent,
+                entry: say(prompt),
                 on: { ENDSPEECH: 'ask' }
             },
-            ask: {
-                entry: send('LISTEN'),
-            },
-            nomatch: { entry: [say("Try again")],  
-                       on: { ENDSPEECH: "prompt" } 
-            },
+            ask: { entry: send('LISTEN') }
         }
     })
 }
-
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
     initial: 'idle',
@@ -87,15 +88,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ],
                     TIMEOUT: '..',
                 },
-                states: {
-                    prompt: {
-                        entry: say("Welcome!"), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
-                        on: { ENDSPEECH: 'ask' }
-                    },
-                    ask: {
-                        entry: send('LISTEN'),
-                    },
-                }
+                ...promptAndAsk("Welcome!"), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
             },
             repaint: {
                 initial: 'prompt',
