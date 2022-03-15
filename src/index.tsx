@@ -4,14 +4,12 @@ import * as ReactDOM from "react-dom";
 import { Machine, assign, actions, State } from "xstate";
 import { useMachine, asEffect } from "@xstate/react";
 import { inspect } from "@xstate/inspect";
-import { dmMachine } from "./dmvoicegame";
+import { dmMachine } from "./dmCC";
 import bg from "./forest.png"
 
 import createSpeechRecognitionPonyfill from 'web-speech-cognitive-services/lib/SpeechServices/SpeechToText'
 import createSpeechSynthesisPonyfill from 'web-speech-cognitive-services/lib/SpeechServices/TextToSpeech';
-import { useEffect } from "react";
-import { Context } from "microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/RecognizerConfig";
-
+import { useEffect, useState } from "react";
 
 
 const img_grammar_2: {[index: string]: {forest?: any}} = {
@@ -265,7 +263,7 @@ function App() {
         actions: {
 
             changeBackground: asEffect((context) => {
-                document.body.style.backgroundImage = (`${context.forest}`)
+                document.body.style.backgroundImage =  current.context.recResult[0].background //context.recResult[0].background//(`${context.forest}`)
                 /* console.log('Ready to receive a voice input.'); */
             }),
 
@@ -319,8 +317,9 @@ function App() {
                 }
 
             })
-        }
+        },
     });
+    
     const figureButtons = (current.context.tdmExpectedAlternatives || []).filter((o: any) => o.visual_information)
         .map(
             (o: any, i: any) => (

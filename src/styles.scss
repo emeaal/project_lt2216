@@ -31,15 +31,14 @@ html, body {
         background-color: #166e25; 
       }
       
-    .beach-background {
-        background-color: #4cbb17;
-    }
+      &-forest {
+	    background-color: rgb(190, 43, 43);
+	}
 
     .changeBackground {
         background-image: url(https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg);
     }
 }
-
 
 
 .control {
