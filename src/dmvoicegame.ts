@@ -82,7 +82,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 on: {
                     RECOGNISED: [
                         {
-                            target: 'repaint',
+                            target: 'forest',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
                             actions: assign({ forest: (context) => img_grammar[context.recResult[0].background].forest!})
                         },
@@ -94,21 +94,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 ...promptAndAsk("Welcome!"), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
             },
-            repaint: {
-                initial: 'prompt',
-                states: {
-                    prompt: {
-                        entry: sayPlace,
-                        on: { ENDSPEECH: 'backgroundChanger' }
-                    },
-                    backgroundChanger: {
-                        entry: ['changeBackground'],
-                        always: '#root.dm.voicegameapp.forest'
-                    }
-                },
-            },
             forest: {
-                initial: 'prompt',
+                initial: 'sayforest',
                 on: {
                     RECOGNISED: [
                         {
@@ -121,8 +108,18 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         }
                     ]
                 },
+                states: {
+                    sayforest: {
+                        entry: sayPlace,
+                        on: { ENDSPEECH: 'backgroundChanger' }
+                    },
+                    backgroundChanger: {
+                        entry: ['changeBackground'],
+                        always: '#root.dm.voicegameapp.forest'
+                    },
+                },
                 ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?")
-            }
+        },
         },
     },
 }
