@@ -120,6 +120,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?")
         },
+        right_cave: {
+            ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him. Too bad.")
+        },
+        left_river: {
+            ...prompt("What's up?")
+        }
         },
     },
 }
