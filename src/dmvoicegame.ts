@@ -9,6 +9,22 @@ function say(text: string): Action<SDSContext, SDSEvent> {
     return send((_context: SDSContext) => ({ type: "SPEAK", value: text }))
 }
 
+function sayp(text:string): MachineConfig<SDSContext, any, SDSEvent> {
+    return({
+        initial: 'saytheplace',
+        states: {
+            saytheplace: {
+                entry: say("You're right. It doesn seem to be a forest"),
+                on: { ENDSPEECH: 'backgroundChanger' },
+            },
+            backgroundChanger: {
+                entry: ['changeBackground'],
+                always: '#root.dm.voicegameapp.forest'
+            },
+        }
+    })
+}
+
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string } } = {
     "It's a beach.": {beach: "Beach" },
     "A beach": {beach: "Beach"},
@@ -17,6 +33,7 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "It's a forest.": {forest: "Forest" },
     "Help.": {help: "Help" },
     "Right.": {right: "Right" },
+    "Right?": {right: "Right" },
     "Left.": {left: "Left" },
 }
 
@@ -30,6 +47,8 @@ function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
         states: { prompt: { entry: say(prompt) } }
     })
 }
+
+
 
 function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
     return ({
@@ -84,7 +103,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         {
                             target: 'forest',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
-                            actions: assign({ forest: (context) => img_grammar[context.recResult[0].background].forest!})
+                            actions: assign({ forest: (context) => img_grammar[context.recResult[0].utterance].forest!})
                         },
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
@@ -100,34 +119,24 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {
                             target: 'right_cave',
-                            cond: (context) => "right" in menugrammar[context.recResult[0].utterance]
+                            cond: (context) => "right" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
                             target: 'left_river',
-                            cond: (context) => "left" in menugrammar[context.recResult[0].utterance]
+                            cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
                         }
                     ]
                 },
-                states: {
-                    sayforest: {
-                        entry: sayPlace,
-                        on: { ENDSPEECH: 'backgroundChanger' }
-                    },
-                    backgroundChanger: {
-                        entry: ['changeBackground'],
-                        always: '#root.dm.voicegameapp.forest'
-                    },
-                },
+                ...sayp("Forest"), 
                 ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?")
-        },
-        right_cave: {
+            },
+            right_cave: {
             ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him. Too bad.")
         },
         left_river: {
             ...prompt("What's up?")
         }
-        },
     },
-}
+},
+    },
 })
-
