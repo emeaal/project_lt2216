@@ -14,13 +14,34 @@ function sayp(text:string): MachineConfig<SDSContext, any, SDSEvent> {
         initial: 'saytheplace',
         states: {
             saytheplace: {
-                entry: sayPlace,
-                on: { ENDSPEECH: 'backgroundChanger' },
+                entry: say(text),
+                on: { ENDSPEECH: '#root.dm.voicegameapp.histforask' }, //backgroundChanger },
             },
             backgroundChanger: {
                 entry: ['changeBackground'],
                 always: '#root.dm.voicegameapp.forest'
             },
+        }
+    })
+}
+
+function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
+    return ({
+        initial: 'prompt',
+        states: { prompt: { entry: say(prompt) } }
+    })
+}
+
+
+function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
+    return ({
+        initial: 'prompt',
+        states: {
+            prompt: {
+                entry: say(prompt),
+                on: { ENDSPEECH: 'ask' }
+            },
+            ask: { entry: send('LISTEN') }
         }
     })
 }
@@ -51,27 +72,6 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
 
 const img_grammar: {[index: string]: {forest?: any}} = {
     "Forest.": {forest: bg}//new URL('https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg')}
-}
-
-function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
-    return ({
-        initial: 'prompt',
-        states: { prompt: { entry: say(prompt) } }
-    })
-}
-
-
-function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
-    return ({
-        initial: 'prompt',
-        states: {
-            prompt: {
-                entry: say(prompt),
-                on: { ENDSPEECH: 'ask' }
-            },
-            ask: { entry: send('LISTEN') }
-        }
-    })
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -161,8 +161,15 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         }
                     ]
                 },
-                ...sayp("Forest"), 
-                ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?")
+                states: {
+                    sayforest: {
+                        entry: sayPlace,
+                        on: { ENDSPEECH: 'tellforeststory' },
+                    },
+                    tellforeststory: {
+                        ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?"),
+                    },
+                },
             },
             right_cave: {
             ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him. Too bad.")
