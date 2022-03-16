@@ -42,6 +42,7 @@ interface SDSContext {
     help: string;
     right: string;
     left: string;
+    leave: string;
 
     text: string;
 

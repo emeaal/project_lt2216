@@ -58,7 +58,7 @@ const notmatchedsentences = [
 // Sentences will be randomized if utterance was not understood, to avoid repetitions
 const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * notmatchedsentences.length)];
 
-const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string } } = {
+const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, } } = {
     "It's a beach.": {beach: "beach" },
     "A beach": {beach: "beach"},
     "A forest": {forest: "forest" },
@@ -68,7 +68,8 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Right.": {right: "right" },
     "Right?": {right: "right" },
     "Left.": {left: "left" },
-    "Left?": {left: "left"}
+    "Left?": {left: "left"},
+    "Leave.": {leave: "leave"},
 }
 
 const img_grammar: {[index: string]: {forest?: any}} = {
@@ -106,6 +107,15 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: { ENDSPEECH: '#root.dm.voicegameapp'},
                 }
             }
+        },
+        endofgame: {
+            initial: 'end',
+            states: {
+                end: {
+                    entry: say("Game ended. Please play again if you'd like to"),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.welcome'}
+                }
+            },
         },
         voicegameapp: {
             initial: 'welcome',
@@ -177,7 +187,38 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him. Too bad.")
         },
         left_river: {
-            ...prompt("What's up?")
+            initial: 'cavestory',
+            on: {
+                RECOGNISED: [
+                    {   target: '#root.dm.getHelp',
+                        cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
+                    {
+                        target: '#root.dm.endofgame',
+                        cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
+                    },
+                    {
+                        target: 'offermoney',
+                        cond: (context) => "money" in (menugrammar[context.recResult[0].utterance] || {}),
+                    },
+                    {
+                        target: 'lookforacorns',
+                        cond: (context) => "acorns" in (menugrammar[context.recResult[0].utterance] || {}),
+                    }
+                ]
+            },
+            states: {
+                cavestory: {
+                    ...prompt("The troll tells you that for the small price of 10 acorns, they can let you inside the cave"),
+                    on: {ENDSPEECH: 'cavealternatives'},
+                },
+                cavealternatives: {
+                    ...promptAndAsk("You can leave, offer them money instead or look for acorns")
+                }
+            }
         }
     },
 },
