@@ -14,8 +14,8 @@ function sayp(text:string): MachineConfig<SDSContext, any, SDSEvent> {
         initial: 'saytheplace',
         states: {
             saytheplace: {
-                entry: sayPlace,
-                on: { ENDSPEECH: 'backgroundChanger' },
+                entry: say(text),
+                on: { ENDSPEECH: '#root.dm.voicegameapp.histforask' }, //backgroundChanger },
             },
             backgroundChanger: {
                 entry: ['changeBackground'],
@@ -23,34 +23,6 @@ function sayp(text:string): MachineConfig<SDSContext, any, SDSEvent> {
             },
         }
     })
-}
-
-// Sentences to ask if if no match
-const notmatchedsentences = [
-    "Sorry what did you say?",
-    "Sorry I didn't understand what you said",
-    "Could you repeat that?",
-    "Could you say that again, please?",
-    "What did you say?",
-]
-
-// Sentences will be randomized if utterance was not understood, to avoid repetitions
-const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * notmatchedsentences.length)];
-
-const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string } } = {
-    "It's a beach.": {beach: "Beach" },
-    "A beach": {beach: "Beach"},
-    "A forest": {forest: "Forest" },
-    "Forest.": {forest: "Forest" },
-    "It's a forest.": {forest: "Forest" },
-    "Help.": {help: "Help" },
-    "Right.": {right: "Right" },
-    "Right?": {right: "Right" },
-    "Left.": {left: "Left" },
-}
-
-const img_grammar: {[index: string]: {forest?: any}} = {
-    "Forest.": {forest: bg}//new URL('https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg')}
 }
 
 function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
@@ -72,6 +44,35 @@ function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> 
             ask: { entry: send('LISTEN') }
         }
     })
+}
+
+// Sentences to ask if if no match
+const notmatchedsentences = [
+    "Sorry what did you say?",
+    "Sorry I didn't understand what you said",
+    "Could you repeat that?",
+    "Could you say that again, please?",
+    "What did you say?",
+]
+
+// Sentences will be randomized if utterance was not understood, to avoid repetitions
+const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * notmatchedsentences.length)];
+
+const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string } } = {
+    "It's a beach.": {beach: "beach" },
+    "A beach": {beach: "beach"},
+    "A forest": {forest: "forest" },
+    "Forest.": {forest: "forest" },
+    "It's a forest.": {forest: "forest" },
+    "Help.": {help: "Help" },
+    "Right.": {right: "right" },
+    "Right?": {right: "right" },
+    "Left.": {left: "left" },
+    "Left?": {left: "left"}
+}
+
+const img_grammar: {[index: string]: {forest?: any}} = {
+    "Forest.": {forest: bg}//new URL('https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg')}
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -161,9 +162,17 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         }
                     ]
                 },
-                ...sayp("Forest"), 
-                ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?")
+                states: {
+                    sayforest: {
+                        entry: sayPlace,
+                        on: { ENDSPEECH: 'tellforeststory' },
+                    },
+                    tellforeststory: {
+                        ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?"),
+                    },
+                },
             },
+            //game ended
             right_cave: {
             ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him. Too bad.")
         },
