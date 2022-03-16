@@ -53,7 +53,7 @@ const notmatchedsentences = [
     "Could you repeat that?",
     "Could you say that again, please?",
     "What did you say?",
-]
+    ]
 
 // Sentences will be randomized if utterance was not understood, to avoid repetitions
 const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * notmatchedsentences.length)];
