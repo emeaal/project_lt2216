@@ -14,7 +14,7 @@ function sayp(text:string): MachineConfig<SDSContext, any, SDSEvent> {
         initial: 'saytheplace',
         states: {
             saytheplace: {
-                entry: say("You're right. It doesn seem to be a forest"),
+                entry: sayPlace,
                 on: { ENDSPEECH: 'backgroundChanger' },
             },
             backgroundChanger: {
@@ -47,7 +47,6 @@ function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
         states: { prompt: { entry: say(prompt) } }
     })
 }
-
 
 
 function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
@@ -108,8 +107,17 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
                         },
+                        {
+                            target: '.nomatch'
+                        }
                     ],
                     TIMEOUT: '..',
+                },
+                states: {
+                    nomatch: {
+                        entry: say("Sorry, what did you say?"),
+                        on: { ENDSPEECH: 'ask' }
+                    },
                 },
                 ...promptAndAsk("Welcome!"), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
             },
@@ -117,6 +125,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 initial: 'sayforest',
                 on: {
                     RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                        },
                         {
                             target: 'right_cave',
                             cond: (context) => "right" in (menugrammar[context.recResult[0].utterance] || {}),
@@ -124,14 +135,23 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         {
                             target: 'left_river',
                             cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
+                        },
+                        {
+                            target: '.nomatch'
                         }
                     ]
+                },
+                states: {
+                    nomatch: {
+                        entry: say("Sorry, what did you say?"),
+                        on: { ENDSPEECH: 'ask' }
+                    },
                 },
                 ...sayp("Forest"), 
                 ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?")
             },
             right_cave: {
-            ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him. Too bad.")
+            ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him. Too bad.")
         },
         left_river: {
             ...prompt("What's up?")
