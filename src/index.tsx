@@ -276,6 +276,10 @@ function App() {
                 /* console.log('Recognition stopped.'); */
             }),
             ttsStart: asEffect((context) => {
+                let content = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-US"><voice name="${context.voice.name}">`
+                content = content + (process.env.REACT_APP_TTS_LEXICON ? `<lexicon uri="${process.env.REACT_APP_TTS_LEXICON}"/>` : "")
+                content = content + `${context.ttsAgenda}</voice></speak>`
+                console.debug(content)
                 const utterance = new context.ttsUtterance(context.ttsAgenda);
                 console.log("S>", context.ttsAgenda)
                 utterance.voice = context.voice
