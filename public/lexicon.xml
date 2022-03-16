@@ -6,7 +6,7 @@
         http://www.w3.org/TR/2007/CR-pronunciation-lexicon-20071212/pls.xsd"
       alphabet="x-microsoft-sapi" xml:lang="en-US">
 
-<prosody rate=fast></prosody>
+<prosody rate="+20.00%"></prosody>
 
 
 </lexicon>
