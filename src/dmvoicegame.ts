@@ -178,7 +178,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         on: { ENDSPEECH: 'tellforeststory' },
                     },
                     tellforeststory: {
-                        ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?"),
+                        ...promptAndAsk("To your right a river is flowing, and to the left there's a cave. Where would you like to go?"),
                     },
                 },
             },
