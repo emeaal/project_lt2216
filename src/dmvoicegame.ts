@@ -76,6 +76,15 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 CLICK: 'voicegameapp'
             }
         },
+        noMatch: {
+            initial: 'notmatched',
+            states: {
+                notmatched: {
+                    entry: say("Sorry, what did you say?"),
+                    on: { ENDSPEECH: '#root.dm.voicegameapp.histforask'},
+                }
+            }
+        },
         getHelp: {
             initial: 'helpmessage',
             states: {
@@ -90,6 +99,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             states: {
                 hist: {
                     type: 'history',
+                    history: 'shallow'
+                },
+                histforask: {
+                    type: 'history',
+                    history: 'deep',
                 },
             stop: {
                 entry: say("Ok"),
@@ -108,16 +122,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
                         },
                         {
-                            target: '.nomatch'
+                            target: '#root.dm.noMatch'
                         }
                     ],
-                    TIMEOUT: '..',
-                },
-                states: {
-                    nomatch: {
-                        entry: say("Sorry, what did you say?"),
-                        on: { ENDSPEECH: 'ask' }
-                    },
+                    TIMEOUT: '..', 
                 },
                 ...promptAndAsk("Welcome!"), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
             },
@@ -137,15 +145,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
-                            target: '.nomatch'
+                            target: '#root.dm.noMatch'
                         }
                     ]
-                },
-                states: {
-                    nomatch: {
-                        entry: say("Sorry, what did you say?"),
-                        on: { ENDSPEECH: 'ask' }
-                    },
                 },
                 ...sayp("Forest"), 
                 ...promptAndAsk("To your right there seems to be a river flowing, and to the left you see what looks like a cave. Where would you like to go?")
