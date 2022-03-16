@@ -25,16 +25,15 @@ function sayp(text:string): MachineConfig<SDSContext, any, SDSEvent> {
     })
 }
 
-const notmatchedsentences: { [index: string]: Array<string> } = {
-    "resp": [
+const notmatchedsentences = [
     "Sorry what did you say?",
     "Sorry I didn't understand what you said",
     "Could you repeat that?",
     "Could you say that again, please?",
     "What did you say?",
-    "Could you repeat plesase?"
-] 
-}
+]
+
+const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * notmatchedsentences.length)];
 
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string } } = {
     "It's a beach.": {beach: "Beach" },
@@ -91,7 +90,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'notmatched',
             states: {
                 notmatched: {
-                    entry: say(notmatchedsentences["resp"][Math.random() * notmatchedsentences["resp"].length | 0]),
+                    entry: say(randomnomatchedsentence),
                     on: { ENDSPEECH: '#root.dm.voicegameapp.histforask'},
                 }
             }
