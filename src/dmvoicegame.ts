@@ -25,6 +25,7 @@ function sayp(text:string): MachineConfig<SDSContext, any, SDSEvent> {
     })
 }
 
+// Sentences to ask if if no match
 const notmatchedsentences = [
     "Sorry what did you say?",
     "Sorry I didn't understand what you said",
@@ -33,6 +34,7 @@ const notmatchedsentences = [
     "What did you say?",
 ]
 
+// Sentences will be randomized if utterance was not understood, to avoid repetitions
 const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * notmatchedsentences.length)];
 
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string } } = {
