@@ -59,15 +59,16 @@ const notmatchedsentences = [
 const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * notmatchedsentences.length)];
 
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string } } = {
-    "It's a beach.": {beach: "Beach" },
-    "A beach": {beach: "Beach"},
-    "A forest": {forest: "Forest" },
-    "Forest.": {forest: "Forest" },
-    "It's a forest.": {forest: "Forest" },
+    "It's a beach.": {beach: "beach" },
+    "A beach": {beach: "beach"},
+    "A forest": {forest: "forest" },
+    "Forest.": {forest: "forest" },
+    "It's a forest.": {forest: "forest" },
     "Help.": {help: "Help" },
-    "Right.": {right: "Right" },
-    "Right?": {right: "Right" },
-    "Left.": {left: "Left" },
+    "Right.": {right: "right" },
+    "Right?": {right: "right" },
+    "Left.": {left: "left" },
+    "Left?": {left: "left"}
 }
 
 const img_grammar: {[index: string]: {forest?: any}} = {
@@ -171,6 +172,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                 },
             },
+            //game ended
             right_cave: {
             ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him. Too bad.")
         },
