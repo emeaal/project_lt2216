@@ -67,7 +67,7 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Help.": {help: "Help" },
     "Right.": {right: "right" },
     "Right?": {right: "right" },
-    "Left.": {left: "left" },
+    "Left": {left: "left" },
     "Left?": {left: "left"},
     "Leave.": {leave: "leave"},
 }
@@ -113,7 +113,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             states: {
                 end: {
                     entry: say("Game ended. Please play again if you'd like to"),
-                    on: {ENDSPEECH: '#root.dm.voicegameapp.welcome'}
+                    on: {ENDSPEECH: '#root.dm.idle'}
                 }
             },
         },
@@ -194,9 +194,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
                     },
                     {
-                        target: '#root.dm.noMatch'
-                    },
-                    {
                         target: '#root.dm.endofgame',
                         cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
                     },
@@ -207,7 +204,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     {
                         target: 'lookforacorns',
                         cond: (context) => "acorns" in (menugrammar[context.recResult[0].utterance] || {}),
-                    }
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
+
                 ]
             },
             states: {
@@ -219,6 +220,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ...promptAndAsk("You can leave, offer them money instead or look for acorns")
                 }
             }
+        },
+        offermoney: {
+            ...prompt("You offer money")
+        },
+        lookforacorns: {
+            ...prompt("You look for acorns")
         }
     },
 },
