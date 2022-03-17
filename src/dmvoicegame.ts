@@ -56,7 +56,9 @@ const notmatchedsentences = [
     ]
 
 // Sentences will be randomized if utterance was not understood, to avoid repetitions
-const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * notmatchedsentences.length)];
+var randomNumber = Math.random
+const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * Math.floor(notmatchedsentences.length))]
+
 
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, } } = {
     "It's a beach.": {beach: "beach" },
