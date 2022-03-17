@@ -36,6 +36,7 @@ const notmatchedsentences = [
     "Could you say that again, please?",
     "What did you say?",
     "Sorry I don't understand",
+    "Could you please repeat that?"
     ]
 
 
