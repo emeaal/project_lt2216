@@ -60,7 +60,7 @@ var randomNumber = Math.random
 const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * Math.floor(notmatchedsentences.length))]
 
 
-const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, } } = {
+const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, } } = {
     "It's a beach.": {beach: "beach" },
     "A beach": {beach: "beach"},
     "A forest": {forest: "forest" },
@@ -72,6 +72,7 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Left": {left: "left" },
     "Left?": {left: "left"},
     "Leave.": {leave: "leave"},
+    "Money.": {money: "money"}
 }
 
 const img_grammar: {[index: string]: {forest?: any}} = {
@@ -224,8 +225,17 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         offermoney: {
-            ...prompt("You offer money")
+            initial: 'promptmoney',
+            states: {
+                promptmoney: {
+                ...prompt("You say you don’t have acorns, but you have 10 euros in your pocket . The trolls laugh. You should go look for some acorns then"),
+                on: {ENDSPEECH: '#root.dm.voicegameapp.lookforacorns'}
+            }, 
+            }
+            
         },
+
+
         lookforacorns: {
             ...prompt("You look for acorns")
         }
