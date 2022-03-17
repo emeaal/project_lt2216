@@ -1,27 +1,26 @@
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
-    type: "SPEAK", value: `You're right. It does seem to be a ${context.recResult[0].utterance}` // not needed
+    type: "SPEAK", value: `You're right. It does seem to be a ${context.recResult[0].utterance}`
 }))
 
-function say(text: string): Action<SDSContext, SDSEvent> {
-    return send((_context: SDSContext) => ({ type: "SPEAK", value: text }))
+function say(text: (context: SDSContext) => string): Action<SDSContext, SDSEvent> {
+    return send((_context: SDSContext) => ({ type: "SPEAK", value: text(_context) }))
 }
 
 function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
     return ({
         initial: 'prompt',
-        states: { prompt: { entry: say(prompt) } }
+        states: { prompt: { entry: say(() => prompt) } }
     })
 }
-
 
 function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
     return ({
         initial: 'prompt',
         states: {
             prompt: {
-                entry: say(prompt),
+                entry: say(() => prompt),
                 on: { ENDSPEECH: 'ask' }
             },
             ask: { entry: send('LISTEN') }
@@ -36,6 +35,7 @@ const notmatchedsentences = [
     "Could you repeat that?",
     "Could you say that again, please?",
     "What did you say?",
+    "Sorry I don't understand",
     ]
 
 
@@ -48,6 +48,7 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Cave.": {cave: "cave"},
     "It's a forest.": {forest: "forest" },
     "Help.": {help: "Help" },
+    "I don't know what to do": {help: "Help"},
     "Right.": {right: "right" },
     "Right?": {right: "right" },
     "Left": {left: "left" },
@@ -81,7 +82,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'notmatched',
             states: {
                 notmatched: {
-                    entry: say(notmatchedsentences[Math.floor(Math.random() * (notmatchedsentences.length))]),
+                    entry: say(() => notmatchedsentences[Math.floor(Math.random() * (notmatchedsentences.length))]),
                     on: { ENDSPEECH: '#root.dm.voicegameapp.histforask'},
                 }
             }
@@ -90,7 +91,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'helpmessage',
             states: {
                 helpmessage: {
-                    entry: say("One thing that we actually have succeeded to implement at this moment is this help message"),
+                    entry: say(() => "One thing that we actually have succeeded to implement at this moment is this help message"),
                     on: { ENDSPEECH: '#root.dm.voicegameapp'},
                 }
             }
@@ -99,7 +100,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'end',
             states: {
                 end: {
-                    entry: say("Game ended. Please play again if you'd like to"),
+                    entry: say(() => "Game ended. Please play again if you'd like to"),
                     on: {ENDSPEECH: '#root.dm.idle'}
                 }
             },
@@ -116,7 +117,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     history: 'deep',
                 },
             stop: {
-                entry: say("Ok"),
+                entry: say(() => "Ok"),
                 always: '#root.dm.idle'
             },
             welcome: {
@@ -246,7 +247,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: {ENDSPEECH: 'cavealternatives'},
                 },
                 cavealternatives: {
-                    ...promptAndAsk("You can leave, offer them money instead or look for acorns")
+                    ...promptAndAsk("You can leave, offer them money or look for acorns")
                 }
             }
         },
@@ -260,8 +261,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
             
         },
-
-
         lookforacorns: {
             ...prompt("You look for acorns")
         },
