@@ -1,5 +1,4 @@
 import { MachineConfig, send, Action, assign } from "xstate";
-import bg from "./forest.png"
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
     type: "SPEAK", value: `You're right. It does seem to be a ${context.recResult[0].utterance}` // not needed
@@ -56,9 +55,9 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Money.": {money: "money"}
 }
 
-const img_grammar: {[index: string]: {forest?: any, beach?: any}} = {
-    "Forest.": {forest: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
-    "Beach.": {beach: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
+const img_grammar: {[index: string]: {background?: any}} = {
+    "Forest.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
+    "Beach.": {background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -124,12 +123,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         {
                             target: 'forest',
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
-                            actions: assign({ forest: (context) => img_grammar[context.recResult[0].utterance].forest!})
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {
                             target: 'beach',
                             cond: (context) => "beach" in (menugrammar[context.recResult[0].utterance] || {}),
-                            actions: assign({ beach: (context) => img_grammar[context.recResult[0].utterance].beach!})
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})

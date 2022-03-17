@@ -311,8 +311,8 @@ function App() {
         actions: {
 
             changeBackground: asEffect((context) => {
-                console.log(context.beach)
-                document.body.style.backgroundImage =  `url('${context.beach}')`
+                console.log(context.background)
+                document.body.style.backgroundImage =  `url('${context.background}')`
                 /* console.log('Ready to receive a voice input.'); */
             }),
 
