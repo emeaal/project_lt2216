@@ -51,6 +51,7 @@ interface SDSContext {
 
     lifecounter: number;
     background: any;
+    response: any;
 }
 
 type SDSEvent =
