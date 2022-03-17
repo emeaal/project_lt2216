@@ -49,7 +49,7 @@ interface SDSContext {
     action: string;
 
 
-    counter: number;
+    lifecounter: number;
     background: any;
 }
 

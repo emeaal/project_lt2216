@@ -84,6 +84,7 @@ const img_grammar: {[index: string]: {background?: any}} = {
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
     initial: 'idle',
+    entry: assign({lifecounter: (context) => context.lifecounter = 3}),
     states: {
         idle: {
             on: {
@@ -115,12 +116,20 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         endofgame: {
-            initial: 'end',
+            initial: 'anotherlife',
             states: {
                 end: {
-                    entry: say(() => "Game ended. Please play again if you'd like to"),
+                    entry: say(() => "Game ended. Please try again if you'd like to"),
                     on: {ENDSPEECH: '#root.dm.idle'}
-                }
+                },
+                anotherlife: {
+                    entry: say(() => "Here is another life"),
+                on: { 
+                    ENDSPEECH: {
+                        actions: assign({lifecounter: (context) => context.lifecounter - 1})
+                    },
+                    },
+            },
             },
         },
         voicegameapp: {
@@ -233,7 +242,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         always: 'cavealternatives'
                     },
                     cavealternatives: {
-                        ...promptAndAsk("In front of it there are two trolls, but they don’t say anything. You decide to address one of them. Which one do you choose?")
+                        ...promptAndAsk("In front of it there are two trolls, but they don't say anything. You decide to address one of them. Which one do you choose?")
                     }
                 }
             },
@@ -241,7 +250,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial:  'sayprompt',
             states: {
                 sayprompt: {
-                    entry:  say(() => "You get hit in the head with a bat. You’re now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him."),
+                    entry:  say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him."),
                     on: { ENDSPEECH: '#root.dm.endofgame' },
                 },
         }
