@@ -8,8 +8,6 @@ import { dmMachine } from "./dmvoicegame";
 
 import createSpeechRecognitionPonyfill from 'web-speech-cognitive-services/lib/SpeechServices/SpeechToText'
 import createSpeechSynthesisPonyfill from 'web-speech-cognitive-services/lib/SpeechServices/TextToSpeech';
-import { useEffect, useState } from "react";
-import { ConsoleLoggingListener } from "microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.browser/ConsoleLoggingListener";
 
 // const img_grammar_2: {[index: string]: {forest?: any}} = {
 //     "Forest.": {forest: new URL('https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg')}
