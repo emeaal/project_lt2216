@@ -95,7 +95,7 @@ const machine = Machine<SDSContext, any, SDSEvent>({
                   voiceRe = RegExp(process.env.REACT_APP_TTS_VOICE, "u");
                 }
                 const voice = voices.find((voice) =>
-                  /Christopher/u.test(voice.name)
+                  /Ryan/u.test(voice.name)
                 )!; //voices.find((v: any) => voiceRe.test(v.name))!
                 if (voice) {
                   context.voice = voice;
