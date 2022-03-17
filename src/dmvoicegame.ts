@@ -91,7 +91,31 @@ const menu = {
         "Climb it.",
         "Climb the tree.",
         "Try to climb it."
-    ]
+    ],
+    'left': [
+        "Left.",
+        "To the left.",
+        "I want to go to the left.",
+        "The left troll.",
+        "To the left troll."
+    ],
+    'right': [
+        "Right.",
+        "To the right.",
+        "I want to go to the right.",
+        "The right troll.",
+        "To the right troll."
+    ],
+    'leave': [
+        "Leave.",
+        "I want to leave."
+    ],
+    'money': [
+        "Money.",
+        "Offer money.",
+        "Give them money"
+    ],
+
 }
 
 
@@ -221,7 +245,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         {
                             target: 'cave',
-                            cond: (context) => "cave" in (menugrammar[context.recResult[0].utterance] || {}),
+                            cond: (context) => menu['cave'].includes(context.recResult[0].utterance),
                             actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {
@@ -260,11 +284,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         {
                             target: 'left_troll',
-                            cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
-                        },
+                            cond: (context) => menu['left'].includes(context.recResult[0].utterance)                        },
                         {
                             target: '.right_troll',
-                            cond: (context) => "right" in (menugrammar[context.recResult[0].utterance] || {}),
+                            cond: (context) => menu['right'].includes(context.recResult[0].utterance),
                         },
                         {
                             target: '#root.dm.noMatch'
@@ -305,11 +328,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     {
                         target: '#root.dm.endofgame',
-                        cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
+                        cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: 'offer_money',
-                        cond: (context) => "money" in (menugrammar[context.recResult[0].utterance] || {}),
+                        cond: (context) => menu['money'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: 'lookforacorns',
@@ -346,7 +369,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     {
                         target: 'lookforacorns',
-                        cond: (context) => "acorns" in (menugrammar[context.recResult[0].utterance] || {}),
+                        cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
                         actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
 
                     },
