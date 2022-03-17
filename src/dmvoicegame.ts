@@ -216,7 +216,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         always: 'cavealternatives'
                     },
                     cavealternatives: {
-                        ...promptAndAsk("In front of it there are two trolls, but they don’t say anything. You decide to address one of them. Which one do you choose?")
+                        ...promptAndAsk("In front of it there are two trolls, but they don't say anything. You decide to address one of them. Which one do you choose?")
                     }
                 }
             },
@@ -224,7 +224,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial:  'sayprompt',
             states: {
                 sayprompt: {
-                    entry:  say(() => "You get hit in the head with a bat. You’re now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him."),
+                    entry:  say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him."),
                     on: { ENDSPEECH: '#root.dm.endofgame' },
                 },
         }
