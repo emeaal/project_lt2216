@@ -66,10 +66,24 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
 const menu = {
     'forest': [
         "Forest.",
-        "Let's go to the forest."
+        "A forest.",
+        "It's a forest."
     ],
     'beach': [
+        "Beach.",
+        "A beach.",
+        "It's a beach."
 
+    ],
+    'cave': [
+        "Cave.",
+        "Go to the cave"
+    ],
+    'acorns': [
+        "Acorns.",
+        "Find some acorns.",
+        "Find acorns.",
+        "Try to find acorns"
     ],
 }
 
@@ -158,7 +172,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         {
                             target: 'beach',
-                            cond: (context) => "beach" in (menugrammar[context.recResult[0].utterance] || {}),
+                            cond: (context) => menu['beach'].includes(context.recResult[0].utterance),
                             actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {   target: '#root.dm.getHelp',
