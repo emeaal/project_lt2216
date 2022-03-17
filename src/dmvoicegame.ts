@@ -65,15 +65,10 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
 
 const menu = {
     'forest': [
-        "Forest.",
-        "A forest.",
-        "It's a forest."
+        "Forest."
     ],
     'beach': [
-        "Beach.",
-        "A beach.",
-        "It's a beach."
-
+        "Beach."
     ],
     'cave': [
         "Cave.",
@@ -91,10 +86,9 @@ const menu = {
 
 const img_grammar: {[index: string]: {background?: any}} = {
     "Forest.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
-    "It's a forest.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
     "Beach.": {background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
     "Cave.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
-    "Acorns.": {background: 'https://wallpaperaccess.com/full/4101978.jpg'}
+    "Acorns": {background: 'https://wallpaperaccess.com/full/4101978.jpg'}
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -131,7 +125,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         endofgame: {
-            initial: 'anotherlife',
+            initial: 'end',
             on: {
                 RECOGNISED: [
                     {
@@ -204,7 +198,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ],
                     TIMEOUT: '..', 
                 },
-                ...promptAndAsk("Welcome!"), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
+                ...promptAndAsk("Welcome! You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
             },
             forest: {
                 initial: 'sayforest',
@@ -302,12 +296,14 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
                     },
                     {
-                        target: 'offermoney',
+                        target: 'offer_money',
                         cond: (context) => "money" in (menugrammar[context.recResult[0].utterance] || {}),
                     },
                     {
                         target: 'lookforacorns',
                         cond: (context) => "acorns" in (menugrammar[context.recResult[0].utterance] || {}),
+                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
                     },
                     {
                         target: '#root.dm.noMatch'
@@ -325,15 +321,38 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 }
             }
         },
-        offermoney: {
-            initial: 'promptmoney',
+        offer_money: {
+            initial: 'prompt',
+            on: {
+                RECOGNISED: [
+                    {   target: '#root.dm.getHelp',
+                        cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                    },
+                    {
+                        target: '#root.dm.endofgame',
+                        cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
+                    },
+                    {
+                        target: 'lookforacorns',
+                        cond: (context) => "acorns" in (menugrammar[context.recResult[0].utterance] || {}),
+                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
+
+                ]
+            },
             states: {
-                promptmoney: {
-                ...prompt("You say you don't have acorns, but you have 10 euros in your pocket . The trolls laugh. You should go look for some acorns then"),
-                on: {ENDSPEECH: '#root.dm.voicegameapp.lookforacorns'}
-            }, 
+                prompt: {
+                    ...prompt("You say you don't have acorns, but you have 10 euros in your pocket . The trolls laugh."),
+                    on: {ENDSPEECH: 'cavealternatives'},
+                },
+                cavealternatives: {
+                    ...promptAndAsk("You can either leave or look for some acorns.")
+                }
             }
-            
         },
         lookforacorns: {
             initial: 'sayacorns',
@@ -373,6 +392,15 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
             },
         },
+
+
+
+
+
+
+
+
+
         beach: {
             initial: 'saybeach',
                 on: {

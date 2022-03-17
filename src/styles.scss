@@ -1,11 +1,11 @@
-$yel: hsla(77, 100%, 77%, 1);
+$yel: rgb(0, 0, 0);
 $pnk: #fff; //url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
 $hjk: rgba(173, 28, 202, 0.133);
 $rd: #CD1515;
-$mono: IBM Plex Mono, monospace;
+$mono: Dancing script, cursive;
 $dark: #063746;
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@1,300;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -13,10 +13,11 @@ $dark: #063746;
 
 html, body {
     height: 100vh;;
-    background-image: url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
+    background-image: url(https://images.squarespace-cdn.com/content/v1/544c48e3e4b0393759955d4c/1502684584149-9C28NNI81SFLQMSLV7NT/image-asset.jpeg);
     background-size: cover;
     background-position: center;
     background-repeat: repeat;
+    // font-weight: ;
 }
 
 .App {
@@ -65,7 +66,7 @@ html, body {
 	padding-left: 50px;
 	padding-right: 20px;
 	width: 100vw;
-	font-family: IBM Plex Mono, monospace;
+	font-family: Dancing Script, cursive;
 	font-style: italic;
 	font-weight: light;
 	font-size: 20pt;
