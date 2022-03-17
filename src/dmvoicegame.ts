@@ -67,6 +67,7 @@ const img_grammar: {[index: string]: {background?: any}} = {
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
     initial: 'idle',
+    entry: assign({lifecounter: (context) => context.lifecounter = 3}),
     states: {
         idle: {
             on: {
@@ -98,12 +99,20 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         endofgame: {
-            initial: 'end',
+            initial: 'anotherlife',
             states: {
                 end: {
-                    entry: say(() => "Game ended. Please play again if you'd like to"),
+                    entry: say(() => "Game ended. Please try again if you'd like to"),
                     on: {ENDSPEECH: '#root.dm.idle'}
-                }
+                },
+                anotherlife: {
+                    entry: say(() => "Here is another life"),
+                on: { 
+                    ENDSPEECH: {
+                        actions: assign({lifecounter: (context) => context.lifecounter - 1})
+                    },
+                    },
+            },
             },
         },
         voicegameapp: {

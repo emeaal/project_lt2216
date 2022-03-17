@@ -47,7 +47,7 @@ interface SDSContext {
     text: string;
 
 
-    counter: number;
+    lifecounter: number;
     background: any;
 }
 
