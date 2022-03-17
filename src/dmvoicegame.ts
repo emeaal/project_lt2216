@@ -55,10 +55,6 @@ const notmatchedsentences = [
     "What did you say?",
     ]
 
-// Sentences will be randomized if utterance was not understood, to avoid repetitions
-var randomNumber = Math.random
-const randomnomatchedsentence = notmatchedsentences[Math.floor(Math.random() * Math.floor(notmatchedsentences.length))]
-
 
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, } } = {
     "It's a beach.": {beach: "beach" },
@@ -97,7 +93,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'notmatched',
             states: {
                 notmatched: {
-                    entry: say(randomnomatchedsentence),
+                    entry: say(notmatchedsentences[Math.floor(Math.random() * Math.floor(notmatchedsentences.length))]),
                     on: { ENDSPEECH: '#root.dm.voicegameapp.histforask'},
                 }
             }
@@ -182,7 +178,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     backgroundChanger: {
                         entry: ['changeBackground'],
-                        always: '#root.dm.voicegameapp.forest'
+                        always: '.tellforeststory'
                     },
                     tellforeststory: {
                         ...promptAndAsk("To your right a river is flowing, and to the left there's a cave. Where would you like to go?"),
