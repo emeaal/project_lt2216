@@ -36,6 +36,7 @@ const notmatchedsentences = [
     "Could you repeat that?",
     "Could you say that again, please?",
     "What did you say?",
+    "Sorry I don't understand",
     ]
 
 
@@ -47,6 +48,7 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Forest.": {forest: "forest" },
     "It's a forest.": {forest: "forest" },
     "Help.": {help: "Help" },
+    "I don't know what to do": {help: "Help"},
     "Right.": {right: "right" },
     "Right?": {right: "right" },
     "Left": {left: "left" },
@@ -210,7 +212,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: {ENDSPEECH: 'cavealternatives'},
                 },
                 cavealternatives: {
-                    ...promptAndAsk("You can leave, offer them money instead or look for acorns")
+                    ...promptAndAsk("You can leave, offer them money or look for acorns")
                 }
             }
         },
@@ -224,8 +226,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
             
         },
-
-
         lookforacorns: {
             ...prompt("You look for acorns")
         },
