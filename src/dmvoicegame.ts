@@ -80,6 +80,18 @@ const menu = {
         "Find acorns.",
         "Try to find acorns"
     ],
+    'shake': [
+        "Shake.",
+        "Shake it.",
+        "Shake the tree.",
+        "Try to shake it."
+    ],
+    'climb': [
+        "Climb.",
+        "Climb it.",
+        "Climb the tree.",
+        "Try to climb it."
+    ]
 }
 
 
@@ -198,7 +210,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ],
                     TIMEOUT: '..', 
                 },
-                ...promptAndAsk("Welcome! You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
+                ...promptAndAsk("Welcome!") // You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
             },
             forest: {
                 initial: 'sayforest',
@@ -362,16 +374,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
                     },
                     {
-                        target: '#root.dm.endofgame',
-                        cond: (context) => "shake" in (menugrammar[context.recResult[0].utterance] || {}),
+                        target: '.shake_tree',
+                        cond: (context) => menu['shake'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: '#root.dm.endofgame',
-                        cond: (context) => "climb" in (menugrammar[context.recResult[0].utterance] || {}),
-                    },
-                    {
-                        target: '#root.dm.init',
-                        cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
+                        cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: '#root.dm.noMatch'
@@ -390,9 +398,19 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 tellforeststory: {
                     ...promptAndAsk("Do you shake it or try to climb it?"),
                 },
+                shake_tree: {
+                    initial:  'sayprompt',
+                    states: {
+                        sayprompt: {
+                            entry:  [say(() => "You shake the tree as hard as you can. A squirrel falls down and scratches at your eyes. The damage is so bad that you eventually die. Sorry."), 
+                            assign({lifecounter: (context) => context.lifecounter - 1})],
+                            on: { ENDSPEECH: '#root.dm.endofgame' },
+                        },
+                },
+            },
             },
         },
-
+    
 
 
 
