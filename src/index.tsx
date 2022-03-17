@@ -10,6 +10,7 @@ import bg from "./forest.png"
 import createSpeechRecognitionPonyfill from 'web-speech-cognitive-services/lib/SpeechServices/SpeechToText'
 import createSpeechSynthesisPonyfill from 'web-speech-cognitive-services/lib/SpeechServices/TextToSpeech';
 import { useEffect, useState } from "react";
+import { ConsoleLoggingListener } from "microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.browser/ConsoleLoggingListener";
 
 
 const img_grammar_2: {[index: string]: {forest?: any}} = {
@@ -30,148 +31,197 @@ inspect({
 const defaultPassivity = 10
 
 const machine = Machine<SDSContext, any, SDSEvent>({
-    id: 'root',
-    type: 'parallel',
-    states: {
-        dm: {
-            ...dmMachine
-        },
-
-        asrtts: {
-            initial: 'init',
-            states: {
-                init: {
-                    on: {
-                        CLICK: {
-                            target: 'getToken',
-                            actions: [
-                                assign({
-                                    audioCtx: (_ctx) =>
-                                        new ((window as any).AudioContext || (window as any).webkitAudioContext)()
-                                }),
-                                (context) =>
-                                    navigator.mediaDevices.getUserMedia({ audio: true })
-                                        .then(function(stream) { context.audioCtx.createMediaStreamSource(stream) })
-                            ]
-                        }
-                    }
-                },
-                getToken: {
-                    invoke: {
-                        id: "getAuthorizationToken",
-                        src: (_ctx, _evt) => getAuthorizationToken(),
-                        onDone: {
-                            actions: [
-                                assign((_context, event) => { return { azureAuthorizationToken: event.data } }),
-                                'ponyfillASR'],
-                            target: 'ponyfillTTS'
-                        },
-                        onError: {
-                            target: 'fail'
-                        }
-                    }
-                },
-                ponyfillTTS: {
-                    invoke: {
-                        id: 'ponyTTS',
-                        src: (context, _event) => (callback, _onReceive) => {
-                            const ponyfill = createSpeechSynthesisPonyfill({
-                                audioContext: context.audioCtx,
-                                credentials: {
-                                    region: REGION,
-                                    authorizationToken: context.azureAuthorizationToken,
-                                }
-                            });
-                            const { speechSynthesis, SpeechSynthesisUtterance } = ponyfill;
-                            context.tts = speechSynthesis
-                            context.ttsUtterance = SpeechSynthesisUtterance
-                            context.tts.addEventListener('voiceschanged', () => {
-                                context.tts.cancel()
-                                const voices = context.tts.getVoices();
-                                let voiceRe = RegExp("en-US", 'u')
-                                if (process.env.REACT_APP_TTS_VOICE) {
-                                    voiceRe = RegExp(process.env.REACT_APP_TTS_VOICE, 'u')
-                                }
-                                const voice = voices.find(voice => /Christopher/u.test(voice.name))! //voices.find((v: any) => voiceRe.test(v.name))!
-                                if (voice) {
-                                    context.voice = voice
-                                    callback('TTS_READY')
-                                } else {
-                                    console.error(`TTS_ERROR: Could not get voice for regexp ${voiceRe}`)
-                                    callback('TTS_ERROR')
-                                }
-                            })
-                        }
-                    },
-                    on: {
-                        TTS_READY: 'idle',
-                        TTS_ERROR: 'fail'
-                    }
-                },
-                idle: {
-                    on: {
-                        LISTEN: 'recognising',
-                        SPEAK: {
-                            target: 'speaking',
-                            actions: assign((_context, event) => { return { ttsAgenda: event.value } })
-                        }
-                    },
-                },
-                recognising: {
-                    initial: 'noinput',
-                    exit: 'recStop',
-                    on: {
-                        ASRRESULT: {
-                            actions: ['recLogResult',
-                                assign((_context, event) => {
-                                    return {
-                                        recResult: event.value
-                                    }
-                                })],
-                            target: '.match'
-                        },
-                        RECOGNISED: 'idle',
-                        SELECT: 'idle',
-                        CLICK: '.pause'
-                    },
-                    states: {
-                        noinput: {
-                            entry: [
-                                'recStart',
-                                send(
-                                    { type: 'TIMEOUT' },
-                                    { delay: (context) => (500 * (context.tdmPassivity || defaultPassivity)), id: 'timeout' }
-                                )],
-                            on: {
-                                TIMEOUT: '#root.asrtts.idle',
-                                STARTSPEECH: 'inprogress'
-                            },
-                            exit: cancel('timeout')
-                        },
-                        inprogress: {
-                        },
-                        match: {
-                            entry: send('RECOGNISED'),
-                        },
-                        pause: {
-                            entry: 'recStop',
-                            on: { CLICK: 'noinput' }
-                        }
-                    }
-                },
-                speaking: {
-                    entry: 'ttsStart',
-                    on: {
-                        ENDSPEECH: 'idle',
-                        SELECT: 'idle',
-                        CLICK: { target: 'idle', actions: send('ENDSPEECH') }
-                    },
-                    exit: 'ttsStop',
-                },
-                fail: {}
-            }
-        }
+  id: "root",
+  type: "parallel",
+  states: {
+    dm: {
+        ...dmMachine
     },
+    asrtts: {
+      initial: "init",
+      states: {
+        init: {
+          on: {
+            CLICK: {
+              actions: [
+                assign({
+                  audioCtx: (_ctx) =>
+                    new ((window as any).AudioContext ||
+                      (window as any).webkitAudioContext)(),
+                }),
+                (context) =>
+                  navigator.mediaDevices
+                    .getUserMedia({ audio: true })
+                    .then(function (stream) {
+                      context.audioCtx.createMediaStreamSource(stream);
+                    }),
+              ],
+              target: "#root.asrtts.getToken",
+            },
+          },
+        },
+        getToken: {
+          invoke: {
+            src: (_ctx, _evt) => getAuthorizationToken(),
+            id: "getAuthorizationToken",
+            onDone: [
+              {
+                actions: [
+                  assign((_context, event) => {
+                    return { azureAuthorizationToken: event.data };
+                  }),
+                  "ponyfillASR",
+                ],
+                target: "#root.asrtts.ponyfillTTS",
+              },
+            ],
+            onError: [
+              {
+                target: "#root.asrtts.fail",
+              },
+            ],
+          },
+        },
+        ponyfillTTS: {
+          invoke: {
+            src: (context, _event) => (callback, _onReceive) => {
+              const ponyfill = createSpeechSynthesisPonyfill({
+                audioContext: context.audioCtx,
+                credentials: {
+                  region: REGION,
+                  authorizationToken: context.azureAuthorizationToken,
+                },
+              });
+              const { speechSynthesis, SpeechSynthesisUtterance } = ponyfill;
+              context.tts = speechSynthesis;
+              context.ttsUtterance = SpeechSynthesisUtterance;
+              context.tts.addEventListener("voiceschanged", () => {
+                context.tts.cancel();
+                const voices = context.tts.getVoices();
+                let voiceRe = RegExp("en-US", "u");
+                if (process.env.REACT_APP_TTS_VOICE) {
+                  voiceRe = RegExp(process.env.REACT_APP_TTS_VOICE, "u");
+                }
+                const voice = voices.find((voice) =>
+                  /Christopher/u.test(voice.name)
+                )!; //voices.find((v: any) => voiceRe.test(v.name))!
+                if (voice) {
+                  context.voice = voice;
+                  callback("TTS_READY");
+                } else {
+                  console.error(
+                    `TTS_ERROR: Could not get voice for regexp ${voiceRe}`
+                  );
+                  callback("TTS_ERROR");
+                }
+              });
+            },
+            id: "ponyTTS",
+          },
+          on: {
+            TTS_READY: {
+              target: "#root.asrtts.idle",
+            },
+            TTS_ERROR: {
+              target: "#root.asrtts.fail",
+            },
+          },
+        },
+        idle: {
+          on: {
+            LISTEN: {
+              target: "#root.asrtts.recognising",
+            },
+            SPEAK: {
+              actions: assign((_context, event) => {
+                return { ttsAgenda: event.value };
+              }),
+              target: "#root.asrtts.speaking",
+            },
+          },
+        },
+        recognising: {
+          exit: "recStop",
+          initial: "noinput",
+          states: {
+            noinput: {
+              entry: [
+                "recStart",
+                send(
+                  { type: "TIMEOUT" },
+                  {
+                    delay: (context) =>
+                      500 * (context.tdmPassivity || defaultPassivity),
+                    id: "timeout",
+                  }
+                ),
+              ],
+              exit: cancel("timeout"),
+              on: {
+                TIMEOUT: {
+                  target: "#root.asrtts.idle",
+                },
+                STARTSPEECH: {
+                  target: "#root.asrtts.recognising.inprogress",
+                },
+              },
+            },
+            inprogress: {},
+            match: {
+              entry: send("RECOGNISED"),
+            },
+            pause: {
+              entry: "recStop",
+              on: {
+                CLICK: {
+                  target: "#root.asrtts.recognising.noinput",
+                },
+              },
+            },
+          },
+          on: {
+            ASRRESULT: {
+              actions: [
+                "recLogResult",
+                assign((_context, event) => {
+                  return {
+                    recResult: event.value,
+                  };
+                }),
+              ],
+              target: "#root.asrtts.recognising.match",
+            },
+            RECOGNISED: {
+              target: "#root.asrtts.idle",
+            },
+            SELECT: {
+              target: "#root.asrtts.idle",
+            },
+            CLICK: {
+              target: "#root.asrtts.recognising.pause",
+            },
+          },
+        },
+        speaking: {
+          entry: "ttsStart",
+          exit: "ttsStop",
+          on: {
+            ENDSPEECH: {
+              target: "#root.asrtts.idle",
+            },
+            SELECT: {
+              target: "#root.asrtts.idle",
+            },
+            CLICK: {
+              actions: send("ENDSPEECH"),
+              target: "#root.asrtts.idle",
+            },
+          },
+        },
+        fail: {},
+      },
+    },
+  },
 },
     {
         actions: {
@@ -263,7 +313,8 @@ function App() {
         actions: {
 
             changeBackground: asEffect((context) => {
-                document.body.style.backgroundImage =  current.context.recResult[0].background //context.recResult[0].background//(`${context.forest}`)
+                console.log(context.forest)
+                document.body.style.backgroundImage =  `url('${context.forest}')`
                 /* console.log('Ready to receive a voice input.'); */
             }),
 
