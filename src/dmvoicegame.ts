@@ -158,7 +158,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {
-                            target: 'river',
+                            target: '#root.dm.init',
                             cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
@@ -192,12 +192,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
-                            target: 'offermoney',
-                            cond: (context) => "money" in (menugrammar[context.recResult[0].utterance] || {}),
+                            target: '#root.dm.endofgame',
+                            cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
-                            target: 'lookforacorns',
-                            cond: (context) => "acorns" in (menugrammar[context.recResult[0].utterance] || {}),
+                            target: 'right_troll',
+                            cond: (context) => "right" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
                             target: '#root.dm.noMatch'
@@ -207,15 +207,28 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 states: {
                     cavestory: {
-                        ...prompt("You make your way to the cave. In front of it there are two trolls, but they don’t say anything."),
-                        on: {ENDSPEECH: 'cavealternatives'},
+                        ...prompt("You make your way to the cave."),
+                        on: {ENDSPEECH: 'backgroundChanger'},
+                    },
+                    backgroundChanger: {
+                        entry: ['changeBackground'],
+                        always: 'cavealternatives'
                     },
                     cavealternatives: {
-                        ...promptAndAsk("You decide to address one of them. Which one do you choose?")
+                        ...promptAndAsk("In front of it there are two trolls, but they don’t say anything. You decide to address one of them. Which one do you choose?")
                     }
                 }
             },
-        left_troll:
+        right_troll: {
+            initial:  'sayprompt',
+            states: {
+                sayprompt: {
+                    entry:  say(() => "You get hit in the head with a bat. You’re now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him."),
+                    on: { ENDSPEECH: '#root.dm.endofgame' },
+                },
+        }
+        },
+        // left_troll: 
         left_river: {
             initial: 'cavestory',
             on: {
