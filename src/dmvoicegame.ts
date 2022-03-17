@@ -41,28 +41,6 @@ const notmatchedsentences = [
     "What was that?"
     ]
 
-
-const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, cave?: string, shake?: string, climb?: string, acorns?: string} } = {
-    "It's a beach.": {beach: "beach" },
-    "A beach": {beach: "beach"},
-    "Beach.": {beach: "beach"},
-    "A forest": {forest: "forest" },
-    "Forest.": {forest: "forest" },
-    "Cave.": {cave: "cave"},
-    "It's a forest.": {forest: "forest" },
-    "Help.": {help: "Help" },
-    "I don't know what to do": {help: "Help"},
-    "Right.": {right: "right" },
-    "Right?": {right: "right" },
-    "Left": {left: "left" },
-    "Left?": {left: "left"},
-    "Leave.": {leave: "leave"},
-    "Money.": {money: "money"},
-    "Shake.": {shake: "shake"},
-    "Climb.": {climb: "climb"},
-    "Acorns": {acorns: "acorns"}
-}
-
 const menu = {
     'forest': [
         "Forest."
@@ -114,6 +92,13 @@ const menu = {
         "Money.",
         "Offer money.",
         "Give them money"
+    ],
+    'help': [
+        "Help.",
+        "What should I do?.",
+        "I don't know what to do.",
+        "The right troll.",
+        "To the right troll."
     ],
 
 }
@@ -226,7 +211,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {   target: '#root.dm.getHelp',
-                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                         },
                         {
                             target: '#root.dm.noMatch'
@@ -241,7 +226,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 on: {
                     RECOGNISED: [
                         {   target: '#root.dm.getHelp',
-                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                         },
                         {
                             target: 'cave',
@@ -250,7 +235,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         {
                             target: '#root.dm.init',
-                            cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
+                            cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                         },
                         {
                             target: '#root.dm.noMatch'
@@ -276,11 +261,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 on: {
                     RECOGNISED: [
                         {   target: '#root.dm.getHelp',
-                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                         },
                         {
                             target: '#root.dm.endofgame',
-                            cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
+                            cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
                         },
                         {
                             target: 'left_troll',
@@ -324,7 +309,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             on: {
                 RECOGNISED: [
                     {   target: '#root.dm.getHelp',
-                        cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: '#root.dm.endofgame',
@@ -336,7 +321,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     {
                         target: 'lookforacorns',
-                        cond: (context) => "acorns" in (menugrammar[context.recResult[0].utterance] || {}),
+                        cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
                         actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
 
                     },
@@ -361,11 +346,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             on: {
                 RECOGNISED: [
                     {   target: '#root.dm.getHelp',
-                        cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: '#root.dm.endofgame',
-                        cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
+                        cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: 'lookforacorns',
@@ -394,7 +379,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             on: {
                 RECOGNISED: [
                     {   target: '#root.dm.getHelp',
-                        cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: '.shake_tree',
@@ -447,7 +432,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 on: {
                     RECOGNISED: [
                         {   target: '#root.dm.getHelp',
-                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                         },
                         {
                             target: '#root.dm.noMatch'
