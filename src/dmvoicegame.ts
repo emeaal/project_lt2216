@@ -39,12 +39,13 @@ const notmatchedsentences = [
     ]
 
 
-const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, } } = {
+const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, cave?: string, } } = {
     "It's a beach.": {beach: "beach" },
     "A beach": {beach: "beach"},
     "Beach.": {beach: "beach"},
     "A forest": {forest: "forest" },
     "Forest.": {forest: "forest" },
+    "Cave.": {cave: "cave"},
     "It's a forest.": {forest: "forest" },
     "Help.": {help: "Help" },
     "Right.": {right: "right" },
@@ -58,6 +59,8 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
 const img_grammar: {[index: string]: {background?: any}} = {
     "Forest.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
     "Beach.": {background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
+    "Cave.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
+    // "Acorns.": {background: ''}
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -149,11 +152,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
                         },
                         {
-                            target: 'right_cave',
-                            cond: (context) => "right" in (menugrammar[context.recResult[0].utterance] || {}),
+                            target: 'cave',
+                            cond: (context) => "cave" in (menugrammar[context.recResult[0].utterance] || {}),
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {
-                            target: 'left_river',
+                            target: 'river',
                             cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
@@ -175,10 +179,42 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                 },
             },
-            //game ended
-            right_cave: {
-            ...prompt("You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him. Too bad.")
-        },
+            cave: {
+                initial: 'cavestory',
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                        },
+                        {
+                            target: '#root.dm.endofgame',
+                            cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
+                        },
+                        {
+                            target: 'offermoney',
+                            cond: (context) => "money" in (menugrammar[context.recResult[0].utterance] || {}),
+                        },
+                        {
+                            target: 'lookforacorns',
+                            cond: (context) => "acorns" in (menugrammar[context.recResult[0].utterance] || {}),
+                        },
+                        {
+                            target: '#root.dm.noMatch'
+                        },
+    
+                    ]
+                },
+                states: {
+                    cavestory: {
+                        ...prompt("You make your way to the cave. In front of it there are two trolls, but they don’t say anything."),
+                        on: {ENDSPEECH: 'cavealternatives'},
+                    },
+                    cavealternatives: {
+                        ...promptAndAsk("You decide to address one of them. Which one do you choose?")
+                    }
+                }
+            },
+        left_troll:
         left_river: {
             initial: 'cavestory',
             on: {
