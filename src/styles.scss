@@ -13,6 +13,10 @@ $dark: #063746;
 
 html, body {
     height: 100vh;;
+    background-image: url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat;
 }
 
 .App {
@@ -22,7 +26,6 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100vh;
-    background-image: url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
     background-size: cover;
     background-position: center;
     background-repeat: repeat;

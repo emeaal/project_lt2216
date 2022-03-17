@@ -76,7 +76,7 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
 }
 
 const img_grammar: {[index: string]: {forest?: any}} = {
-    "Forest.": {forest: bg}//new URL('https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg')}
+    "Forest.": {forest: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'}
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -178,7 +178,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 states: {
                     sayforest: {
                         entry: sayPlace,
-                        on: { ENDSPEECH: 'tellforeststory' },
+                        on: { ENDSPEECH: 'backgroundChanger' },
+                    },
+                    backgroundChanger: {
+                        entry: ['changeBackground'],
+                        always: '#root.dm.voicegameapp.forest'
                     },
                     tellforeststory: {
                         ...promptAndAsk("To your right a river is flowing, and to the left there's a cave. Where would you like to go?"),
@@ -228,7 +232,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'promptmoney',
             states: {
                 promptmoney: {
-                ...prompt("You say you don’t have acorns, but you have 10 euros in your pocket . The trolls laugh. You should go look for some acorns then"),
+                ...prompt("You say you don't have acorns, but you have 10 euros in your pocket . The trolls laugh. You should go look for some acorns then"),
                 on: {ENDSPEECH: '#root.dm.voicegameapp.lookforacorns'}
             }, 
             }
