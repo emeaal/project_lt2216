@@ -135,8 +135,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             on: {
                 RECOGNISED: [
                     {
-                    target: '.anotherlife',
-                    cond: (context) => context.lifecounter > 0
+                    target: '.twolivesleft',
+                    cond: (context) => context.lifecounter === 2,
+                    },
+                    {
+                        target: '.onelifeleft',
+                        cond: (context) => context.lifecounter === 1,
                     },
                     {
                         target: '.end',
@@ -152,10 +156,14 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     entry: say(() => "You ran out of lives. You died."),
                     on: {ENDSPEECH: '#root.dm.idle'}
                 },
-                anotherlife: {
+                twolivesleft: {
                     entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
+                onelifeleft: {
+                    entry: say((context) => `You still have ${context.lifecounter} life left. Use it with care`),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
+                }
             }
         },
         voicegameapp: {
@@ -249,7 +257,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
-                            target: 'right_troll',
+                            target: '.right_troll',
                             cond: (context) => "right" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
@@ -269,18 +277,18 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     cavealternatives: {
                         ...promptAndAsk("In front of it there are two trolls, but they don't say anything. You decide to address one of them. Which one do you choose?")
-                    }
-                }
-            },
-        right_troll: {
-            initial:  'sayprompt',
-            states: {
-                sayprompt: {
-                    entry:  [say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
-                    assign({lifecounter: (context) => context.lifecounter - 1})],
-                    on: { ENDSPEECH: '#root.dm.endofgame' },
+                    },
+                    right_troll: {
+                        initial:  'sayprompt',
+                        states: {
+                            sayprompt: {
+                                entry:  [say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
+                                assign({lifecounter: (context) => context.lifecounter - 1})],
+                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                            },
+                    },
                 },
-        }
+            },
         },
         left_troll: {
             initial: 'cavestory',
