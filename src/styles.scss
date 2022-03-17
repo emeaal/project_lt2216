@@ -2,10 +2,10 @@ $yel: rgb(0, 0, 0);
 $pnk: #fff; //url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
 $hjk: rgba(173, 28, 202, 0.133);
 $rd: #CD1515;
-$mono: Dancing script, cursive;
+$mono: Tangerine, cursive;
 $dark: #063746;
 
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -66,7 +66,7 @@ html, body {
 	padding-left: 50px;
 	padding-right: 20px;
 	width: 100vw;
-	font-family: Dancing Script, cursive;
+	font-family: Tangerine, cursive;
 	font-style: italic;
 	font-weight: light;
 	font-size: 20pt;
