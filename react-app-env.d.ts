@@ -41,6 +41,7 @@ interface SDSContext {
     beach: string;
     forest: any;
     help: string;
+    money: string;
 }
 
 type SDSEvent =
