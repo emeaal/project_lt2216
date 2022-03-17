@@ -54,6 +54,8 @@ const menu = {
     ],
     'acorns': [
         "Acorns.",
+        "Acorns",
+        "Find some acorns",
         "Find some acorns.",
         "Find acorns.",
         "Try to find acorns"
@@ -72,6 +74,7 @@ const menu = {
     ],
     'left': [
         "Left.",
+        "Left",
         "To the left.",
         "I want to go to the left.",
         "The left troll.",
@@ -99,6 +102,13 @@ const menu = {
         "I don't know what to do.",
         "The right troll.",
         "To the right troll."
+    ],
+    'steal': [
+        "Steal.",
+        "Steal the acorns.",
+        "Steal them.",
+        "Try to steal.",
+        "Try to steal them."
     ],
 
 }
@@ -182,7 +192,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'lookforacorns',
             states: {
                 hist: {
                     type: 'history',
@@ -316,7 +326,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: 'offer_money',
+                        target: 'offer_money_trolls',
                         cond: (context) => menu['money'].includes(context.recResult[0].utterance),
                     },
                     {
@@ -341,7 +351,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 }
             }
         },
-        offer_money: {
+        offer_money_trolls: {
             initial: 'prompt',
             on: {
                 RECOGNISED: [
@@ -386,7 +396,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['shake'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: '#root.dm.endofgame',
+                        target: 'climb_tree',
                         cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
                     },
                     {
@@ -418,10 +428,57 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             },
         },
+        climb_tree: {
+            initial: 'prompt',
+            on: {
+                RECOGNISED: [
+                    {   target: '#root.dm.getHelp',
+                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: '.steal',
+                        cond: (context) => menu['steal'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: 'offer_money_squirrel',
+                        cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
+
+                ]
+            },
+            states: {
+                prompt: {
+                    ...prompt("You climb the tree and find a squirrel’s nest, with exactly 10 acorns."),
+                    on: {ENDSPEECH: 'climbchoices'},
+                },
+                climbchoices: {
+                    ...promptAndAsk("Do you try to steal them or try to give the squirrel the 10 euros?")
+                },
+                steal: {
+                    initial:  'sayprompt',
+                    states: {
+                        sayprompt: {
+                            entry:  [say(() => "Did you really think you would survive this? The squirrel immediately takes its revenge."), 
+                            assign({lifecounter: (context) => context.lifecounter - 1})],
+                            on: { ENDSPEECH: '#root.dm.endofgame' },
+                        }
+                },
+            }
+        }},
+        offer_money_squirrel: {
+            initial: 'prompt',
+            states: {
+                prompt: {
+                    ...prompt("The squirrel accepts the transaction. You now have the acorns and go back to the trolls."),
+                    on: {ENDSPEECH: '#root.dm.init'},
+                },
+            },
+        },
+
     
-
-
-
 
 
 
