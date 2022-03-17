@@ -9,22 +9,6 @@ function say(text: string): Action<SDSContext, SDSEvent> {
     return send((_context: SDSContext) => ({ type: "SPEAK", value: text }))
 }
 
-function sayp(text:string): MachineConfig<SDSContext, any, SDSEvent> {
-    return({
-        initial: 'saytheplace',
-        states: {
-            saytheplace: {
-                entry: say(text),
-                on: { ENDSPEECH: '#root.dm.voicegameapp.histforask' }, //backgroundChanger },
-            },
-            backgroundChanger: {
-                entry: ['changeBackground'],
-                always: '#root.dm.voicegameapp.forest'
-            },
-        }
-    })
-}
-
 function prompt(prompt: string): MachineConfig<SDSContext, any, SDSEvent> {
     return ({
         initial: 'prompt',
@@ -59,6 +43,7 @@ const notmatchedsentences = [
 const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, } } = {
     "It's a beach.": {beach: "beach" },
     "A beach": {beach: "beach"},
+    "Beach.": {beach: "beach"},
     "A forest": {forest: "forest" },
     "Forest.": {forest: "forest" },
     "It's a forest.": {forest: "forest" },
@@ -271,4 +256,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
         },
     },
+},
+},
+},
 })
