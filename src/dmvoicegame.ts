@@ -131,20 +131,31 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
         },
         endofgame: {
             initial: 'anotherlife',
+            on: {
+                RECOGNISED: [
+                    {
+                    target: '.anotherlife',
+                    cond: (context) => context.lifecounter > 0
+                    },
+                    {
+                        target: '.end',
+                        cond: (context) => context.lifecounter === 0
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    }
+                ]
+            },
             states: {
                 end: {
-                    entry: say(() => "Game ended. Please try again if you'd like to"),
+                    entry: say(() => "You ran out of lives. You died."),
                     on: {ENDSPEECH: '#root.dm.idle'}
                 },
                 anotherlife: {
-                    entry: say(() => "Here is another life"),
-                on: { 
-                    ENDSPEECH: {
-                        actions: assign({lifecounter: (context) => context.lifecounter - 1})
-                    },
-                    },
-            },
-            },
+                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game`),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
+                },
+            }
         },
         voicegameapp: {
             initial: 'welcome',
@@ -264,7 +275,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial:  'sayprompt',
             states: {
                 sayprompt: {
-                    entry:  say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he’s in charge and you upset him."),
+                    entry:  [say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
+                    assign({lifecounter: (context) => context.lifecounter - 1})],
                     on: { ENDSPEECH: '#root.dm.endofgame' },
                 },
         }
