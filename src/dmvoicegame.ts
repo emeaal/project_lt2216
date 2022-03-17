@@ -85,7 +85,8 @@ const menu = {
         "To the right.",
         "I want to go to the right.",
         "The right troll.",
-        "To the right troll."
+        "To the right troll.",
+        "Right?",
     ],
     'leave': [
         "Leave.",
@@ -156,12 +157,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         endofgame: {
-            initial: 'end',
+            initial: 'twolivesleft',
             on: {
                 RECOGNISED: [
                     {
                     target: '.twolivesleft',
-                    cond: (context) => context.lifecounter === 2,
+                    cond: (context) => context.lifecounter < 3,
                     },
                     {
                         target: '.onelifeleft',
@@ -192,7 +193,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         voicegameapp: {
-            initial: 'lookforacorns',
+            initial: 'welcome',
             states: {
                 hist: {
                     type: 'history',
@@ -306,7 +307,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         initial:  'sayprompt',
                         states: {
                             sayprompt: {
-                                entry:  [say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
+                                entry:  [say(() => "You get hit in the head with a bat."), // You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
                                 assign({lifecounter: (context) => context.lifecounter - 1})],
                                 on: { ENDSPEECH: '#root.dm.endofgame' },
                             },
