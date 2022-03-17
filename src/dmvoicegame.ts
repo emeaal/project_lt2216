@@ -30,17 +30,19 @@ function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> 
 
 // Sentences to ask if if no match
 const notmatchedsentences = [
-    "Sorry what did you say?",
-    "Sorry I didn't understand what you said",
+    "Sorry, what did you say?",
+    "Sorry, I didn't understand what you said",
     "Could you repeat that?",
     "Could you say that again, please?",
     "What did you say?",
-    "Sorry I don't understand",
-    "Could you please repeat that?"
+    "Sorry, I don't understand",
+    "Could you please repeat that?",
+    "I didn't understand you.",
+    "What was that?"
     ]
 
 
-const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, cave?: string, } } = {
+const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: string, right?: string, left?:string, leave?: string, money?: string, cave?: string, shake?: string, climb?: string, acorns?: string} } = {
     "It's a beach.": {beach: "beach" },
     "A beach": {beach: "beach"},
     "Beach.": {beach: "beach"},
@@ -55,14 +57,29 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Left": {left: "left" },
     "Left?": {left: "left"},
     "Leave.": {leave: "leave"},
-    "Money.": {money: "money"}
+    "Money.": {money: "money"},
+    "Shake.": {shake: "shake"},
+    "Climb.": {climb: "climb"},
+    "Acorns": {acorns: "acorns"}
 }
+
+const menu = {
+    'forest': [
+        "Forest.",
+        "Let's go to the forest."
+    ],
+    'beach': [
+
+    ],
+}
+
+
 
 const img_grammar: {[index: string]: {background?: any}} = {
     "Forest.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
     "Beach.": {background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
     "Cave.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
-    // "Acorns.": {background: ''}
+    "Acorns.": {background: 'https://wallpaperaccess.com/full/4101978.jpg'}
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -127,7 +144,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {
                             target: 'forest',
-                            cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
+                            cond: (context) => menu['forest'].includes(context.recResult[0].utterance),
                             actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {
@@ -193,7 +210,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => "leave" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
-                            target: '#root.dm.endofgame',
+                            target: 'left_troll',
                             cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
                         },
                         {
@@ -229,8 +246,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
         }
         },
-        // left_troll: 
-        left_river: {
+        left_troll: {
             initial: 'cavestory',
             on: {
                 RECOGNISED: [
@@ -261,7 +277,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: {ENDSPEECH: 'cavealternatives'},
                 },
                 cavealternatives: {
-                    ...promptAndAsk("You can leave, offer them money or look for acorns")
+                    ...promptAndAsk("You can leave, offer them money or look for acorns.")
                 }
             }
         },
@@ -276,7 +292,42 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             
         },
         lookforacorns: {
-            ...prompt("You look for acorns")
+            initial: 'sayacorns',
+            on: {
+                RECOGNISED: [
+                    {   target: '#root.dm.getHelp',
+                        cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                    },
+                    {
+                        target: '#root.dm.endofgame',
+                        cond: (context) => "shake" in (menugrammar[context.recResult[0].utterance] || {}),
+                    },
+                    {
+                        target: '#root.dm.endofgame',
+                        cond: (context) => "climb" in (menugrammar[context.recResult[0].utterance] || {}),
+                    },
+                    {
+                        target: '#root.dm.init',
+                        cond: (context) => "left" in (menugrammar[context.recResult[0].utterance] || {}),
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    }
+                ]
+            },
+            states: {
+                sayacorns: {
+                    ...prompt("You leave and find an oak."),
+                        on: {ENDSPEECH: 'backgroundChanger'},
+                },
+                backgroundChanger: {
+                    entry: ['changeBackground'],
+                    always: 'tellforeststory'
+                },
+                tellforeststory: {
+                    ...promptAndAsk("Do you shake it or try to climb it?"),
+                },
+            },
         },
         beach: {
             initial: 'saybeach',
