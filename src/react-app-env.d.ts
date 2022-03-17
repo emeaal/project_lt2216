@@ -50,6 +50,7 @@ interface SDSContext {
     counter: number;
     background: any;
     forest: any;
+    beach: any;
     url: any;
 }
 

@@ -71,8 +71,9 @@ const menugrammar: { [index: string]: { beach?: string, forest?: string, help?: 
     "Money.": {money: "money"}
 }
 
-const img_grammar: {[index: string]: {forest?: any}} = {
-    "Forest.": {forest: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'}
+const img_grammar: {[index: string]: {forest?: any, beach?: any}} = {
+    "Forest.": {forest: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
+    "Beach.": {beach: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -93,7 +94,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'notmatched',
             states: {
                 notmatched: {
-                    entry: say(notmatchedsentences[Math.floor(Math.random() * Math.floor(notmatchedsentences.length))]),
+                    entry: say(notmatchedsentences[Math.floor(Math.random() * (notmatchedsentences.length))]),
                     on: { ENDSPEECH: '#root.dm.voicegameapp.histforask'},
                 }
             }
@@ -140,6 +141,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => "forest" in (menugrammar[context.recResult[0].utterance] || {}),
                             actions: assign({ forest: (context) => img_grammar[context.recResult[0].utterance].forest!})
                         },
+                        {
+                            target: 'beach',
+                            cond: (context) => "beach" in (menugrammar[context.recResult[0].utterance] || {}),
+                            actions: assign({ beach: (context) => img_grammar[context.recResult[0].utterance].beach!})
+                        },
                         {   target: '#root.dm.getHelp',
                             cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
                         },
@@ -178,7 +184,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     backgroundChanger: {
                         entry: ['changeBackground'],
-                        always: '.tellforeststory'
+                        always: 'tellforeststory'
                     },
                     tellforeststory: {
                         ...promptAndAsk("To your right a river is flowing, and to the left there's a cave. Where would you like to go?"),
@@ -238,8 +244,31 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
 
         lookforacorns: {
             ...prompt("You look for acorns")
-        }
-    },
-},
+        },
+        beach: {
+            initial: 'saybeach',
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => "help" in (menugrammar[context.recResult[0].utterance] || {})
+                        },
+                        {
+                            target: '#root.dm.noMatch'
+                        }
+                    ]
+                },
+                states: {
+                    saybeach: {
+                        entry: sayPlace,
+                        on: { ENDSPEECH: 'backgroundChanger' },
+                    },
+                    backgroundChanger: {
+                        entry: ['changeBackground'],
+                        always: 'tellbeachstory'
+                    },
+                    tellbeachstory: {
+                        ...promptAndAsk("Beach story"),
+                    },
+        },
     },
 })
