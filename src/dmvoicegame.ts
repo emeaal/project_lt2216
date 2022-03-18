@@ -48,6 +48,8 @@ const lostlives = [
     "Well, this was a wrong turn. You lost a life.",
     "You should be searching for your wallet, not finding ways to die",
     "Unfortunately this was not what you expected, you lost a life",
+    "Good job! You lost a life.",
+    "Nice! One step closer to death. You lost a life."
 ]
 
 const menu = {
@@ -98,6 +100,8 @@ const menu = {
         "Left.",
         "Left",
         "To the left.",
+        "To the left one.",
+        "The left one.",
         "I want to go to the left.",
         "The left troll.",
         "To the left troll."
@@ -105,6 +109,8 @@ const menu = {
     'right': [
         "Right.",
         "To the right.",
+        "The right one.",
+        "To the right one.",
         "I want to go to the right.",
         "The right troll.",
         "To the right troll.",
@@ -323,7 +329,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'leave',
+            initial: 'cave',
             states: {
                 hist: {
                     type: 'history',
