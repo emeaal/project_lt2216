@@ -149,6 +149,7 @@ const menu = {
     ],
     'path': [
         "Try another path.",
+        "Find another path.",
         "Try to find another path.",
         "Take another path.",
         "Go on another path.",
@@ -180,6 +181,7 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Try another path." : {background: 'https://i.imgur.com/WCrueUG.jpg'},
     "Try to find another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
     "Take another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Find another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
     "Go on another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
     "Try to go on another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
     "Another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
