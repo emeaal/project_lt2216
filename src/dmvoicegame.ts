@@ -125,6 +125,7 @@ const menu = {
 
 const img_grammar: {[index: string]: {background?: any}} = {
     "A forest.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
+    "Leave.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
     "A beach.": {background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
     "A cave.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
     "To the left.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
@@ -358,8 +359,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: '#root.dm.endofgame',
+                        target: 'leave',
                         cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                     },
                     {
                         target: 'offer_money_trolls',
@@ -421,7 +423,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         leave: {
-            initial: 'cavestory',
+            initial: 'prompt',
             on: {
                 RECOGNISED: [
                     {   target: '#root.dm.getHelp',
@@ -448,9 +450,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 ]
             },
             states: {
-                cavestory: {
+            prompt: {
                     ...prompt("You don’t have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
-                    on: {ENDSPEECH: 'cavealternatives'},
+                    on: {ENDSPEECH: '#root.dm.init'},
                 },
             }
         },
@@ -542,7 +544,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'prompt',
             states: {
                 prompt: {
-                    ...prompt("The squirrel accepts the transaction. You now have the acorns and go back to the trolls."),
+                    ...prompt("The squirrel accepts the transaction. You now have the acorns and go back to the trolls, but you wonder why a squirrel needs money."),
                     on: {ENDSPEECH: '#root.dm.init'},
                 },
             },
