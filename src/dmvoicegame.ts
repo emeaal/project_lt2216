@@ -1,9 +1,10 @@
+import { Context } from "microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/RecognizerConfig";
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const blackbackground = 'https://esquilo.io/wallpaper/wallpaper/20210704/black-wallpaper-plain-plain-black-desktop-wallpapers-on-wallpaperdog-preview.webp'
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
-    type: "SPEAK", value: `You're right. It does seem to be ${context.recResult[0].utterance}`
+    type: "SPEAK", value: `You're right. It does seem to be a ${context.place}`
 }))
 
 function say(text: (context: SDSContext) => string): Action<SDSContext, SDSEvent> {
@@ -63,118 +64,42 @@ const stopwords: { [index: string]: { stop?: string } } = {
     "Quit playing": {stop: "Stop"}
 }
 
-const menu = {
-    'forest': [
-        "A forest.",
-        "Forest.",
+// I got sick of scrolling for ages so I made them horizontal instead of vertical :--)
+const menu : { [index: string]: Array<string> } = {
+    'forest': ["A forest.", "Forest.", "It's a forest."
     ],
-    'beach': [
-        "A beach.",
-        "Beach",
+    'beach': ["A beach.", "Beach", "It's a beach", "I think it's a beach"
     ],
-    'boat': [
-        "Boat.",
+    'boat': ["Boat.",
     ],
-    'tree': [
-        "Palm tree",
-        "Tree.",
-        "Tree",
-        "3",
-        "Three.",
-        "Three"
+    'tree': ["Palm tree", "Tree.", "Tree", "3", "Three.","Three"
     ],
-    'cave': [
-        "Cave.",
-        "Go to the cave"
+    'cave': ["Cave.", "Go to the cave"
     ],
-    'acorns': [
-        "Acorns.",
-        "Acorns",
-        "Find some acorns",
-        "Find some acorns.",
-        "Find acorns.",
-        "Try to find acorns",
-        "Try to look for acorns.",
-        "Look for acorns."
+    'acorns': [ "Acorns.","Acorns", "Find some acorns", "Find some acorns.", "Find acorns.","Try to find acorns","Try to look for acorns.", "Look for acorns."
     ],
-    'shake': [
-        "Shake.",
-        "Shake it.",
-        "Shake the tree.",
-        "Try to shake it."
+    'shake': [ "Shake.","Shake it.","Shake the tree.", "Try to shake it."
     ],
-    'climb': [
-        "Climb.",
-        "Climb it.",
-        "Climb the tree.",
-        "Try to climb it."
+    'climb': ["Climb.", "Climb it.", "Climb the tree.","Try to climb it."
     ],
-    'left': [
-        "Left.",
-        "Left",
-        "To the left.",
-        "To the left one.",
-        "The left one.",
-        "I want to go to the left.",
-        "The left troll.",
-        "To the left troll."
+    'left': [ "Left.","Left", "To the left.", "To the left one.","The left one.","I want to go to the left.", "The left troll.",  "To the left troll."
     ],
-    'right': [
-        "Right.",
-        "To the right.",
-        "The right one.",
-        "To the right one.",
-        "I want to go to the right.",
-        "The right troll.",
-        "To the right troll.",
-        "Right?",
+    'right': [ "Right.","To the right.",  "The right one.", "To the right one.", "I want to go to the right.", "The right troll.","To the right troll.", "Right?",
     ],
-    'leave': [
-        "Leave.",
-        "I want to leave."
+    'leave': [ "Leave.","I want to leave."
     ],
-    'money': [
-        "Money.",
-        "Offer money.",
-        "Give them money"
+    'money': [ "Money.", "Offer money.","Give them money"
     ],
-    'help': [
-        "Help.",
-        "What should I do?.",
-        "I don't know what to do.",
-        "The right troll.",
-        "To the right troll."
+    'help': [ "Help.","What should I do?.","I don't know what to do.","The right troll.", "To the right troll."
     ],
-    'steal': [
-        "Steal.",
-        "Steal the acorns.",
-        "Steal them.",
-        "Try to steal.",
-        "Try to steal them."
+    'steal': ["Steal.", "Steal the acorns.", "Steal them.","Try to steal.","Try to steal them."
     ],
-    'talk': [
-        "Try to talk to the trolls.",
-        "Talk to the trolls.",
-        "Try to talk to the trolls again.",
-        "Talk to the trolls again.",
-        "Talk.",
-        "Talk"
+    'talk': [ "Try to talk to the trolls.", "Talk to the trolls.", "Try to talk to the trolls again.", "Talk to the trolls again.", "Talk.", "Talk"
     ],
-    'path': [
-        "Try another path.",
-        "Find another path.",
-        "Try to find another path.",
-        "Take another path.",
-        "Go on another path.",
-        "Try to go on another path.",
-        "Another path.",
-        "Another path"
-
+    'path': [ "Try another path.", "Find another path.", "Try to find another path.", "Take another path.", "Go on another path.",  "Try to go on another path.", "Another path.", "Another path"
     ]
 
 }
-
-
 
 const img_grammar: { [index: string]: { background?: any } } = {
     "A forest.": { background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg' },
@@ -375,7 +300,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         RECOGNISED: [
                             {
                                 target: 'forest',
-                                cond: (context) => menu['forest'].includes(context.recResult[0].utterance),
+                                cond: (context) => menu["forest"].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
@@ -422,7 +347,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     states: {
                         sayforest: {
-                            entry: sayPlace,
+                            entry: [assign({place: (context) => context.place = "forest"}), sayPlace],
                             on: { ENDSPEECH: 'backgroundChanger' },
                         },
                         backgroundChanger: {
