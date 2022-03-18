@@ -191,7 +191,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 ]
             },
             states: {
-<<<<<<< HEAD
                 entry: {
                     always: [
                         {
@@ -213,30 +212,15 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     entry: say(() => "You ran out of lives. You died."),
                     on: {ENDSPEECH: '#root.dm.idle'},
                 },
-=======
->>>>>>> b3c29369b03f4b5547669da754aafe23b63de3cc
                 twolivesleft: {
                     entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
                 onelifeleft: {
-<<<<<<< HEAD
-                    entry: say((context) => `You still have ${context.lifecounter} life left. Use it with care`),
-                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
-                },
-                
-                
-            }
-=======
                     entry: say((context) => `You still have ${context.lifecounter} life left. You can continue your game`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'},
                 },
-                end: {
-                    entry: say(() => "You ran out of lives. You're now dead"),
-                    on: {ENDSPEECH: '#root.dm.idle'},
-                }
             },
->>>>>>> b3c29369b03f4b5547669da754aafe23b63de3cc
         },
         voicegameapp: {
             initial: 'cave',
