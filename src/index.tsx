@@ -20,7 +20,7 @@ inspect({
 });
 
 
-const defaultPassivity = 10
+const defaultPassivity = 20
 
 const machine = Machine<SDSContext, any, SDSEvent>({
   id: "root",
