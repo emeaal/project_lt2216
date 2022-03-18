@@ -604,7 +604,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: 'talktotrolls',
+                        target: 'trollskill',
                         cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
                     },
                     {
@@ -624,6 +624,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             wander: {
                 ...promptAndAsk("So what will it be?")            },
             }
+
+        },
+        trollskill: {
+
+        },
+        anotherpath: {
 
         },
         lookforacorns: {
