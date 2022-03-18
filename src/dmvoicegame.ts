@@ -336,7 +336,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'cave',
+            initial: 'talktotrolls',
             states: {
                 hist: {
                     type: 'history',
@@ -560,7 +560,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
 
                             },
                             {
-                                target: 'findsquirrel',
+                                target: '#root.dm.init',
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
 
@@ -638,6 +638,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'anotherpath',
                                 cond: (context) => menu['path'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -668,11 +670,48 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     }
                 },
                 anotherpath: {
+                    initial: 'prompt',
+                    on: {
+                        RECOGNISED: [
+                            {
+                                target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            // {
+                            //     target: '.trollskill',
+                            //     cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
+                            // },
+                            {
+                                target: 'anotherpath',
+                                cond: (context) => menu['path'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            },
+
+                        ]
+                    },
+                    states: {
+                        prompt: {
+                            ...prompt("You're back to that crossroads again."),
+                            on: { ENDSPEECH: 'backgroundChanger' },
+                        },
+                        backgroundChanger: {
+                            entry: ['changeBackground'],
+                            always: 'omg'
+                        },
+                        omg: {
+                            ...promptAndAsk("Omg look! A squirrel with your wallet."),
+                            on: { ENDSPEECH: '#root.dm.init' },
+                        },
+                    }                
 
                 },
-                findsquirrel: {
+                // findsquirrel: {
 
-                },
+                // },
                 lookforacorns: {
                     initial: 'sayacorns',
                     on: {
