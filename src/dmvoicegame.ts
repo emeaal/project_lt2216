@@ -1,7 +1,7 @@
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
-    type: "SPEAK", value: `You're right. It does seem to be ${context.recResult[0].utterance}`
+    type: "SPEAK", value: `You're right. It does seem to be a ${context.recResult[0].utterance}`
 }))
 
 function say(text: (context: SDSContext) => string): Action<SDSContext, SDSEvent> {
@@ -43,10 +43,10 @@ const notmatchedsentences = [
 
 const menu = {
     'forest': [
-        "A forest."
+        "Forest."
     ],
     'beach': [
-        "A beach."
+        "Beach."
     ],
     'cave': [
         "Cave.",
@@ -126,7 +126,7 @@ const img_grammar: {[index: string]: {background?: any}} = {
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
     initial: 'idle',
     entry: assign({lifecounter: (context) => context.lifecounter = 3}),
-    states: {
+        states: {
         idle: {
             on: {
                 CLICK: 'init'
@@ -161,36 +161,25 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             on: {
                 RECOGNISED: [
                     {
-                    target: '.twolivesleft',
-                    cond: (context) => context.lifecounter < 3,
-                    },
-                    {
-                        target: '.onelifeleft',
-                        cond: (context) => context.lifecounter === 1,
+                        target: '.twolivesleft',
+                        cond: (context) => context.lifecounter < 3,
                     },
                     {
                         target: '.end',
-                        cond: (context) => context.lifecounter === 0
-                    },
-                    {
-                        target: '#root.dm.noMatch'
+                        cond: (context) => context.lifecounter === 0,
                     }
                 ]
             },
             states: {
-                end: {
-                    entry: say(() => "You ran out of lives. You died."),
-                    on: {ENDSPEECH: '#root.dm.idle'}
-                },
                 twolivesleft: {
-                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game`),
+                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
-                onelifeleft: {
-                    entry: say((context) => `You still have ${context.lifecounter} life left. Use it with care`),
-                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
+                end: {
+                    entry: say(() => "You ran out of lives. You're now dead"),
+                    on: {ENDSPEECH: '#root.dm.idle'},
                 }
-            }
+            },
         },
         voicegameapp: {
             initial: 'welcome',
@@ -301,7 +290,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         always: 'cavealternatives'
                     },
                     cavealternatives: {
-                        ...promptAndAsk("In front of it there are two trolls, but they don't say anything. You decide to address one of them. Which one do you choose?")
+                        ...promptAndAsk("In front of it there are two trolls") // but they don't say anything. You decide to address one of them. Which one do you choose?")
                     },
                     right_troll: {
                         initial:  'sayprompt',
@@ -478,7 +467,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
             },
         },
+
     
+
+
+
 
 
         beach: {
