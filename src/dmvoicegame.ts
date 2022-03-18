@@ -43,6 +43,16 @@ const notmatchedsentences = [
     "Take a breath and try again."
 ]
 
+
+const helpmessages = [
+    "Didn't you pay attention to the rules?",
+    "I don't think is so hard to figure out.",
+    "Think harder.",
+    "Let me say that again.",
+    "You have a short memory it seems."
+
+]
+
 const lostlives = [
     "Oops, you lost a life",
     "Oh no! You lost a life",
@@ -158,7 +168,10 @@ const menu = {
         "Try to talk to the trolls again.",
         "Talk to the trolls again.",
         "Talk.",
-        "Talk"
+        "Talk",
+        "Try again.",
+        "Try to speak to them again.",
+        "Try to speak again."
     ],
     'path': [
         "Try another path.",
@@ -231,7 +244,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'helpmessage',
             states: {
                 helpmessage: {
-                    entry: say(() => "One thing that we actually have succeeded to implement at this moment is this help message"),
+                    entry: say(() => helpmessages[Math.floor(Math.random() * (helpmessages.length))]),
                     on: { ENDSPEECH: '#root.dm.voicegameapp' },
                 }
             }
@@ -355,7 +368,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'talktotrolls',
             states: {
                 hist: {
                     type: 'history',
@@ -592,7 +605,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     states: {
                         prompt: {
-                            ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don't have it.  You turn around and wander for a bit. "),
+                            ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don't have it.  You turn around and wander for a bit. You arrive at a crossroads."),
                             on: { ENDSPEECH: 'backgroundChanger' },
                         },
                         backgroundChanger: {
@@ -600,7 +613,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'wander'
                         },
                         wander: {
-                            ...promptAndAsk("You arrive at a crossroads. Do you go to the right or to the left?"),
+                            ...promptAndAsk("Do you go to the right or to the left?"),
                             on: { ENDSPEECH: '#root.dm.init' },
                         },
                     }
