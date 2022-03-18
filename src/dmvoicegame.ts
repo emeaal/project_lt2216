@@ -82,7 +82,9 @@ const menu = {
         "Find some acorns",
         "Find some acorns.",
         "Find acorns.",
-        "Try to find acorns"
+        "Try to find acorns",
+        "Try to look for acorns.",
+        "Look for acorns."
     ],
     'shake': [
         "Shake.",
@@ -178,6 +180,8 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Find some acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
     "Find some acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
     "Try to find acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Try to look for acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Look for acorns." : { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
     "Try another path." : {background: 'https://i.imgur.com/WCrueUG.jpg'},
     "Try to find another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
     "Take another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
@@ -269,7 +273,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: { ENDSPEECH: 'telltwolives' }
                 },
                 telltwolives: {
-                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`),
+                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game from the nearest checkpoint.`),
                     on: { ENDSPEECH: '#root.dm.voicegameapp.hist' }
                 },
                 onelifeleft: {
@@ -277,7 +281,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: { ENDSPEECH: 'tellonelife' }
                 },
                 tellonelife: {
-                    entry: say((context) => `You still have ${context.lifecounter} life left. You can continue your game`),
+                    entry: say((context) => `You still have ${context.lifecounter} life left. You can continue your game from the nearest checkpoint.`),
                     on: { ENDSPEECH: '#root.dm.voicegameapp.hist' },
                 },
             },
