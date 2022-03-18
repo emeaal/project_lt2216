@@ -53,6 +53,11 @@ const menu = {
     ],
     'tree': [
         "Palm tree",
+        "Tree.",
+        "Tree",
+        "3",
+        "Three.",
+        "Three"
     ],
     'cave': [
         "Cave.",
