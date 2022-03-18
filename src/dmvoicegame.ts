@@ -41,6 +41,15 @@ const notmatchedsentences = [
     "What was that?"
     ]
 
+const lostlives = [
+    "Oops, you lost a life",
+    "Oh no! You lost a life",
+    "Oops, this was definitely not the right path to to search for your wallet. You lost a life",
+    "Well, this was a wrong turn. You lost a life.",
+    "You should be searching for your wallet, not finding ways to die",
+    "Unfortunately this was not what you expected, you lost a life",
+]
+
 const menu = {
     'forest': [
         "A forest.",
@@ -223,7 +232,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: {ENDSPEECH: '#root.dm.idle'},
                 },
                 twolivesleft: {
-                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`),
+                    entry: [say(() => lostlives[Math.floor(Math.random() * (lostlives.length))]) && say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`)],
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
                 onelifeleft: {
@@ -494,7 +503,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: '.lostwanderlife',
+                        target: '#root.dm.endofgame',
                         cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                         actions: assign({lifecounter: (context) => context.lifecounter - 1})
                     },
@@ -518,10 +527,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             backgroundChanger: {
                 entry: ['changeBackground'],
                 always: 'wander'
-            },
-            lostwanderlife: {
-                entry: say(() => "The road doesn't take you anywhere. You lose a life"),
-                on: {ENDSPEECH: '#root.dm.endofgame'},
             },
             wander: {
                 ...promptAndAsk("You arrive at a crossroads. Do you go to the right or to the left?"),
