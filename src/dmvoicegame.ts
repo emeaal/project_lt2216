@@ -132,6 +132,7 @@ const img_grammar: {[index: string]: {background?: any}} = {
     "Leave.": {background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg'},
     "A beach.": {background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
     "A cave.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
+    "Cave.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
     "To the left.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
     "Left.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
     "Acorns": {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
