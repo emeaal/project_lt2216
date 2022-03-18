@@ -501,13 +501,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             states: {
             prompt: {
-<<<<<<< Updated upstream
                     ...prompt("You don’t have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
                     on: {ENDSPEECH: 'backgroundChanger'},
-=======
-                    ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
-                    on: {ENDSPEECH: '#root.dm.init'},
->>>>>>> Stashed changes
                 },
             backgroundChanger: {
                 entry: ['changeBackground'],
