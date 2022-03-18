@@ -334,11 +334,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         always: 'cavealternatives'
                     },
                     cavealternatives: {
-<<<<<<< HEAD
                         ...promptAndAsk("In front of it there are two trolls")
-=======
-                        ...promptAndAsk("In front of it there are two trolls") // but they don't say anything. You decide to address one of them. Which one do you choose?")
->>>>>>> b3c29369b03f4b5547669da754aafe23b63de3cc
                     },
                     right_troll: {
                         initial:  'sayprompt',
