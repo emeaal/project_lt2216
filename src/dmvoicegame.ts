@@ -1,3 +1,4 @@
+import { Context } from "microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/RecognizerConfig";
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
@@ -163,12 +164,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         endofgame: {
-            initial: 'twolivesleft',
+            initial: 'entry',
             on: {
                 RECOGNISED: [
                     {
-                    target: '.twolivesleft',
-                    cond: (context) => context.lifecounter < 3,
+                        target: '.twolivesleft',
+                        cond: (context) => context.lifecounter === 2,
                     },
                     {
                         target: '.onelifeleft',
@@ -184,9 +185,26 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 ]
             },
             states: {
+                entry: {
+                    always: [
+                        {
+                            target: 'twolivesleft',
+                            cond: (context) => context.lifecounter === 2,
+                        },
+                        {
+                            target: 'onelifeleft',
+                            cond: (context) => context.lifecounter === 1,
+                        },
+                        {
+                            target: 'end',
+                            cond: (context) => context.lifecounter === 0
+                        },
+
+                    ]
+                },
                 end: {
                     entry: say(() => "You ran out of lives. You died."),
-                    on: {ENDSPEECH: '#root.dm.idle'}
+                    on: {ENDSPEECH: '#root.dm.idle'},
                 },
                 twolivesleft: {
                     entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game`),
@@ -195,11 +213,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 onelifeleft: {
                     entry: say((context) => `You still have ${context.lifecounter} life left. Use it with care`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
-                }
+                },
+                
+                
             }
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'cave',
             states: {
                 hist: {
                     type: 'history',
@@ -307,7 +327,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         always: 'cavealternatives'
                     },
                     cavealternatives: {
-                        ...promptAndAsk("In front of it there are two trolls, but they don't say anything. You decide to address one of them. Which one do you choose?")
+                        ...promptAndAsk("In front of it there are two trolls")
                     },
                     right_troll: {
                         initial:  'sayprompt',
@@ -391,6 +411,40 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 }
             }
         },
+        // leave: {
+        //     initial: 'cavestory',
+        //     on: {
+        //         RECOGNISED: [
+        //             {   target: '#root.dm.getHelp',
+        //                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+        //             },
+        //             {
+        //                 target: '#root.dm.endofgame',
+        //                 cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+        //             },
+        //             {
+        //                 target: 'offer_money_trolls',
+        //                 cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+        //             },
+        //             {
+        //                 target: 'lookforacorns',
+        //                 cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
+        //                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
+        //             },
+        //             {
+        //                 target: '#root.dm.noMatch'
+        //             },
+
+        //         ]
+        //     },
+        //     states: {
+        //         cavestory: {
+        //             ...prompt("You don’t have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
+        //             on: {ENDSPEECH: 'cavealternatives'},
+        //         },
+        //     }
+        // },
         lookforacorns: {
             initial: 'sayacorns',
             on: {
