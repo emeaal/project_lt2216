@@ -622,7 +622,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ...prompt("The trolls don't want to waste their time with you again. You should find another path before they get too mad. Or you could try again. But I wouldn't personally recommend that."),
                 },
             wander: {
-                ...promptAndAsk(" So what will it be?")            },
+                ...promptAndAsk("So what will it be?")            },
             }
 
         },
