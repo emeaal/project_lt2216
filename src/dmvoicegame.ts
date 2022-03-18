@@ -278,7 +278,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'cave',
+            initial: 'welcome',
             states: {
                 hist: {
                     type: 'history',
@@ -638,7 +638,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 states: {
                     saybeach: {
-                        entry: sayPlace,
+                        entry: say(() => "It definitely looked like a forest to me, but if you say so, sure. It is a beach."),
                         on: { ENDSPEECH: 'backgroundChanger' },
                     },
                     backgroundChanger: {
