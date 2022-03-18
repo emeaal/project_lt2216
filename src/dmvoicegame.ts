@@ -342,7 +342,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'offer_money_trolls',
+            initial: 'left_troll',
             states: {
                 hist: {
                     type: 'history',
