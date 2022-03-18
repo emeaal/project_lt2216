@@ -1,7 +1,7 @@
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
-    type: "SPEAK", value: `You're right. It does seem to be a ${context.recResult[0].utterance}`
+    type: "SPEAK", value: `You're right. It does seem to be ${context.recResult[0].utterance}`
 }))
 
 function say(text: (context: SDSContext) => string): Action<SDSContext, SDSEvent> {
@@ -43,10 +43,10 @@ const notmatchedsentences = [
 
 const menu = {
     'forest': [
-        "Forest."
+        "A forest."
     ],
     'beach': [
-        "Beach."
+        "A beach."
     ],
     'cave': [
         "Cave.",
@@ -478,11 +478,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
             },
         },
-
     
-
-
-
 
 
         beach: {
