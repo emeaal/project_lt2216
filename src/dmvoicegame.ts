@@ -1,7 +1,7 @@
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
-    type: "SPEAK", value: `You're right. It does seem to be a ${context.recResult[0].utterance}`
+    type: "SPEAK", value: `You're right. It does seem to be ${context.recResult[0].utterance}`
 }))
 
 function say(text: (context: SDSContext) => string): Action<SDSContext, SDSEvent> {
@@ -43,10 +43,10 @@ const notmatchedsentences = [
 
 const menu = {
     'forest': [
-        "Forest."
+        "A forest."
     ],
     'beach': [
-        "Beach."
+        "A beach."
     ],
     'boat': [
         "Boat.",
@@ -223,7 +223,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'cave',
+            initial: 'welcome',
             states: {
                 hist: {
                     type: 'history',
@@ -449,8 +449,16 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             states: {
             prompt: {
                     ...prompt("You don’t have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
-                    on: {ENDSPEECH: '#root.dm.init'},
+                    on: {ENDSPEECH: 'backgroundChanger'},
                 },
+            backgroundChanger: {
+                entry: ['changeBackground'],
+                always: 'wander'
+            },
+            wander: {
+                ...promptAndAsk("blablabla"),
+                on: {ENDSPEECH: '#root.dm.init'},
+            },
             }
         },
         lookforacorns: {
