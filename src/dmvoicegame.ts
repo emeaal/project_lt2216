@@ -44,6 +44,15 @@ const notmatchedsentences = [
     "Take a breath and try again."
 ]
 
+
+const helpmessages = [
+    "Didn't you pay attention to the rules?",
+    "I don't think is so hard to figure out.",
+    "Think harder.",
+    "Let me say that again.",
+    "You have a short memory it seems."
+]
+
 const lostlives = [
     "Oops, you lost a life",
     "Oh no! You lost a life",
@@ -108,6 +117,10 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "A beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
     "A cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Offer money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' }, 
+    "Give them money": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Give it money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Offer it money." : { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "To the left.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "To the right.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Left.": { background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg' },
@@ -156,7 +169,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             initial: 'helpmessage',
             states: {
                 helpmessage: {
-                    entry: say(() => "One thing that we actually have succeeded to implement at this moment is this help message"),
+                    entry: say(() => helpmessages[Math.floor(Math.random() * (helpmessages.length))]),
                     on: { ENDSPEECH: '#root.dm.voicegameapp' },
                 }
             }
@@ -280,7 +293,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'talktotrolls',
             states: {
                 hist: {
                     type: 'history',
@@ -517,7 +530,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     states: {
                         prompt: {
-                            ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don't have it.  You turn around and wander for a bit. "),
+                            ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don't have it.  You turn around and wander for a bit. You arrive at a crossroads."),
                             on: { ENDSPEECH: 'backgroundChanger' },
                         },
                         backgroundChanger: {
@@ -525,7 +538,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'wander'
                         },
                         wander: {
-                            ...promptAndAsk("You arrive at a crossroads. Do you go to the right or to the left?"),
+                            ...promptAndAsk("Do you go to the right or to the left?"),
                             on: { ENDSPEECH: '#root.dm.init' },
                         },
                     }
@@ -643,7 +656,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'omg'
                         },
                         omg: {
-                            ...promptAndAsk("Omg look! A squirrel has your wallet."),
+                            ...promptAndAsk("Omg look! A squirrel has your wallet. Let's catch it! Hurry"),
                             on: { ENDSPEECH: '#root.dm.init' },
                         },
                     }                
