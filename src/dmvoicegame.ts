@@ -550,18 +550,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: '#root.dm.endofgame',
-                        cond: (context) => menu['left'].includes(context.recResult[0].utterance),
+                        target: 'talktotrolls',
+                        cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
                     },
-                    // {
-                    //     target: 'backtocave',
-                    //     cond: (context) => menu['right'].includes(context.recResult[0].utterance),
-                    // },
                     {
-                        target: '#root.dm.voicegameapp.cave',
-                        cond: (context) => menu['right'].includes(context.recResult[0].utterance),
-                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
-
+                        target: 'anotherpath',
+                        cond: (context) => menu['path'].includes(context.recResult[0].utterance),
                     },
                     {
                         target: '#root.dm.noMatch'
@@ -579,11 +573,14 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 always: 'wander'
             },
             wander: {
-                ...promptAndAsk("blablabla"),
+                ...promptAndAsk("Do you try to talk to the trolls again or find another path?"),
                 on: {ENDSPEECH: '#root.dm.init'},
             },
             }
         },
+        talktotrolls: {
+
+        }
         lookforacorns: {
             initial: 'sayacorns',
             on: {
