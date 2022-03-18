@@ -1,4 +1,3 @@
-import { Context } from "microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/RecognizerConfig";
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
@@ -218,12 +217,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
                 onelifeleft: {
-                    entry: say((context) => `You still have ${context.lifecounter} life left. Use it with care`),
-                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
+                    entry: say((context) => `You still have ${context.lifecounter} life left. You can continue your game`),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'},
                 },
-                
-                
-            }
+            },
         },
         voicegameapp: {
             initial: 'cave',
