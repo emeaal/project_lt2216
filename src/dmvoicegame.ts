@@ -133,6 +133,14 @@ const menu = {
         "Try to steal.",
         "Try to steal them."
     ],
+    'talk': [
+        "Try to talk to the trolls.",
+        "Talk to the trolls.",
+        "Try to talk to the trolls again.",
+        "Talk to the trolls again.",
+        "Talk.",
+        "Talk"
+    ]
 
 }
 
