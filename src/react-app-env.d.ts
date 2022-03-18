@@ -37,9 +37,8 @@ interface SDSContext {
     azureAuthorizationToken: string;
     audioCtx: any;
 
-    pos: string;
-    neg: string;
     help: string;
+    stop: string;
     right: string;
     left: string;
     leave: string;

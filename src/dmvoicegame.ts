@@ -1,5 +1,7 @@
 import { MachineConfig, send, Action, assign } from "xstate";
 
+const blackbackground = 'https://esquilo.io/wallpaper/wallpaper/20210704/black-wallpaper-plain-plain-black-desktop-wallpapers-on-wallpaperdog-preview.webp'
+
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
     type: "SPEAK", value: `You're right. It does seem to be ${context.recResult[0].utterance}`
 }))
@@ -51,6 +53,15 @@ const lostlives = [
     "Good job! You lost a life.",
     "Nice! One step closer to death. You lost a life."
 ]
+
+const stopwords: { [index: string]: { stop?: string } } = {
+    "Stop.": { stop: "Stop" },
+    "Shut up.": {stop: "Stop"},
+    "I don't want to play anymore.": {stop: "Stop"},
+    "End game.": {stop: "Stop"},
+    "Quit game": {stop: "Stop"},
+    "Quit playing": {stop: "Stop"}
+}
 
 const menu = {
     'forest': [
@@ -259,13 +270,14 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         {
                             target: 'end',
-                            cond: (context) => context.lifecounter === 0
+                            cond: (context) => context.lifecounter === 0,
+                            actions: assign({background: (context) => context.background = blackbackground}),
                         },
 
                     ]
                 },
                 end: {
-                    entry: say(() => "You ran out of lives. You died."),
+                    entry: say(() => "You ran out of lives. You died."), //'changeBackground'], i tried fixing the background when one dies
                     on: { ENDSPEECH: '#root.dm.idle' },
                 },
                 twolivesleft: {
@@ -322,7 +334,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         {
                             target: 'end',
-                            cond: (context) => context.lifecounter === 0
+                            cond: (context) => context.lifecounter === 0,
+                            actions: assign({background: (context) => context.background = blackbackground})
                         },
 
                     ]
@@ -342,7 +355,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'left_troll',
+            initial: 'welcome',
             states: {
                 hist: {
                     type: 'history',
@@ -375,7 +388,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: 'stop', cond: (context) => context.recResult[0].utterance === ('Stop.')
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
                                 target: '#root.dm.noMatch'
