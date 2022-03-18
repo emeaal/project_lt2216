@@ -2,7 +2,7 @@ import { Context } from "microsoft-cognitiveservices-speech-sdk/distrib/lib/src/
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const sayPlace: Action<SDSContext, SDSEvent> = send((context: SDSContext) => ({
-    type: "SPEAK", value: `You're right. It does seem to be ${context.recResult[0].utterance}`
+    type: "SPEAK", value: `You're right. It does seem to be a ${context.recResult[0].utterance}`
 }))
 
 function say(text: (context: SDSContext) => string): Action<SDSContext, SDSEvent> {
@@ -44,10 +44,16 @@ const notmatchedsentences = [
 
 const menu = {
     'forest': [
-        "A forest."
+        "Forest."
     ],
     'beach': [
-        "A beach."
+        "Beach."
+    ],
+    'boat': [
+        "Boat.",
+    ],
+    'tree': [
+        "Palm tree",
     ],
     'cave': [
         "Cave.",
@@ -133,7 +139,7 @@ const img_grammar: {[index: string]: {background?: any}} = {
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
     initial: 'idle',
     entry: assign({lifecounter: (context) => context.lifecounter = 3}),
-    states: {
+        states: {
         idle: {
             on: {
                 CLICK: 'init'
@@ -177,14 +183,15 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     {
                         target: '.end',
-                        cond: (context) => context.lifecounter === 0
+                        cond: (context) => context.lifecounter === 0,
                     },
                     {
                         target: '#root.dm.noMatch'
-                    }
+                    },
                 ]
             },
             states: {
+<<<<<<< HEAD
                 entry: {
                     always: [
                         {
@@ -206,17 +213,30 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     entry: say(() => "You ran out of lives. You died."),
                     on: {ENDSPEECH: '#root.dm.idle'},
                 },
+=======
+>>>>>>> b3c29369b03f4b5547669da754aafe23b63de3cc
                 twolivesleft: {
-                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game`),
+                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
                 onelifeleft: {
+<<<<<<< HEAD
                     entry: say((context) => `You still have ${context.lifecounter} life left. Use it with care`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
                 
                 
             }
+=======
+                    entry: say((context) => `You still have ${context.lifecounter} life left. You can continue your game`),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'},
+                },
+                end: {
+                    entry: say(() => "You ran out of lives. You're now dead"),
+                    on: {ENDSPEECH: '#root.dm.idle'},
+                }
+            },
+>>>>>>> b3c29369b03f4b5547669da754aafe23b63de3cc
         },
         voicegameapp: {
             initial: 'cave',
@@ -230,7 +250,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     history: 'deep',
                 },
             stop: {
-                entry: say(() => "Ok"),
+                entry: say(() => "Ok. Thanks for playing"),
                 always: '#root.dm.idle'
             },
             welcome: {
@@ -249,6 +269,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         {   target: '#root.dm.getHelp',
                             cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        { 
+                            target: 'stop', cond: (context) => context.recResult[0].utterance === ('Stop.')
                         },
                         {
                             target: '#root.dm.noMatch'
@@ -327,7 +350,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         always: 'cavealternatives'
                     },
                     cavealternatives: {
+<<<<<<< HEAD
                         ...promptAndAsk("In front of it there are two trolls")
+=======
+                        ...promptAndAsk("In front of it there are two trolls") // but they don't say anything. You decide to address one of them. Which one do you choose?")
+>>>>>>> b3c29369b03f4b5547669da754aafe23b63de3cc
                     },
                     right_troll: {
                         initial:  'sayprompt',
@@ -512,7 +539,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             states: {
                 prompt: {
-                    ...prompt("You climb the tree and find a squirrel’s nest, with exactly 10 acorns."),
+                    ...prompt("You climb the tree and find a squirrel's nest, with exactly 10 acorns."),
                     on: {ENDSPEECH: 'climbchoices'},
                 },
                 climbchoices: {
@@ -538,7 +565,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
             },
         },
+
     
+
+
+
 
 
         beach: {
@@ -547,6 +578,14 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     RECOGNISED: [
                         {   target: '#root.dm.getHelp',
                             cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: '.boat',
+                            cond: (context) => menu['boat'].includes(context.recResult[0].utterance)
+                        },
+                        {
+                            target: '.palm_tree',
+                            cond: (context) => menu['tree'].includes(context.recResult[0].utterance)
                         },
                         {
                             target: '#root.dm.noMatch'
@@ -563,10 +602,29 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         always: 'tellbeachstory'
                     },
                     tellbeachstory: {
-                        ...promptAndAsk("Beach story"),
+                        ...promptAndAsk("You take a few steps forward to see more of your surroundings. To your left there's a stranded boat and to your right you see a few palm trees. Where do you go?"),
                     },
+                    boat: {
+                        initial:  'sayprompt',
+                        states: {
+                            sayprompt: {
+                                entry:  [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. Too bad")], 
+                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                                },
+                    },
+                },
+                palm_tree: {
+                    initial:  'sayprompt',
+                        states: {
+                            sayprompt: {
+                                entry:  [say(() => "Oh no! You died..."), 
+                                assign({lifecounter: (context) => context.lifecounter - 1})],
+                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                                },
+                },
         },
     },
+},
 },
 },
 },
