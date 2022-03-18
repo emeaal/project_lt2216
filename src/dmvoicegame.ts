@@ -287,7 +287,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'leave',
             states: {
                 hist: {
                     type: 'history',
@@ -458,8 +458,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: '#root.dm.endofgame',
+                        target: 'leave',
                         cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
                     },
                     {
                         target: 'lookforacorns',
@@ -492,15 +494,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     {
                         target: '#root.dm.endofgame',
-                        cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+                        cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: 'offer_money_trolls',
-                        cond: (context) => menu['money'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'lookforacorns',
-                        cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
+                        target: 'backtocave',
+                        cond: (context) => menu['right'].includes(context.recResult[0].utterance),
                         actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
 
                     },
@@ -513,6 +511,48 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             states: {
             prompt: {
                     ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
+                    on: {ENDSPEECH: 'backgroundChanger'},
+                },
+            backgroundChanger: {
+                entry: ['changeBackground'],
+                always: 'wander'
+            },
+            wander: {
+                ...promptAndAsk("You arrive at a crossroads. Do you go to the right or to the left?"),
+                on: {ENDSPEECH: '#root.dm.init'},
+            },
+            }
+        },
+        backtocave: {
+            initial: 'prompt',
+            on: {
+                RECOGNISED: [
+                    {   target: '#root.dm.getHelp',
+                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: '#root.dm.endofgame',
+                        cond: (context) => menu['left'].includes(context.recResult[0].utterance),
+                    },
+                    // {
+                    //     target: 'backtocave',
+                    //     cond: (context) => menu['right'].includes(context.recResult[0].utterance),
+                    // },
+                    {
+                        target: '#root.dm.voicegameapp.cave',
+                        cond: (context) => menu['right'].includes(context.recResult[0].utterance),
+                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
+
+                ]
+            },
+            states: {
+            prompt: {
+                    ...prompt("You just walked in a circle and now you're back at the cave. I see your orientation skills aren't the best."),
                     on: {ENDSPEECH: 'backgroundChanger'},
                 },
             backgroundChanger: {
