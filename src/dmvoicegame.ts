@@ -30,12 +30,15 @@ function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> 
 
 // Sentences to ask if if no match
 const notmatchedsentences = [
-    "Whad did you say?",
+    "What did you say?",
     "Can you speak up?",
     "Maybe work on your enunciation.",
     "Am I deaf or did you mumble?",
     "What was that?",
-    "Are you shy, or what?"
+    "Are you shy, or what?",
+    "Don't be shy.",
+    "Are you eating and speaking?",
+    "Take a breath and try again."
 ]
 
 const lostlives = [
