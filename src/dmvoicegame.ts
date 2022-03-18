@@ -597,8 +597,42 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             }
         },
         talktotrolls: {
+            initial: 'prompt',
+            on: {
+                RECOGNISED: [
+                    {   target: '#root.dm.getHelp',
+                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: 'talktotrolls',
+                        cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: 'anotherpath',
+                        cond: (context) => menu['path'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
 
-        }
+                ]
+            },
+            states: {
+            prompt: {
+                    ...prompt("The trolls don't want to waste their time with you again. You should find another path before they get too mad. Or you could try again. But I wouldn't personally recommend that. So what will it be?"),
+                    on: {ENDSPEECH: 'backgroundChanger'},
+                },
+            backgroundChanger: {
+                entry: ['changeBackground'],
+                always: 'wander'
+            },
+            wander: {
+                ...promptAndAsk("Do you try to talk to the trolls again or find another path?"),
+                on: {ENDSPEECH: '#root.dm.init'},
+            },
+            }
+
+        },
         lookforacorns: {
             initial: 'sayacorns',
             on: {
