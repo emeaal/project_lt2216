@@ -2,10 +2,10 @@ $yel: rgb(0, 0, 0);
 $pnk: #fff; //url(https://cdn.stocksnap.io/img-thumbs/960w/0OTQR8DFQO.jpg);
 $hjk: rgba(173, 28, 202, 0.133);
 $rd: #CD1515;
-$mono: Tangerine, cursive;
+$mono: MedievalSharp, cursive;
 $dark: #063746;
 
-@import url('https://fonts.googleapis.com/css2?family=Tangerine:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -30,33 +30,24 @@ html, body {
     background-size: cover;
     background-position: center;
     background-repeat: repeat;
-
-    .forest-background { // i think maybe this should be used to change backgrounds?
-        background-color: #166e25; 
-      }
-      
-      &-forest {
-	    background-color: rgb(190, 43, 43);
-	}
-
-    .changeBackground {
-        background-image: url(https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg);
-    }
 }
 
 
 .control {
     position: center;
-    height: 40vh;
+    height: 50vh;
     cursor: pointer;
     display: flex;
     flex-flow: row wrap;
     align-items: left;
     &:hover .circle-click  {
-	background: $yel;
+    background-image: url(./wallet.png); //<a href="https://www.flaticon.com/free-icons/wallet" title="wallet icons">Wallet icons created by Freepik - Flaticon</a>
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center;
     }
     .prompt img  {
-	height: 40vh;
+	height: 50vh;
 	padding: 10px 25px;
 	text-align: left;
     }
@@ -95,7 +86,7 @@ html, body {
 	&-click {
 	    @extend .circle;
 	    border: 0px;
-	    background-color: #fff;
+	    background-color: rgb(0, 0, 0);
 	}
 	&-speaking {
 	    @extend .circle;
