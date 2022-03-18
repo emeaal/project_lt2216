@@ -140,6 +140,16 @@ const menu = {
         "Talk to the trolls again.",
         "Talk.",
         "Talk"
+    ],
+    'path': [
+        "Try another path.",
+        "Try to find another path.",
+        "Take another path.",
+        "Go on another path.",
+        "Try to go on another path.",
+        "Another path.",
+        "Another path"
+
     ]
 
 }
