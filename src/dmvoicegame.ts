@@ -48,6 +48,12 @@ const menu = {
     'beach': [
         "Beach."
     ],
+    'boat': [
+        "Boat.",
+    ],
+    'tree': [
+        "Palm tree",
+    ],
     'cave': [
         "Cave.",
         "Go to the cave"
@@ -204,7 +210,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     history: 'deep',
                 },
             stop: {
-                entry: say(() => "Ok"),
+                entry: say(() => "Ok. Thanks for playing"),
                 always: '#root.dm.idle'
             },
             welcome: {
@@ -223,6 +229,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         {   target: '#root.dm.getHelp',
                             cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        { 
+                            target: 'stop', cond: (context) => context.recResult[0].utterance === ('Stop.')
                         },
                         {
                             target: '#root.dm.noMatch'
@@ -452,7 +461,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             states: {
                 prompt: {
-                    ...prompt("You climb the tree and find a squirrel’s nest, with exactly 10 acorns."),
+                    ...prompt("You climb the tree and find a squirrel's nest, with exactly 10 acorns."),
                     on: {ENDSPEECH: 'climbchoices'},
                 },
                 climbchoices: {
@@ -493,6 +502,14 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                         },
                         {
+                            target: '.boat',
+                            cond: (context) => menu['boat'].includes(context.recResult[0].utterance)
+                        },
+                        {
+                            target: '.palm_tree',
+                            cond: (context) => menu['tree'].includes(context.recResult[0].utterance)
+                        },
+                        {
                             target: '#root.dm.noMatch'
                         }
                     ]
@@ -507,10 +524,29 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         always: 'tellbeachstory'
                     },
                     tellbeachstory: {
-                        ...promptAndAsk("Beach story"),
+                        ...promptAndAsk("You take a few steps forward to see more of your surroundings. To your left there's a stranded boat and to your right you see a few palm trees. Where do you go?"),
                     },
+                    boat: {
+                        initial:  'sayprompt',
+                        states: {
+                            sayprompt: {
+                                entry:  [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. Too bad")], 
+                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                                },
+                    },
+                },
+                palm_tree: {
+                    initial:  'sayprompt',
+                        states: {
+                            sayprompt: {
+                                entry:  [say(() => "Oh no! You died..."), 
+                                assign({lifecounter: (context) => context.lifecounter - 1})],
+                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                                },
+                },
         },
     },
+},
 },
 },
 },
