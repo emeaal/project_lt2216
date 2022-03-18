@@ -140,7 +140,6 @@ const img_grammar: {[index: string]: {background?: any}} = {
     "Find some acorns" : {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
     "Find some acorns.": {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
     "Try to find acorns" : {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
-    "Welcome": {background: 'https://images.squarespace-cdn.com/content/v1/544c48e3e4b0393759955d4c/1502684584149-9C28NNI81SFLQMSLV7NT/image-asset.jpeg'}
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -510,7 +509,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             states: {
             prompt: {
-                    ...prompt("You don’t have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
+                    ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
                     on: {ENDSPEECH: 'backgroundChanger'},
                 },
             backgroundChanger: {
@@ -659,7 +658,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         initial:  'sayprompt',
                         states: {
                             sayprompt: {
-                                entry:  [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. Too bad"),
+                                entry:  [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. I told you it wasn't a beach...Too bad"),
                                 assign({lifecounter: (context) => context.lifecounter - 1})], 
                                 on: { ENDSPEECH: '#root.dm.endofgamebeach' },
                                 },
@@ -669,7 +668,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     initial:  'sayprompt',
                         states: {
                             sayprompt: {
-                                entry:  [say(() => "Oh no! You died..."), 
+                                entry:  [say(() => "Oh no! A coconut falls from the palm tree and hits you in the head. I told you it wasn't a beach. You should've listened to me. Too bad you didn't"), 
                                 assign({lifecounter: (context) => context.lifecounter - 1})],
                                 on: { ENDSPEECH: '#root.dm.endofgamebeach' },
                                 },
