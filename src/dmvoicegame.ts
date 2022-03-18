@@ -619,17 +619,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             states: {
             prompt: {
-                    ...prompt("The trolls don't want to waste their time with you again. You should find another path before they get too mad. Or you could try again. But I wouldn't personally recommend that. So what will it be?"),
-                    on: {ENDSPEECH: 'backgroundChanger'},
+                    ...prompt("The trolls don't want to waste their time with you again. You should find another path before they get too mad. Or you could try again. But I wouldn't personally recommend that."),
                 },
-            backgroundChanger: {
-                entry: ['changeBackground'],
-                always: 'wander'
-            },
             wander: {
-                ...promptAndAsk("Do you try to talk to the trolls again or find another path?"),
-                on: {ENDSPEECH: '#root.dm.init'},
-            },
+                ...promptAndAsk(" So what will it be?")            },
             }
 
         },
