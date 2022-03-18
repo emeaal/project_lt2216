@@ -124,7 +124,7 @@ const menu = {
 
 const img_grammar: {[index: string]: {background?: any}} = {
     "A forest.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
-    "Leave.": {background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg'},
+    "Leave.": {background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg'},
     "A beach.": {background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1'},
     "A cave.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
     "To the left.": {background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg'},
@@ -278,7 +278,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'cave',
             states: {
                 hist: {
                     type: 'history',
@@ -318,7 +318,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ],
                     TIMEOUT: '..', 
                 },
-                ...promptAndAsk("Welcome!") // You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?
+                ...promptAndAsk("You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?")
             },
             forest: {
                 initial: 'sayforest',
