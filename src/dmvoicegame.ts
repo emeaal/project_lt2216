@@ -222,6 +222,59 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
             },
         },
+        endofgamebeach: {
+            initial: 'entry',
+            on: {
+                RECOGNISED: [
+                    {
+                        target: '.twolivesleft',
+                        cond: (context) => context.lifecounter === 2,
+                    },
+                    {
+                        target: '.onelifeleft',
+                        cond: (context) => context.lifecounter === 1,
+                    },
+                    {
+                        target: '.end',
+                        cond: (context) => context.lifecounter === 0,
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
+                ]
+            },
+            states: {
+                entry: {
+                    always: [
+                        {
+                            target: 'twolivesleft',
+                            cond: (context) => context.lifecounter === 2,
+                        },
+                        {
+                            target: 'onelifeleft',
+                            cond: (context) => context.lifecounter === 1,
+                        },
+                        {
+                            target: 'end',
+                            cond: (context) => context.lifecounter === 0
+                        },
+
+                    ]
+                },
+                end: {
+                    entry: say(() => "You ran out of lives. You died."),
+                    on: {ENDSPEECH: '#root.dm.idle'},
+                },
+                twolivesleft: {
+                    entry: say((context) => `You still have ${context.lifecounter} lives left. Try finding the right path`),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.welcome'}
+                },
+                onelifeleft: {
+                    entry: say((context) => `You still have ${context.lifecounter} life left. Try finding the right path`),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.welcome'},
+                },
+            },
+        },
         voicegameapp: {
             initial: 'welcome',
             states: {
@@ -448,8 +501,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             states: {
             prompt: {
+<<<<<<< Updated upstream
                     ...prompt("You don’t have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
                     on: {ENDSPEECH: 'backgroundChanger'},
+=======
+                    ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
+                    on: {ENDSPEECH: '#root.dm.init'},
+>>>>>>> Stashed changes
                 },
             backgroundChanger: {
                 entry: ['changeBackground'],
@@ -597,8 +655,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         initial:  'sayprompt',
                         states: {
                             sayprompt: {
-                                entry:  [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. Too bad")], 
-                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                                entry:  [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. Too bad"),
+                                assign({lifecounter: (context) => context.lifecounter - 1})], 
+                                on: { ENDSPEECH: '#root.dm.endofgamebeach' },
                                 },
                     },
                 },
@@ -608,7 +667,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             sayprompt: {
                                 entry:  [say(() => "Oh no! You died..."), 
                                 assign({lifecounter: (context) => context.lifecounter - 1})],
-                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                                on: { ENDSPEECH: '#root.dm.endofgamebeach' },
                                 },
                 },
         },
