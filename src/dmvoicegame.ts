@@ -250,11 +250,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         {
                             target: 'twolivesleft',
                             cond: (context) => context.lifecounter === 2,
-                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+                            actions: assign({background: (context) => context.background = 'https://images.squarespace-cdn.com/content/v1/544c48e3e4b0393759955d4c/1502684584149-9C28NNI81SFLQMSLV7NT/image-asset.jpeg'}),
                         },
                         {
                             target: 'onelifeleft',
                             cond: (context) => context.lifecounter === 1,
+                            actions: assign({background: (context) => context.background = 'https://images.squarespace-cdn.com/content/v1/544c48e3e4b0393759955d4c/1502684584149-9C28NNI81SFLQMSLV7NT/image-asset.jpeg'}),
                         },
                         {
                             target: 'end',
@@ -278,7 +279,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'cave',
+            initial: 'welcome',
             states: {
                 hist: {
                     type: 'history',
@@ -318,7 +319,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ],
                     TIMEOUT: '..', 
                 },
-                ...promptAndAsk("You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?")
+                ...promptAndAsk("Welcome"), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?")
             },
             forest: {
                 initial: 'sayforest',
