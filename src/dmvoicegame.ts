@@ -139,7 +139,6 @@ const img_grammar: {[index: string]: {background?: any}} = {
     "Find some acorns" : {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
     "Find some acorns.": {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
     "Try to find acorns" : {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
-    "Welcome": {background: 'https://images.squarespace-cdn.com/content/v1/544c48e3e4b0393759955d4c/1502684584149-9C28NNI81SFLQMSLV7NT/image-asset.jpeg'}
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
