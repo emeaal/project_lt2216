@@ -250,12 +250,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         {
                             target: 'twolivesleft',
                             cond: (context) => context.lifecounter === 2,
-                            actions: assign({background: (context) => context.background = 'https://images.squarespace-cdn.com/content/v1/544c48e3e4b0393759955d4c/1502684584149-9C28NNI81SFLQMSLV7NT/image-asset.jpeg'}),
+                            actions: assign({background: (context) => context.background = 'https://c.pxhere.com/images/6e/62/14ec0e80e4a8bfd7510e8745c88f-1628448.jpg!d'}),
                         },
                         {
                             target: 'onelifeleft',
                             cond: (context) => context.lifecounter === 1,
-                            actions: assign({background: (context) => context.background = 'https://images.squarespace-cdn.com/content/v1/544c48e3e4b0393759955d4c/1502684584149-9C28NNI81SFLQMSLV7NT/image-asset.jpeg'}),
+                            actions: assign({background: (context) => context.background = 'https://c.pxhere.com/images/6e/62/14ec0e80e4a8bfd7510e8745c88f-1628448.jpg!d'}),
                         },
                         {
                             target: 'end',
