@@ -667,7 +667,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     initial:  'sayprompt',
                         states: {
                             sayprompt: {
-                                entry:  [say(() => "Oh no! A coconut falls from the palm tree and hits you in the head. I told you it wasn't a beach. You should've listened to me. Too bad you didn't"), 
+                                entry:  [say(() => "Oh no! A coconut falls from one of the palm trees and hits you in the head. I told you it wasn't a beach. You should've listened to me. Too bad you didn't"), 
                                 assign({lifecounter: (context) => context.lifecounter - 1})],
                                 on: { ENDSPEECH: '#root.dm.endofgamebeach' },
                                 },
