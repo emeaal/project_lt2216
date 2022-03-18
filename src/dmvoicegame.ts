@@ -133,7 +133,8 @@ const img_grammar: {[index: string]: {background?: any}} = {
     "Find acorns.": {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
     "Find some acorns" : {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
     "Find some acorns.": {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
-    "Try to find acorns" : {background: 'https://wallpaperaccess.com/full/4101978.jpg'}
+    "Try to find acorns" : {background: 'https://wallpaperaccess.com/full/4101978.jpg'},
+    "Welcome": {background: 'https://images.squarespace-cdn.com/content/v1/544c48e3e4b0393759955d4c/1502684584149-9C28NNI81SFLQMSLV7NT/image-asset.jpeg'}
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -249,6 +250,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         {
                             target: 'twolivesleft',
                             cond: (context) => context.lifecounter === 2,
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {
                             target: 'onelifeleft',
@@ -266,11 +268,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: {ENDSPEECH: '#root.dm.idle'},
                 },
                 twolivesleft: {
-                    entry: say((context) => `You still have ${context.lifecounter} lives left. Try finding the right path`),
+                    entry: [say((context) => `You still have ${context.lifecounter} lives left. Try finding the right path`), 'changeBackground'],
                     on: {ENDSPEECH: '#root.dm.voicegameapp.welcome'}
                 },
                 onelifeleft: {
-                    entry: say((context) => `You still have ${context.lifecounter} life left. Try finding the right path`),
+                    entry: [say((context) => `You still have ${context.lifecounter} life left. Try finding the right path`), 'changeBackground'],
                     on: {ENDSPEECH: '#root.dm.voicegameapp.welcome'},
                 },
             },
