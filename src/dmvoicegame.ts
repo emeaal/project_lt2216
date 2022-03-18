@@ -683,10 +683,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 target: '#root.dm.getHelp',
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
-                            // {
-                            //     target: '.trollskill',
-                            //     cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
-                            // },
                             {
                                 target: 'anotherpath',
                                 cond: (context) => menu['path'].includes(context.recResult[0].utterance),
@@ -709,7 +705,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'omg'
                         },
                         omg: {
-                            ...promptAndAsk("Omg look! A squirrel with your wallet."),
+                            ...promptAndAsk("Omg look! A squirrel has your wallet."),
                             on: { ENDSPEECH: '#root.dm.init' },
                         },
                     }                
