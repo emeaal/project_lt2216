@@ -448,312 +448,212 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
             },
         },
-        left_troll: {
-            initial: 'cavestory',
-            on: {
-                RECOGNISED: [
-                    {   target: '#root.dm.getHelp',
-                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'leave',
-                        cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
-                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
-                    },
-                    {
-                        target: 'offer_money_trolls',
-                        cond: (context) => menu['money'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'lookforacorns',
-                        cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
-                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
-
-                    },
-                    {
-                        target: '#root.dm.noMatch'
-                    },
-
-                ]
-            },
-            states: {
-                cavestory: {
-                    ...prompt("The troll tells you that for the small price of 10 acorns, they can let you inside the cave"),
-                    on: {ENDSPEECH: 'cavealternatives'},
-                },
-                cavealternatives: {
-                    ...promptAndAsk("You can leave, offer them money or look for acorns.")
-                }
-            }
-        },
-        offer_money_trolls: {
-            initial: 'prompt',
-            on: {
-                RECOGNISED: [
-                    {   target: '#root.dm.getHelp',
-                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'leave',
-                        cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
-                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
-
-                    },
-                    {
-                        target: 'lookforacorns',
-                        cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
-                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
-
-                    },
-                    {
-                        target: '#root.dm.noMatch'
-                    },
-
-                ]
-            },
-            states: {
-                prompt: {
-                    ...prompt("You say you don't have acorns, but you have 10 euros in your pocket . The trolls laugh."),
-                    on: {ENDSPEECH: 'cavealternatives'},
-                },
-                cavealternatives: {
-                    ...promptAndAsk("You can either leave or look for some acorns.")
-                }
-            }
-        },
-        leave: {
-            initial: 'prompt',
-            on: {
-                RECOGNISED: [
-                    {   target: '#root.dm.getHelp',
-                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: '#root.dm.endofgame',
-                        cond: (context) => menu['left'].includes(context.recResult[0].utterance),
-                        actions: assign({lifecounter: (context) => context.lifecounter - 1})
-                    },
-                    {
-                        target: 'backtocave',
-                        cond: (context) => menu['right'].includes(context.recResult[0].utterance),
-                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
-
-                    },
-                    {
-                        target: '#root.dm.noMatch'
-                    },
-
-                ]
-            },
-            states: {
-            prompt: {
-                    ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don't have it.  You turn around and wander for a bit. "),
-                    on: {ENDSPEECH: 'backgroundChanger'},
-                },
-            backgroundChanger: {
-                entry: ['changeBackground'],
-                always: 'wander'
-            },
-            wander: {
-                ...promptAndAsk("You arrive at a crossroads. Do you go to the right or to the left?"),
-                on: {ENDSPEECH: '#root.dm.init'},
-            },
-            }
-        },
-        backtocave: {
-            initial: 'prompt',
-            on: {
-                RECOGNISED: [
-                    {   target: '#root.dm.getHelp',
-                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'talktotrolls',
-                        cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'anotherpath',
-                        cond: (context) => menu['path'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: '#root.dm.noMatch'
-                    },
-
-                ]
-            },
-            states: {
-            prompt: {
-                    ...prompt("You just walked in a circle and now you're back at the cave. I see your orientation skills aren't the best."),
-                    on: {ENDSPEECH: 'backgroundChanger'},
-                },
-            backgroundChanger: {
-                entry: ['changeBackground'],
-                always: 'wander'
-            },
-            wander: {
-                ...promptAndAsk("Do you try to talk to the trolls again or find another path?"),
-                on: {ENDSPEECH: '#root.dm.init'},
-            },
-            }
-        },
-        talktotrolls: {
-            initial: 'prompt',
-            on: {
-                RECOGNISED: [
-                    {   target: '#root.dm.getHelp',
-                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: '.trollskill',
-                        cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'anotherpath',
-                        cond: (context) => menu['path'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: '#root.dm.noMatch'
-                    },
-
-                ]
-            },
-            states: {
-                prompt: {
-                        ...prompt("The trolls don't want to waste their time with you again. You should find another path before they get too mad. Or you could try again. But I wouldn't personally recommend that."),
-                        on: {ENDSPEECH: 'choices'},
-                    },
-                choices: {
-                    ...promptAndAsk("So what will it be?"),
-                    on: {ENDSPEECH: 'trollskill'},
-                        },
-                trollskill: {
-                    initial:  'sayprompt',
-                    states: {
-                        sayprompt: {
-                            entry:  [say(() => "I don't know why you won't listen to me. The trolls have had enough of you. They club you to death."), 
-                            assign({lifecounter: (context) => context.lifecounter - 1})],
-                            on: { ENDSPEECH: '#root.dm.endofgame' },
-                        },
-                },
-            
-        },
-        anotherpath: {
-
-        },
-        lookforacorns: {
-            initial: 'sayacorns',
-            on: {
-                RECOGNISED: [
-                    {   target: '#root.dm.getHelp',
-                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: '.shake_tree',
-                        cond: (context) => menu['shake'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'climb_tree',
-                        cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: '#root.dm.noMatch'
-                    }
-                ]
-            },
-            states: {
-                sayacorns: {
-                    ...prompt("You leave and find an oak."),
-                        on: {ENDSPEECH: 'backgroundChanger'},
-                },
-                backgroundChanger: {
-                    entry: ['changeBackground'],
-                    always: 'tellforeststory'
-                },
-                tellforeststory: {
-                    ...promptAndAsk("Do you shake it or try to climb it?"),
-                },
-                shake_tree: {
-                    initial:  'sayprompt',
-                    states: {
-                        sayprompt: {
-                            entry:  [say(() => "You shake the tree as hard as you can. A squirrel falls down and scratches at your eyes. The damage is so bad that you eventually die. Sorry."), 
-                            assign({lifecounter: (context) => context.lifecounter - 1})],
-                            on: { ENDSPEECH: '#root.dm.endofgame' },
-                        },
-                },
-            },
-            },
-        },
-        climb_tree: {
-            initial: 'prompt',
-            on: {
-                RECOGNISED: [
-                    {   target: '#root.dm.getHelp',
-                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: '.steal',
-                        cond: (context) => menu['steal'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: 'offer_money_squirrel',
-                        cond: (context) => menu['money'].includes(context.recResult[0].utterance),
-                    },
-                    {
-                        target: '#root.dm.noMatch'
-                    },
-
-                ]
-            },
-            states: {
-                prompt: {
-                    ...prompt("You climb the tree and find a squirrel's nest, with exactly 10 acorns."),
-                    on: {ENDSPEECH: 'climbchoices'},
-                },
-                climbchoices: {
-                    ...promptAndAsk("Do you try to steal them or try to give the squirrel the 10 euros?")
-                },
-                steal: {
-                    initial:  'sayprompt',
-                    states: {
-                        sayprompt: {
-                            entry:  [say(() => "Did you really think you would survive this? The squirrel immediately takes its revenge."), 
-                            assign({lifecounter: (context) => context.lifecounter - 1})],
-                            on: { ENDSPEECH: '#root.dm.endofgame' },
-                        }
-                },
-            }
-        }},
-        offer_money_squirrel: {
-            initial: 'prompt',
-            states: {
-                prompt: {
-                    ...prompt("The squirrel accepts the transaction. You now have the acorns and go back to the trolls, but you wonder why a squirrel needs money."),
-                    on: {ENDSPEECH: '#root.dm.init'},
-                },
-            },
-        },
-
-    
-
-
-
-
-
-        beach: {
-            initial: 'saybeach',
+            left_troll: {
+                initial: 'cavestory',
                 on: {
                     RECOGNISED: [
                         {   target: '#root.dm.getHelp',
                             cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                         },
                         {
-                            target: '.boat',
-                            cond: (context) => menu['boat'].includes(context.recResult[0].utterance)
+                            target: 'leave',
+                            cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
                         },
                         {
-                            target: '.palm_tree',
-                            cond: (context) => menu['tree'].includes(context.recResult[0].utterance)
+                            target: 'offer_money_trolls',
+                            cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: 'lookforacorns',
+                            cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
+                        },
+                        {
+                            target: '#root.dm.noMatch'
+                        },
+
+                    ]
+                },
+                states: {
+                    cavestory: {
+                        ...prompt("The troll tells you that for the small price of 10 acorns, they can let you inside the cave"),
+                        on: {ENDSPEECH: 'cavealternatives'},
+                    },
+                    cavealternatives: {
+                        ...promptAndAsk("You can leave, offer them money or look for acorns.")
+                    }
+                }
+            },
+            offer_money_trolls: {
+                initial: 'prompt',
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: 'leave',
+                            cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
+                        },
+                        {
+                            target: 'lookforacorns',
+                            cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
+                        },
+                        {
+                            target: '#root.dm.noMatch'
+                        },
+
+                    ]
+                },
+                states: {
+                    prompt: {
+                        ...prompt("You say you don't have acorns, but you have 10 euros in your pocket . The trolls laugh."),
+                        on: {ENDSPEECH: 'cavealternatives'},
+                    },
+                    cavealternatives: {
+                        ...promptAndAsk("You can either leave or look for some acorns.")
+                    }
+                }
+            },
+            leave: {
+                initial: 'prompt',
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: '#root.dm.endofgame',
+                            cond: (context) => menu['left'].includes(context.recResult[0].utterance),
+                            actions: assign({lifecounter: (context) => context.lifecounter - 1})
+                        },
+                        {
+                            target: 'backtocave',
+                            cond: (context) => menu['right'].includes(context.recResult[0].utterance),
+                            actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+
+                        },
+                        {
+                            target: '#root.dm.noMatch'
+                        },
+
+                    ]
+                },
+                states: {
+                prompt: {
+                        ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don't have it.  You turn around and wander for a bit. "),
+                        on: {ENDSPEECH: 'backgroundChanger'},
+                    },
+                backgroundChanger: {
+                    entry: ['changeBackground'],
+                    always: 'wander'
+                },
+                wander: {
+                    ...promptAndAsk("You arrive at a crossroads. Do you go to the right or to the left?"),
+                    on: {ENDSPEECH: '#root.dm.init'},
+                },
+                }
+            },
+            backtocave: {
+                initial: 'prompt',
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: 'talktotrolls',
+                            cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: 'anotherpath',
+                            cond: (context) => menu['path'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: '#root.dm.noMatch'
+                        },
+
+                    ]
+                },
+                states: {
+                prompt: {
+                        ...prompt("You just walked in a circle and now you're back at the cave. I see your orientation skills aren't the best."),
+                        on: {ENDSPEECH: 'backgroundChanger'},
+                    },
+                backgroundChanger: {
+                    entry: ['changeBackground'],
+                    always: 'wander'
+                },
+                wander: {
+                    ...promptAndAsk("Do you try to talk to the trolls again or find another path?"),
+                    on: {ENDSPEECH: '#root.dm.init'},
+                },
+                }
+            },
+            talktotrolls: {
+                initial: 'prompt',
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: '.trollskill',
+                            cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: 'anotherpath',
+                            cond: (context) => menu['path'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: '#root.dm.noMatch'
+                        },
+
+                    ]
+                },
+                states: {
+                    prompt: {
+                            ...prompt("The trolls don't want to waste their time with you again. You should find another path before they get too mad. Or you could try again. But I wouldn't personally recommend that."),
+                            on: {ENDSPEECH: 'choices'},
+                        },
+                    choices: {
+                        ...promptAndAsk("So what will it be?"),
+                        on: {ENDSPEECH: 'trollskill'},
+                            },
+                    trollskill: {
+                        initial:  'sayprompt',
+                        states: {
+                            sayprompt: {
+                                entry:  [say(() => "I don't know why you won't listen to me. The trolls have had enough of you. They club you to death."), 
+                                assign({lifecounter: (context) => context.lifecounter - 1})],
+                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                            },
+                    },
+                
+            },
+            anotherpath: {
+
+            },
+            lookforacorns: {
+                initial: 'sayacorns',
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: '.shake_tree',
+                            cond: (context) => menu['shake'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: 'climb_tree',
+                            cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
                         },
                         {
                             target: '#root.dm.noMatch'
@@ -761,40 +661,136 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ]
                 },
                 states: {
-                    saybeach: {
-                        entry: say(() => "It definitely looked like a forest to me, but if you say so, sure. It is a beach."),
-                        on: { ENDSPEECH: 'backgroundChanger' },
+                    sayacorns: {
+                        ...prompt("You leave and find an oak."),
+                            on: {ENDSPEECH: 'backgroundChanger'},
                     },
                     backgroundChanger: {
                         entry: ['changeBackground'],
-                        always: 'tellbeachstory'
+                        always: 'tellforeststory'
                     },
-                    tellbeachstory: {
-                        ...promptAndAsk("You take a few steps forward to see more of your surroundings. To your left there's a stranded boat and to your right you see a few palm trees. Where do you go?"),
+                    tellforeststory: {
+                        ...promptAndAsk("Do you shake it or try to climb it?"),
                     },
-                    boat: {
+                    shake_tree: {
                         initial:  'sayprompt',
                         states: {
                             sayprompt: {
-                                entry:  [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. I told you it wasn't a beach...Too bad"),
-                                assign({lifecounter: (context) => context.lifecounter - 1})], 
-                                on: { ENDSPEECH: '#root.dm.endofgamebeach' },
-                                },
+                                entry:  [say(() => "You shake the tree as hard as you can. A squirrel falls down and scratches at your eyes. The damage is so bad that you eventually die. Sorry."), 
+                                assign({lifecounter: (context) => context.lifecounter - 1})],
+                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                            },
                     },
                 },
-                palm_tree: {
-                    initial:  'sayprompt',
+                },
+            },
+            climb_tree: {
+                initial: 'prompt',
+                on: {
+                    RECOGNISED: [
+                        {   target: '#root.dm.getHelp',
+                            cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: '.steal',
+                            cond: (context) => menu['steal'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: 'offer_money_squirrel',
+                            cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                        },
+                        {
+                            target: '#root.dm.noMatch'
+                        },
+
+                    ]
+                },
+                states: {
+                    prompt: {
+                        ...prompt("You climb the tree and find a squirrel's nest, with exactly 10 acorns."),
+                        on: {ENDSPEECH: 'climbchoices'},
+                    },
+                    climbchoices: {
+                        ...promptAndAsk("Do you try to steal them or try to give the squirrel the 10 euros?")
+                    },
+                    steal: {
+                        initial:  'sayprompt',
                         states: {
                             sayprompt: {
-                                entry:  [say(() => "Oh no! A coconut falls from one of the palm trees and hits you in the head. I told you it wasn't a beach. You should've listened to me. Too bad you didn't"), 
+                                entry:  [say(() => "Did you really think you would survive this? The squirrel immediately takes its revenge."), 
                                 assign({lifecounter: (context) => context.lifecounter - 1})],
-                                on: { ENDSPEECH: '#root.dm.endofgamebeach' },
-                                },
+                                on: { ENDSPEECH: '#root.dm.endofgame' },
+                            }
+                    },
+                }
+            }},
+            offer_money_squirrel: {
+                initial: 'prompt',
+                states: {
+                    prompt: {
+                        ...prompt("The squirrel accepts the transaction. You now have the acorns and go back to the trolls, but you wonder why a squirrel needs money."),
+                        on: {ENDSPEECH: '#root.dm.init'},
+                    },
                 },
+            },
+
+            beach: {
+                initial: 'saybeach',
+                    on: {
+                        RECOGNISED: [
+                            {   target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '.boat',
+                                cond: (context) => menu['boat'].includes(context.recResult[0].utterance)
+                            },
+                            {
+                                target: '.palm_tree',
+                                cond: (context) => menu['tree'].includes(context.recResult[0].utterance)
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            }
+                        ]
+                    },
+                    states: {
+                        saybeach: {
+                            entry: say(() => "It definitely looked like a forest to me, but if you say so, sure. It is a beach."),
+                            on: { ENDSPEECH: 'backgroundChanger' },
+                        },
+                        backgroundChanger: {
+                            entry: ['changeBackground'],
+                            always: 'tellbeachstory'
+                        },
+                        tellbeachstory: {
+                            ...promptAndAsk("You take a few steps forward to see more of your surroundings. To your left there's a stranded boat and to your right you see a few palm trees. Where do you go?"),
+                        },
+                        boat: {
+                            initial:  'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry:  [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. I told you it wasn't a beach...Too bad"),
+                                    assign({lifecounter: (context) => context.lifecounter - 1})], 
+                                    on: { ENDSPEECH: '#root.dm.endofgamebeach' },
+                                    },
+                        },
+                    },
+                    palm_tree: {
+                        initial:  'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry:  [say(() => "Oh no! A coconut falls from one of the palm trees and hits you in the head. I told you it wasn't a beach. You should've listened to me. Too bad you didn't"), 
+                                    assign({lifecounter: (context) => context.lifecounter - 1})],
+                                    on: { ENDSPEECH: '#root.dm.endofgamebeach' },
+                                    },
+                    },
+            },
         },
-    },
-},
-},
-},
-},
-})
+    }
+    }
+    }
+    }
+    }
+    }
+    })
