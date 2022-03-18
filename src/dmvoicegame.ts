@@ -604,7 +604,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: 'trollskill',
+                        target: '.trollskill',
                         cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
                     },
                     {
@@ -618,16 +618,24 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 ]
             },
             states: {
-            prompt: {
-                    ...prompt("The trolls don't want to waste their time with you again. You should find another path before they get too mad. Or you could try again. But I wouldn't personally recommend that."),
+                prompt: {
+                        ...prompt("The trolls don't want to waste their time with you again. You should find another path before they get too mad. Or you could try again. But I wouldn't personally recommend that."),
+                        on: {ENDSPEECH: 'choices'},
+                    },
+                choices: {
+                    ...promptAndAsk("So what will it be?"),
+                    on: {ENDSPEECH: 'trollskill'},
+                        },
+                trollskill: {
+                    initial:  'sayprompt',
+                    states: {
+                        sayprompt: {
+                            entry:  [say(() => "I don't know why you won't listen to me. The trolls have had enough of you. They club you to death."), 
+                            assign({lifecounter: (context) => context.lifecounter - 1})],
+                            on: { ENDSPEECH: '#root.dm.endofgame' },
+                        },
                 },
-            wander: {
-                ...promptAndAsk("So what will it be?")            },
-            }
-
-        },
-        trollskill: {
-
+            
         },
         anotherpath: {
 
