@@ -44,7 +44,7 @@ const notmatchedsentences = [
 const lostlives = [
     "Oops, you lost a life",
     "Oh no! You lost a life",
-    "Oops, this was definitely not the right path to to search for your wallet. You lost a life",
+    "Oops, this was definitely not the right path to search for your wallet. You lost a life",
     "Well, this was a wrong turn. You lost a life.",
     "You should be searching for your wallet, not finding ways to die",
     "Unfortunately this was not what you expected, you lost a life",
@@ -232,10 +232,18 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: {ENDSPEECH: '#root.dm.idle'},
                 },
                 twolivesleft: {
-                    entry: [say(() => lostlives[Math.floor(Math.random() * (lostlives.length))]) && say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`)],
+                    entry: say(() => lostlives[Math.floor(Math.random() * (lostlives.length))]), 
+                    on: {ENDSPEECH: 'telltwolives'}
+                },
+                telltwolives: {
+                    entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
                 onelifeleft: {
+                    entry: say(() => lostlives[Math.floor(Math.random() * (lostlives.length))]), 
+                    on: {ENDSPEECH: 'tellonelife'}
+                },
+                tellonelife: {
                     entry: say((context) => `You still have ${context.lifecounter} life left. You can continue your game`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'},
                 },
@@ -297,7 +305,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'leave',
             states: {
                 hist: {
                     type: 'history',
