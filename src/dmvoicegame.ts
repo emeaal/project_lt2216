@@ -288,7 +288,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'leave',
+            initial: 'welcome',
             states: {
                 hist: {
                     type: 'history',
@@ -494,8 +494,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                     },
                     {
-                        target: '#root.dm.endofgame',
+                        target: '.lostwanderlife',
                         cond: (context) => menu['left'].includes(context.recResult[0].utterance),
+                        actions: assign({lifecounter: (context) => context.lifecounter - 1})
                     },
                     {
                         target: 'backtocave',
@@ -511,12 +512,16 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
             states: {
             prompt: {
-                    ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
+                    ...prompt("You don't have time for that, you need to find your wallet, and these trolls definitely don't have it.  You turn around and wander for a bit. "),
                     on: {ENDSPEECH: 'backgroundChanger'},
                 },
             backgroundChanger: {
                 entry: ['changeBackground'],
                 always: 'wander'
+            },
+            lostwanderlife: {
+                entry: say(() => "The road doesn't take you anywhere. You lose a life"),
+                on: {ENDSPEECH: '#root.dm.endofgame'},
             },
             wander: {
                 ...promptAndAsk("You arrive at a crossroads. Do you go to the right or to the left?"),
