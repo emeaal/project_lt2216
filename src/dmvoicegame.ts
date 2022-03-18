@@ -323,7 +323,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'cave',
+            initial: 'leave',
             states: {
                 hist: {
                     type: 'history',
