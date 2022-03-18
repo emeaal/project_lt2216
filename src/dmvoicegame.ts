@@ -50,7 +50,6 @@ const helpmessages = [
     "Think harder.",
     "Let me say that again.",
     "You have a short memory it seems."
-
 ]
 
 const lostlives = [
@@ -146,7 +145,9 @@ const menu = {
     'money': [
         "Money.",
         "Offer money.",
-        "Give them money"
+        "Give them money",
+        "Give it money.",
+        "Offer it money."
     ],
     'help': [
         "Help.",
@@ -196,6 +197,10 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "A beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
     "A cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Offer money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' }, 
+    "Give them money": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Give it money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Offer it money." : { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "To the left.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "To the right.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Left.": { background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg' },
@@ -731,7 +736,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'omg'
                         },
                         omg: {
-                            ...promptAndAsk("Omg look! A squirrel has your wallet."),
+                            ...promptAndAsk("Omg look! A squirrel has your wallet. Let's catch it! Hurry!"),
                             on: { ENDSPEECH: '#root.dm.init' },
                         },
                     }                
@@ -800,6 +805,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'offer_money_squirrel',
                                 cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -832,9 +838,51 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     states: {
                         prompt: {
                             ...prompt("The squirrel accepts the transaction. You now have the acorns and go back to the trolls, but you wonder why a squirrel needs money."),
-                            on: { ENDSPEECH: '#root.dm.init' },
+                            on: { ENDSPEECH: 'backatcave' },
                         },
                     },
+                },
+                backatcave: {
+                    initial: 'prompt',
+                    on: {
+                        RECOGNISED: [
+                            {
+                                target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '.steal',
+                                cond: (context) => menu['steal'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'offer_money_squirrel',
+                                cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            },
+
+                        ]
+                    },
+                    states: {
+                        prompt: {
+                            ...prompt("You climb the tree and find a squirrel's nest, with exactly 10 acorns."),
+                            on: { ENDSPEECH: 'climbchoices' },
+                        },
+                        climbchoices: {
+                            ...promptAndAsk("Do you try to steal them or try to give the squirrel the 10 euros?")
+                        },
+                        steal: {
+                            initial: 'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry: [say(() => "Did you really think you would survive this? The squirrel immediately takes its revenge."),
+                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
+                                    on: { ENDSPEECH: '#root.dm.endofgame' },
+                                }
+                            },
+                        }
+                    }
                 },
                 beach: {
                     initial: 'saybeach',
