@@ -162,18 +162,29 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 RECOGNISED: [
                     {
                         target: '.twolivesleft',
-                        cond: (context) => context.lifecounter < 3,
+                        cond: (context) => context.lifecounter === 2,
+                    },
+                    {
+                        target: '.onelifeleft',
+                        cond: (context) => context.lifecounter === 1,
                     },
                     {
                         target: '.end',
                         cond: (context) => context.lifecounter === 0,
-                    }
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
                 ]
             },
             states: {
                 twolivesleft: {
                     entry: say((context) => `You still have ${context.lifecounter} lives left. You can continue your game.`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
+                },
+                onelifeleft: {
+                    entry: say((context) => `You still have ${context.lifecounter} life left. You can continue your game`),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'},
                 },
                 end: {
                     entry: say(() => "You ran out of lives. You're now dead"),
