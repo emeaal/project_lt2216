@@ -177,6 +177,13 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Find some acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
     "Find some acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
     "Try to find acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Try another path." : {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Try to find another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Take another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Go on another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Try to go on another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+
 }
 
 export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
@@ -553,6 +560,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
 
                             },
                             {
+                                target: 'findsquirrel',
+                                cond: (context) => menu['left'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+
+                            },
+                            {
                                 target: '#root.dm.noMatch'
                             },
 
@@ -657,6 +670,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 anotherpath: {
 
                 },
+                findsquirrel: {
+
+                },
                 lookforacorns: {
                     initial: 'sayacorns',
                     on: {
@@ -753,7 +769,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                     },
                 },
-
                 beach: {
                     initial: 'saybeach',
                     on: {
