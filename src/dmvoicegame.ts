@@ -217,10 +217,19 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
                 },
                 onelifeleft: {
+<<<<<<< HEAD
                     entry: say((context) => `You still have ${context.lifecounter} life left. You can continue your game`),
                     on: {ENDSPEECH: '#root.dm.voicegameapp.hist'},
                 },
             },
+=======
+                    entry: say((context) => `You still have ${context.lifecounter} life left. Use it with care`),
+                    on: {ENDSPEECH: '#root.dm.voicegameapp.hist'}
+                },
+                
+                
+            }
+>>>>>>> f85f39da58a39f6c20aaac25092ee9219816dd46
         },
         voicegameapp: {
             initial: 'cave',
@@ -418,40 +427,40 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 }
             }
         },
-        // leave: {
-        //     initial: 'cavestory',
-        //     on: {
-        //         RECOGNISED: [
-        //             {   target: '#root.dm.getHelp',
-        //                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-        //             },
-        //             {
-        //                 target: '#root.dm.endofgame',
-        //                 cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
-        //             },
-        //             {
-        //                 target: 'offer_money_trolls',
-        //                 cond: (context) => menu['money'].includes(context.recResult[0].utterance),
-        //             },
-        //             {
-        //                 target: 'lookforacorns',
-        //                 cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
-        //                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
+        leave: {
+            initial: 'cavestory',
+            on: {
+                RECOGNISED: [
+                    {   target: '#root.dm.getHelp',
+                        cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: '#root.dm.endofgame',
+                        cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: 'offer_money_trolls',
+                        cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                    },
+                    {
+                        target: 'lookforacorns',
+                        cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
+                        actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background!})
 
-        //             },
-        //             {
-        //                 target: '#root.dm.noMatch'
-        //             },
+                    },
+                    {
+                        target: '#root.dm.noMatch'
+                    },
 
-        //         ]
-        //     },
-        //     states: {
-        //         cavestory: {
-        //             ...prompt("You don’t have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
-        //             on: {ENDSPEECH: 'cavealternatives'},
-        //         },
-        //     }
-        // },
+                ]
+            },
+            states: {
+                cavestory: {
+                    ...prompt("You don’t have time for that, you need to find your wallet, and these trolls definitely don’t have it.  You turn around and wander for a bit. "),
+                    on: {ENDSPEECH: 'cavealternatives'},
+                },
+            }
+        },
         lookforacorns: {
             initial: 'sayacorns',
             on: {
