@@ -1,4 +1,3 @@
-import { Context } from "microsoft-cognitiveservices-speech-sdk/distrib/lib/src/common.speech/RecognizerConfig";
 import { MachineConfig, send, Action, assign } from "xstate";
 
 const blackbackground = 'https://esquilo.io/wallpaper/wallpaper/20210704/black-wallpaper-plain-plain-black-desktop-wallpapers-on-wallpaperdog-preview.webp'
@@ -26,7 +25,11 @@ function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> 
                 entry: say(() => prompt),
                 on: { ENDSPEECH: 'ask' }
             },
-            ask: { entry: send('LISTEN') }
+            ask: { entry: send('LISTEN') },
+            hist: {
+                    type: 'history',
+                    history: 'deep'
+                },
         }
     })
 }
@@ -77,11 +80,11 @@ const stopwords: { [index: string]: { stop?: string } } = {
 const menu : { [index: string]: Array<string> } = {
     'forest': ["A forest.", "Forest.", "It's a forest."
     ],
-    'beach': ["A beach.", "Beach", "It's a beach", "I think it's a beach"
+    'beach': ["A beach.", "Beach", "It's a beach.", "I think it's a beach", "Beach."
     ],
     'boat': ["Boat.",
     ],
-    'tree': ["Palm tree", "Tree.", "Tree", "3", "Three.","Three"
+    'tree': ["Palm tree", "Tree.", "Tree", "3.", "Three.","Three", "Trees.",
     ],
     'cave': ["Cave.", "Go to the cave"
     ],
@@ -115,6 +118,7 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Forest.": { background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg' },
     "Leave.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
     "A beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
+    "Beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
     "A cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Offer money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' }, 
@@ -215,7 +219,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ]
                 },
                 end: {
-                    entry: say(() => "You ran out of lives. You died."), //'changeBackground'], i tried fixing the background when one dies
+                    entry: [say(() => "You ran out of lives. You died."), 'changeBackground'], //i tried fixing the background when one dies
                     on: { ENDSPEECH: '#root.dm.idle' },
                 },
                 twolivesleft: {
@@ -279,21 +283,23 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     ]
                 },
                 end: {
-                    entry: say(() => "You ran out of lives. You died."),
+                    entry: [say(() => "You ran out of lives. You died."), 'changeBackground'],
                     on: { ENDSPEECH: '#root.dm.idle' },
                 },
                 twolivesleft: {
                     entry: [say((context) => `You still have ${context.lifecounter} lives left. Try finding the right path`), 'changeBackground'],
-                    on: { ENDSPEECH: '#root.dm.voicegameapp.welcome' }
+                    on: { ENDSPEECH: '#root.dm.voicegameapp.welcome.hist' }
                 },
                 onelifeleft: {
                     entry: [say((context) => `You still have ${context.lifecounter} life left. Try finding the right path`), 'changeBackground'],
-                    on: { ENDSPEECH: '#root.dm.voicegameapp.welcome' },
+                    on: { ENDSPEECH: '#root.dm.voicegameapp.welcome.hist' },
                 },
             },
         },
         voicegameapp: {
-            initial: 'talktotrolls',
+            //does background change after death??
+            entry: [assign({background: (context) => context.background = 'https://c.pxhere.com/images/6e/62/14ec0e80e4a8bfd7510e8745c88f-1628448.jpg!d'}), 'changeBackground'],
+            initial: 'welcome',
             states: {
                 hist: {
                     type: 'history',
@@ -789,10 +795,16 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         backgroundChanger: {
                             entry: ['changeBackground'],
-                            always: 'tellbeachstory'
+                            always: [
+                                {target: 'tellbeachstory1', cond: (context) => context.lifecounter === 3},
+                                {target: 'tellbeachstory2', cond: (context) => context.lifecounter < 3},
+                            ],
                         },
-                        tellbeachstory: {
+                        tellbeachstory1: {
                             ...promptAndAsk("You take a few steps forward to see more of your surroundings. To your left there's a stranded boat and to your right you see a few palm trees. Where do you go?"),
+                        },
+                        tellbeachstory2: {
+                            ...promptAndAsk("You've been here before. You take a look at your surroundings. Do you go to the boat to the left or to the palm trees on the right?")
                         },
                         boat: {
                             initial: 'sayprompt',
