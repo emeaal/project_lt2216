@@ -23,7 +23,7 @@ function promptAndAsk(prompt: string): MachineConfig<SDSContext, any, SDSEvent> 
         initial: 'prompt',
         states: {
             prompt: {
-                entry: say(() => prompt),
+                entry: [say(() => prompt), assign({promptcounter: (context) => context.promptcounter = 0})],
                 on: { ENDSPEECH: 'ask' }
             },
             ask: { entry: send('LISTEN') },
@@ -48,7 +48,6 @@ const notmatchedsentences = [
     "Take a breath and try again.",
     "Are you slow?"
 ]
-
 
 const helpmessages = [
     "Didn't you pay attention to the rules?",
@@ -337,7 +336,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             }
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         sayforest: {
@@ -377,7 +377,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 target: '#root.dm.noMatch',
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
-
                         ]
                     },
                     states: {
@@ -425,7 +424,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 target: 'lookforacorns',
                                 cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
-
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -461,12 +459,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 target: 'lookforacorns',
                                 cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
-
                             },
                             {
                                 target: '#root.dm.noMatch'
                             },
-
                         ]
                     },
                     states: {
@@ -496,18 +492,15 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 target: 'backtocave',
                                 cond: (context) => menu['right'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
-
                             },
                             {
                                 target: '#root.dm.init',
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
-
                             },
                             {
                                 target: '#root.dm.noMatch'
                             },
-
                         ]
                     },
                     states: {
@@ -544,7 +537,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-
                         ]
                     },
                     states: {
@@ -583,7 +575,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-
                         ]
                     },
                     states: {
