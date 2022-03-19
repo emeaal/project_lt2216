@@ -291,13 +291,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         RECOGNISED: [
                             {
                                 target: 'forest',
-                                cond: (context) => menu["forest"].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest")
+,                               actions: assign({ background: (context) => img_grammar["Forest."].background! })
                             },
                             {
                                 target: 'beach',
-                                cond: (context) => menu['beach'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                cond: (context) => context.recResult[0].utterance.includes("beach") || context.recResult[0].utterance.includes("Beach"),
+                                actions: assign({ background: (context) => img_grammar["Beach."].background! })
                             },
                             {
                                 target: '#root.dm.getHelp',
