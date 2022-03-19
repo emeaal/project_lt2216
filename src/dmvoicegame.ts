@@ -291,7 +291,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         RECOGNISED: [
                             { //There's probably a way to make these into lowercase so we don't have to type all alternatives with both Capital letter and without
                                 target: 'forest',
-                                cond: (context) => context.recResult[0].utterance.includes("forest"),                               
+                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest."),                            
                                 actions: assign({ background: (context) => img_grammar["Forest."].background! })
                             },
                             {
