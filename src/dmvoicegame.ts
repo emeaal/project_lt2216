@@ -189,7 +189,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => context.lifecounter === 0,
                             actions: assign({background: (context) => context.background = blackbackground}),
                         },
-
                     ]
                 },
                 end: {
@@ -253,7 +252,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             cond: (context) => context.lifecounter === 0,
                             actions: assign({background: (context) => context.background = blackbackground})
                         },
-
                     ]
                 },
                 end: {
