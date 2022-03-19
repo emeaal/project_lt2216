@@ -291,11 +291,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         RECOGNISED: [
                             { //There's probably a way to make these into lowercase so we don't have to type all alternatives with both Capital letter and without
                                 target: 'forest',
-                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest"),                               actions: assign({ background: (context) => img_grammar["Forest."].background! })
+                                cond: (context) => context.recResult[0].utterance.includes("forest"),                               
+                                actions: assign({ background: (context) => img_grammar["Forest."].background! })
                             },
                             {
                                 target: 'beach',
-                                cond: (context) => context.recResult[0].utterance.includes("beach") || context.recResult[0].utterance.includes("Beach"),
+                                cond: (context) => context.recResult[0].utterance.includes("beach"),
                                 actions: assign({ background: (context) => img_grammar["Beach."].background! })
                             },
                             {
@@ -323,7 +324,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'cave',
-                                cond: (context) => context.recResult[0].utterance.includes("Cave") || context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("left") || context.recResult[0].utterance.includes("Left"),
+                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("left"),
                                 actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
@@ -409,16 +410,16 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'leave',
-                                cond: (context) => context.recResult[0].utterance.includes("leave") || context.recResult[0].utterance.includes("Leave"),
+                                cond: (context) => context.recResult[0].utterance.includes("leave"),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
                                 target: 'offer_money_trolls',
-                                cond: (context) => context.recResult[0].utterance.includes("money") || context.recResult[0].utterance.includes("Offer"),
+                                cond: (context) => context.recResult[0].utterance.includes("money") || context.recResult[0].utterance.includes("offer"),
                             },
                             {
                                 target: 'lookforacorns',
-                                cond: (context) => context.recResult[0].utterance.includes("acorns"),
+                                cond: (context) => context.recResult[0].utterance.includes("acorns") || context.recResult[0].utterance.includes("look"),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
@@ -447,13 +448,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'leave',
-                                cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+                                cond: (context) => context.recResult[0].utterance.includes("leave"),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
 
                             },
                             {
                                 target: 'lookforacorns',
-                                cond: (context) => menu['acorns'].includes(context.recResult[0].utterance),
+                                cond: (context) => context.recResult[0].utterance.includes("acorn") || context.recResult[0].utterance.includes("look"),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
@@ -740,11 +741,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: '.boat',
-                                cond: (context) => context.recResult[0].utterance.includes("boat") || context.recResult[0].utterance.includes("Boat") || context.recResult[0].utterance.includes("left") || context.recResult[0].utterance.includes("Left")
+                                cond: (context) => context.recResult[0].utterance.includes("boat") || context.recResult[0].utterance.includes("left"),
                             },
                             {
                                 target: '.palm_tree',
-                                cond: (context) => menu['tree'].includes(context.recResult[0].utterance)
+                                cond: (context) => context.recResult[0].utterance.includes("tree") || context.recResult[0].utterance.includes("right"),
                             },
                             {
                                 target: '#root.dm.noMatch'
