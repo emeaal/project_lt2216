@@ -1,0 +1,33 @@
+export {img_grammar}
+
+const img_grammar: { [index: string]: { background?: any } } = {
+    "A forest.": { background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg' },
+    "Forest.": { background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg' },
+    "Leave.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
+    "A beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
+    "Beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
+    "A cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Offer money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' }, 
+    "Give them money": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Give it money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Offer it money." : { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "To the left.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "To the right.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Left.": { background: 'https://i.pinimg.com/originals/d0/ce/b1/d0ceb103424a37b36ef58e0501cea6b3.jpg' },
+    "Acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Find acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Find some acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Find some acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Try to find acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Try to look for acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Look for acorns." : { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Try another path." : {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Try to find another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Take another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Find another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Go on another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Try to go on another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+    "Another path.": {background: 'https://i.imgur.com/WCrueUG.jpg'},
+
+}
