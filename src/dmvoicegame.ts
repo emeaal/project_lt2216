@@ -45,7 +45,8 @@ const notmatchedsentences = [
     "Are you shy, or what?",
     "Don't be shy.",
     "Are you eating and speaking?",
-    "Take a breath and try again."
+    "Take a breath and try again.",
+    "Are you slow?"
 ]
 
 
@@ -54,7 +55,8 @@ const helpmessages = [
     "I don't think is so hard to figure out.",
     "Think harder.",
     "Let me say that again.",
-    "You have a short memory it seems."
+    "You have a short memory it seems.",
+    "Are you slow?"
 ]
 
 const lostlives = [
@@ -134,8 +136,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             states: {
                 notmatched: {
                     entry: say(() => notmatchedsentences[Math.floor(Math.random() * (notmatchedsentences.length))]),
-                    on: { ENDSPEECH: '#root.dm.voicegameapp.histforask' },
-                }
+                    on: { ENDSPEECH: 'backgroundChanger' },
+                },
+                backgroundChanger: {
+                    entry: ['changeBackground'],
+                    always: '#root.dm.voicegameapp.histforask'
+                },
             }
         },
         getHelp: {
@@ -166,7 +172,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     {
                         target: '#root.dm.noMatch'
                     },
-                ]
+                ],
             },
             states: {
                 entry: {
@@ -368,7 +374,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['right'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '#root.dm.noMatch'
+                                target: '#root.dm.noMatch',
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
 
                         ]
