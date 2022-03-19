@@ -219,7 +219,7 @@ const machine = Machine<SDSContext, any, SDSEvent>({
         actions: {
             recLogResult: (context: SDSContext) => {
                 /* context.recResult = event.recResult; */
-                console.log('U>', context.recResult[0]["utterance"], context.recResult[0]["confidence"], context.recResult[0]["background"]);
+                console.log('U>', context.recResult[0]["utterance"].toLowerCase(), context.recResult[0]["confidence"], context.recResult[0]["background"]);
             },
             logIntent: (context: SDSContext) => {
                 /* context.nluData = event.data */
