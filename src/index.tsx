@@ -237,8 +237,6 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
 const ReactiveButton = (props: Props): JSX.Element => {
     var promptText = ((props.state.context.tdmVisualOutputInfo || [{}])
         .find((el: any) => el.attribute === "name") || {}).value;
-    var testingtext = ((props.state.context.tdmVisualOutputInfo || [{}])
-    .find((el: any) => el.attribute === "name") || {}).value;
     var promptImage = ((props.state.context.tdmVisualOutputInfo || [{}])
         .find((el: any) => el.attribute === "image") || {}).value;
     var circleClass = "circle"
@@ -258,7 +256,6 @@ const ReactiveButton = (props: Props): JSX.Element => {
             break;
         case props.state.matches({ dm: 'idle' }):
             promptText = "Welcome to the game! Click the circle to start"
-            // testingtext = "And this is another text"
             circleClass = "circle-click"
             break;
         case props.state.matches({ dm: 'init' }):
@@ -281,7 +278,6 @@ const ReactiveButton = (props: Props): JSX.Element => {
                 </button>
                 <div className="status-text">
                     {promptText}
-                    {testingtext}
                 </div>
             </div>
         </div>);
