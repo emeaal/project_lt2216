@@ -74,8 +74,8 @@ const stopwords: { [index: string]: { stop?: string } } = {
     "Shut up.": {stop: "Stop"},
     "I don't want to play anymore.": {stop: "Stop"},
     "End game.": {stop: "Stop"},
-    "Quit game": {stop: "Stop"},
-    "Quit playing": {stop: "Stop"}
+    "Quit game.": {stop: "Stop"},
+    "Quit playing.": {stop: "Stop"}
 }
 
 // I got sick of scrolling for ages so I made them horizontal instead of vertical :--)
