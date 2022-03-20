@@ -304,12 +304,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         RECOGNISED: [
                             { //There's probably a way to make these into lowercase so we don't have to type all alternatives with both Capital letter and without
                                 target: 'forest',
-                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest."), // seems like we need this as well...                            
+                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest"), // seems like we need this as well...                            
                                 actions: assign({ background: (context) => img_grammar["Forest."].background! })
                             },
                             {
                                 target: 'beach',
-                                cond: (context) => context.recResult[0].utterance.includes("beach"),
+                                cond: (context) => context.recResult[0].utterance.includes("beach") || context.recResult[0].utterance.includes("Beach"),
                                 actions: assign({ background: (context) => img_grammar["Beach."].background! })
                             },
                             {
@@ -337,12 +337,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'cave',
-                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("left"),
+                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("north"),
                                 actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
                                 target: 'river1',
-                                cond: (context) => context.recResult[0].utterance.includes("river") || context.recResult[0].utterance.includes("north"),
+                                cond: (context) => context.recResult[0].utterance.includes("river") || context.recResult[0].utterance.includes("south"),
                                 actions: assign({ background: (context) => img_grammar["River."].background! })
                             },
                             {

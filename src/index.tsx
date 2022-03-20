@@ -219,7 +219,7 @@ const machine = Machine<SDSContext, any, SDSEvent>({
         actions: {
             recLogResult: (context: SDSContext) => {
                 /* context.recResult = event.recResult; */ // .toLowerCase().replace(/\.$/, "") after utterance??
-                console.log('U>', context.recResult[0]["utterance"], context.recResult[0]["confidence"], context.recResult[0]["background"]);
+                console.log('U>', context.recResult[0]["utterance"].toLowerCase().replace(/\.$/, ""), context.recResult[0]["confidence"], context.recResult[0]["background"]);
             },
             logIntent: (context: SDSContext) => {
                 /* context.nluData = event.data */
@@ -313,7 +313,7 @@ function App() {
             recStop: asEffect((context) => {
                 context.asr.abort()
                 /* console.log('Recognition stopped.'); */
-            }),
+            }), 
             ttsStart: asEffect((context) => {
                 let content = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-US"><voice name="${context.voice.name}">`
                 content = content + (process.env.REACT_APP_TTS_LEXICON ? `<lexicon uri="${process.env.REACT_APP_TTS_LEXICON}"/>` : "")
