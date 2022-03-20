@@ -123,14 +123,17 @@ const menu : { [index: string]: Array<string> } = {
     'cross': [ "Cross.", "Cross the river.", "Try to cross.", "Try to cross the river."
     ],
     'yes': ["Yes."
-],
+    ],
     'no': ["No."
-],
+    ],
     'lure': ["Try to lure it.", "Lure it.", "Lure.", "Lure"
-],
+    ],
     'take': ["Take the wallet.", "Try to take the wallet.", "Take it.", "Try to take it."
-]
-
+    ],
+    'change': ["I change my mind.", "I changed my mind.", "Changed my mind", "Change your mind."
+    ],
+    'inside': ["Go inside.", "I go inside.", "Inside."
+    ],
 
     
 
@@ -988,12 +991,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '#root.dm.endofgame',
-                                cond: (context) => menu['steal'].includes(context.recResult[0].utterance),
+                                target: 'insidecave',
+                                cond: (context) => menu['inside'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '#root.dm.endofgame',
-                                cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                                target: '#root.dm.leave',
+                                cond: (context) => menu['change'].includes(context.recResult[0].utterance),
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -1005,22 +1008,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     states: {
                         prompt: {
-                            ...prompt("You climb the tree and find a squirrel's nest, with exactly 10 acorns."),
-                            on: { ENDSPEECH: '#root.dm.endofgame' },
+                            ...prompt("You give the trolls the 10 acorns."),
+                            on: { ENDSPEECH: 'choices' },
                         },
-                        climbchoices: {
-                            ...promptAndAsk("Do you try to steal them or try to give the squirrel the 10 euros?")
+                        choices: {
+                            ...promptAndAsk("Do you go inside the cave or do you change your mind?")
                         },
-                        steal: {
-                            initial: 'sayprompt',
-                            states: {
-                                sayprompt: {
-                                    entry: [say(() => "Did you really think you would survive this? The squirrel immediately takes its revenge."),
-                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
-                                    on: { ENDSPEECH: '#root.dm.endofgame' },
-                                }
-                            },
-                        }
+                        
                     }
                 },
                 beach: {

@@ -4,6 +4,10 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "A forest.": { background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg' },
     "Forest.": { background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg' },
     "Leave.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
+    "I change my mind.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
+    "I changed my mind.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
+    "Changed my mind": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
+    "Change your mind.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
     "A beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
     "Beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
     "Cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
@@ -44,8 +48,10 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Offer it the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Offer the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Offer money to it.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
-    "Try to give it the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' }
-
+    "Try to give it the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Go inside.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "I go inside.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Inside.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
 
 
 }  
