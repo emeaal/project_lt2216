@@ -283,7 +283,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'river1',
+            initial: 'hello',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -297,6 +297,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 stop: {
                     entry: say(() => "Ok. Thanks for playing"),
                     always: '#root.dm.idle'
+                },
+                hello: {
+                    entry: say(() => "Hello and welcome to our game, The Lost Wallet. Before we begin, I am going to explain the rules to you. After a night of partying, you realise you have lost your wallet under curious circumstances. You have to navigate an unknown territory in order to find it, and be very careful to the choices you are presented with. You have three lives, when you die you respawn to the nearest checkpoint, but if you lose all of them it's game over. Good luck and have fun!"), 
+                    on: { ENDSPEECH: 'welcome' },               
                 },
                 welcome: {
                     initial: 'prompt',
@@ -325,7 +329,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         ],
                         TIMEOUT: '..',
                     },
-                    ...promptAndAsk("Welcome"), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "), //You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think?")
+                    ...promptAndAsk("Welcome. You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "),
                 },
                 forest: {
                     initial: 'sayforest',
