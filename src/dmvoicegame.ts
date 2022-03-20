@@ -120,7 +120,9 @@ const menu : { [index: string]: Array<string> } = {
     'shout': [ "Shout.", "Shout profanities.", "Shout at it.", "Shout profanities at it."
     ],
     'cross': [ "Cross.", "Cross the river.", "Try to cross.", "Try to cross the river."
-    ]
+    ],
+    'yes': ["Yes."],
+    'no': ["No"]
     
 
 }
@@ -280,7 +282,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'river1',
+            initial: 'anotherpath',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -634,12 +636,19 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: 'anotherpath',
-                                cond: (context) => menu['path'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
-                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                                target: '#root.dm.voicegameapp.river1',
+                                cond: (context) => menu['yes'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+
+                            },
+                            {
+                                target: '#root.dm.voicegameapp.river1',
+                                cond: (context) => menu['no'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -657,13 +666,14 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'omg'
                         },
                         omg: {
-                            ...prompt("Omg look! A squirrel has your wallet. Let's catch it! Hurry"),
-                            on: { ENDSPEECH: '#root.dm.init' },
+                            ...promptAndAsk("Omg, Look! A squirrel has your wallet. Do you want to chase it?"),
                         },
+                        what: {
+                            ...prompt("What do you mean, no? We're chasing it. Come on."),
+                            on: { ENDSPEECH: 'river1' }
+                        }
                     }                
-
                 },
-
                 river1: {
                     initial: 'prompt',
                     on: {

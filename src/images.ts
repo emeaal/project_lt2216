@@ -8,6 +8,7 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Beach.": { background: 'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/cd/51/9b/seven-mile-beach.jpg?w=1200&h=-1&s=1' },
     "Cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "River.": {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
+    "Yes.": {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
     "South." : {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
     "To the South." : {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
     "Go down South." : {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
