@@ -337,12 +337,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'cave',
-                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("north"),
+                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("North"),
                                 actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
                                 target: 'river1',
-                                cond: (context) => context.recResult[0].utterance.includes("river") || context.recResult[0].utterance.includes("south"),
+                                cond: (context) => context.recResult[0].utterance.includes("river") || context.recResult[0].utterance.includes("South"),
                                 actions: assign({ background: (context) => img_grammar["River."].background! })
                             },
                             {
@@ -703,11 +703,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['wait'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '#root.dm.voicegameapp.river1.look'
-                            },
-                            {
-                                target: '#root.dm.noMatch'
-                            },
+                                target: '#root.dm.voicegameapp.river1.look',                            },
                         ]
                     },
                     states: {
@@ -720,7 +716,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'ask'
                         },
                         ask: {
-                            ...promptAndAsk("Not much to see here actually. Do you like, want to wait here for a bit, or go somewhere else?"),
+                            ...promptAndAsk("Not much to see here actually. Do you want to wait here for a bit, or go somewhere else?"),
                         },
                         somewhere_else: {
                             initial: 'sayprompt',
@@ -765,7 +761,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: '#root.dm.voicegameapp.squirrelriver.cross',
-                                cond: (context) => menu['cross'].includes(context.recResult[0].utterance),
+                                cond: (context) => context.recResult[0].utterance.includes("cross") || context.recResult[0].utterance.includes("river"),
                             },
                             {
                                 target: '#root.dm.voicegameapp.squirrelriver.shout',
