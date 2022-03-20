@@ -282,7 +282,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'anotherpath',
+            initial: 'welcome',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -639,7 +639,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
-                                target: '#root.dm.voicegameapp.river1',
+                                target: '#root.dm.voicegameapp.river2',
                                 cond: (context) => menu['yes'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
 
@@ -670,10 +670,23 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         what: {
                             ...prompt("What do you mean, no? We're chasing it. Come on."),
-                            on: { ENDSPEECH: '#root.dm.voicegameapp.river1' },
+                            on: { ENDSPEECH: '#root.dm.voicegameapp.river2' },
                        
                         }
                     }                
+                },
+                river2: {
+                    initial: 'prompt',
+                    states: {
+                        prompt: {
+                            ...prompt("It led you to the river."),
+                            on: { ENDSPEECH: 'backgroundChanger' },
+                        },
+                        backgroundChanger: {
+                            entry: ['changeBackground'],
+                            always: '#root.dm.voicegameapp.squirrelriver'
+                        }
+                    } 
                 },
                 river1: {
                     initial: 'prompt',
