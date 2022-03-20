@@ -90,7 +90,7 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'tree': ["Palm tree", "Tree.", "Tree", "3.", "Three.","Three", "Trees.",
     ],
-    'cave': ["Cave.", "Go to the cave"
+    'cave': ["Cave.", "Go to the cave", "To The Cave"
     ],
     'acorns': [ "Acorns.","Acorns", "Find some acorns", "Find some acorns.", "Find acorns.","Try to find acorns","Try to look for acorns.", "Look for acorns."
     ],
