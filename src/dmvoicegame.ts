@@ -299,7 +299,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     always: '#root.dm.idle'
                 },
                 hello: {
-                    entry: say(() => "Hello and welcome to our game, The Lost Wallet. Before we begin, I am going to explain the rules to you. After a night of partying, you realise you have lost your wallet under curious circumstances. You have to navigate an unknown territory in order to find it, and be very careful to the choices you are presented with. You have three lives, when you die you respawn to the nearest checkpoint, but if you lose all of them it's game over. Good luck and have fun!"), 
+                    entry: say(() => "Hello! And welcome to our game, The Lost Wallet. Before we begin, I am going to explain the rules to you. After a night of partying, you realise you have lost your wallet under curious circumstances. You have to navigate an unknown territory in order to find it, and be very careful to the choices you are presented with. You have three lives. When you die, you respawn to the nearest checkpoint, but if you lose all of them, it's game over. Good luck and have fun!"), 
                     on: { ENDSPEECH: 'welcome' },               
                 },
                 welcome: {
@@ -410,13 +410,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'cavealternatives'
                         },
                         cavealternatives: {
-                            ...promptAndAsk("In front of it there are two trolls")
+                            ...promptAndAsk("In front of it there are two trolls, but they don't say anything. Which one do you adress?")
                         },
                         right_troll: {
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "You get hit in the head with a bat."), // You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
+                                    entry: [say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
                                     on: { ENDSPEECH: '#root.dm.endofgame' },
                                 },
