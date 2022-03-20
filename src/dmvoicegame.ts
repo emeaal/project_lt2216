@@ -328,6 +328,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
+                                target: 'river1',
+                                cond: (context) => context.recResult[0].utterance.includes("river") || context.recResult[0].utterance.includes("north"),
+                                actions: assign({ background: (context) => img_grammar["River."].background! })
+                            },
+                            {
                                 target: '#root.dm.init',
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                             },
@@ -481,7 +486,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: 'anotherpath',
+                                target: 'river1',
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
 
@@ -612,6 +617,58 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     }                
 
                 },
+
+                river1: {
+                    initial: 'prompt',
+                    on: {
+                        RECOGNISED: [
+                            {
+                                target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '.shake_tree',
+                                cond: (context) => menu['shake'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'climb_tree',
+                                cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            }
+                        ]
+                    },
+                    states: {
+                        prompt: {
+                            ...prompt("You get to the river. Not much to see here actually."),
+                            on: { ENDSPEECH: 'backgroundChanger' },
+                        },
+                        backgroundChanger: {
+                            entry: ['changeBackground'],
+                            always: 'tellforeststory'
+                        },
+                        tellforeststory: {
+                            ...promptAndAsk("Do you shake it or try to climb it?"),
+                        },
+                        shake_tree: {
+                            initial: 'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry: [say(() => "You shake the tree as hard as you can. A squirrel falls down and scratches at your eyes. The damage is so bad that you eventually die. Sorry."),
+                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
+                                    on: { ENDSPEECH: '#root.dm.endofgame' },
+                                },
+                            },
+                        },
+                    },
+                },
+
+
+
+
+
+                
 
 
 
