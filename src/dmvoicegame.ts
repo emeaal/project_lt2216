@@ -115,7 +115,7 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'else': [ "Go somewhere else.", "I want to go somewhere else."
     ],
-    'wait': [ "Wait.", "Wait here.", "Let's wait.", "Let's wait a bit.", "Wait a bit."
+    'wait': [ "Wait.", "Wait here.", "Let's wait.", "Let's wait a bit.", "Wait a bit.", "Wait?"
     ],
     'shout': [ "Shout.", "Shout profanities.", "Shout at it.", "Shout profanities at it."
     ],
@@ -280,7 +280,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'forest',
+            initial: 'river1',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -677,7 +677,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['else'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '.look',
+                                target: '#root.dm.voicegameapp.river1.wait',
                                 cond: (context) => menu['wait'].includes(context.recResult[0].utterance),
                             },
                             {
@@ -685,7 +685,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: '#root.dm.noMatch'
-                            }
+                            },
                         ]
                     },
                     states: {
@@ -727,7 +727,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             states: {
                                 sayprompt: {
                                     entry: [say(() => "Nevermind! Look! A squirrel has your wallet! Do something!")],
-                                    on: { ENDSPEECH: 'squirrelriver' },
+                                    on: { ENDSPEECH: '#root.dm.voicegameapp.squirrelriver' },
                                 },
                             },
                         },
@@ -742,11 +742,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: 'cross',
+                                target: '#root.dm.voicegameapp.squirrelriver.cross',
                                 cond: (context) => menu['cross'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: 'shout',
+                                target: '#root.dm.voicegameapp.squirrelriver.shout',
                                 cond: (context) => menu['shout'].includes(context.recResult[0].utterance),
                             },
                             {
@@ -758,7 +758,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         ]
                     },
                     states: {
-                        sayacorns: {
+                        prompt: {
                             ...prompt("The squirrel crosses the river before you can reach it."),
                             on: { ENDSPEECH: 'ask' },
                         },
