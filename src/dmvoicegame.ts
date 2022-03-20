@@ -337,7 +337,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'cave',
-                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("North") || context.recResult[0].utterance.includes("north"),
+                                cond: (context) => context.recResult[0].utterance.includes("Cave") || context.recResult[0].utterance.includes("North") || context.recResult[0].utterance.includes("north"),
                                 actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
@@ -431,7 +431,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'leave',
                                 cond: (context) => context.recResult[0].utterance.includes("leave"),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Leave."].background! })
                             },
                             {
                                 target: 'offer_money_trolls',
@@ -440,7 +440,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'lookforacorns',
                                 cond: (context) => context.recResult[0].utterance.includes("acorns") || context.recResult[0].utterance.includes("look"),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Acorns."].background! })
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -471,7 +471,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'leave',
                                 cond: (context) => context.recResult[0].utterance.includes("leave"),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Leave."].background! })
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -479,7 +479,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'lookforacorns',
                                 cond: (context) => context.recResult[0].utterance.includes("acorn") || context.recResult[0].utterance.includes("look"),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Acorns."].background! })
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -488,7 +488,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     states: {
                         prompt: {
-                            ...prompt("You say you don't have acorns, but you have 10 euros in your pocket . The trolls laugh."),
+                            ...prompt("You say you don't have acorns, but you have 10 euros in your pocket. The trolls laugh."),
                             on: { ENDSPEECH: 'cavealternatives' },
                         },
                         cavealternatives: {
@@ -507,13 +507,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'river1',
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["River."].background! })
 
                             },
                             {
                                 target: 'backtocave',
                                 cond: (context) => menu['right'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -787,7 +787,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown."),
+                                    entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown and lost all of your lives."),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
                                     on: { ENDSPEECH: '#root.dm.init' },
                                 },
