@@ -738,12 +738,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '.shake_tree',
-                                cond: (context) => menu['shake'].includes(context.recResult[0].utterance),
+                                target: 'cross',
+                                cond: (context) => menu['cross'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: 'climb_tree',
-                                cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
+                                target: 'shout',
+                                cond: (context) => menu['shout'].includes(context.recResult[0].utterance),
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -768,6 +768,16 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                     entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown."),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
                                     on: { ENDSPEECH: '#root.dm.endofgame' },
+                                },
+                            },
+                        },
+                        shout: {
+                            initial: 'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry: [say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game. You can try playing again from the beginnig."),
+                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
+                                    on: { ENDSPEECH: '#root.dm.init' },
                                 },
                             },
                         },
