@@ -46,12 +46,13 @@ const notmatchedsentences = [
     "Don't be shy.",
     "Are you eating and speaking?",
     "Take a breath and try again.",
-    "Are you slow?"
+    "Are you slow?",
+    "Could you repeat that?",
 ]
 
 const helpmessages = [
     "Didn't you pay attention to the rules?",
-    "I don't think is so hard to figure out.",
+    "I don't think it is so hard to figure out.",
     "Think harder.",
     "Let me say that again.",
     "You have a short memory it seems.",
