@@ -291,7 +291,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'hello',
+            initial: 'squirrelriver',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -856,75 +856,22 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 ending1: {
                     initial: 'prompt',
-                    on: {
-                        RECOGNISED: [
-                            {
-                                target: '#root.dm.getHelp',
-                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                            },
-                            {
-                                target: '#root.dm.voicegameapp.ending1',
-                                cond: (context) => menu['money'].includes(context.recResult[0].utterance),
-                            },
-                            {
-                                target: '#root.dm.voicegameapp.ending2',
-                                cond: (context) => menu['take'].includes(context.recResult[0].utterance),
-                            },
-                            {
-                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
-                            },
-                            {
-                                target: '#root.dm.noMatch'
-                            }
-                        ]
-                    },
                     states: {
                         prompt: {
-                            ...prompt("The squirrel actually takes the bill and gives you the wallet. Dumb squirrel, you think to yourself, but then again, how could it know the difference between a lot of money and a few? Maybe it just likes the color green more. Congratulations! You have won the game! Although I have no idea how you could get out of this forest. You're on your own for this. Goodbye!"),
-                            on: { ENDSPEECH: 'ask' },
-                        },
-                        ask: {
-                            ...promptAndAsk("Do you try to give it the bill in exchange for your wallet, or try to take it forcibly?"),
+                            ...prompt("The squirrel actually takes the bill and gives you the wallet. Dumb squirrel, you think to yourself, but then again, how could it know the difference between a lot of money and a few? Maybe it just likes the color green more. Congratulations! You have won the game! And it seems like the squirrel has offered to help lead you out of the forest and find your way home. I think you're in good hands. Goodbye!"),
+                            on: { ENDSPEECH: '#root.dm.init' },
                         },
                     },
                 },
                 ending2: {
                     initial: 'prompt',
-                    on: {
-                        RECOGNISED: [
-                            {
-                                target: '#root.dm.getHelp',
-                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                            },
-                            {
-                                target: '#root.dm.voicegameapp.ending1',
-                                cond: (context) => menu['money'].includes(context.recResult[0].utterance),
-                            },
-                            {
-                                target: '#root.dm.voicegameapp.ending2',
-                                cond: (context) => menu['take'].includes(context.recResult[0].utterance),
-                            },
-                            {
-                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
-                            },
-                            {
-                                target: '#root.dm.noMatch'
-                            }
-                        ]
-                    },
                     states: {
                         prompt: {
-                            ...prompt("You whip out your shiny bill and wave it around. The squirrel is immediately attracted to it and crosses the river back to you."),
-                            on: { ENDSPEECH: 'ask' },
-                        },
-                        ask: {
-                            ...promptAndAsk("Do you try to give it the bill in exchange for your wallet, or try to take it forcibly?"),
+                            ...prompt("I didn't think you could do it, but you really are trying to fight this squirrel. This squirrel is suspiciously strong too. After a good tussle, you manage to rip your wallet out of its grasp. The squirrel scratches at your face one last time and scurries away. Congratulations! You're now left alone, with your wallet but no idea of how to get back home. I think you're on your own with this one, buddy. Goodbye."),
+                            on: { ENDSPEECH: '#root.dm.init' },
                         },
                     },
                 },
-
-
-
                 lookforacorns: {
                     initial: 'sayacorns',
                     on: {
