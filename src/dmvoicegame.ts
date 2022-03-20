@@ -75,7 +75,8 @@ const stopwords: { [index: string]: { stop?: string } } = {
     "I don't want to play anymore.": {stop: "Stop"},
     "End game.": {stop: "Stop"},
     "Quit game.": {stop: "Stop"},
-    "Quit playing.": {stop: "Stop"}
+    "Quit playing.": {stop: "Stop"},
+    "End the game.": {stop: "Stop" }
 }
 
 // I got sick of scrolling for ages so I made them horizontal instead of vertical :--)
@@ -291,7 +292,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         RECOGNISED: [
                             { //There's probably a way to make these into lowercase so we don't have to type all alternatives with both Capital letter and without
                                 target: 'forest',
-                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest."),                            
+                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest."), // seems like we need this as well...                            
                                 actions: assign({ background: (context) => img_grammar["Forest."].background! })
                             },
                             {
@@ -337,6 +338,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                             },
                             {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
                                 target: '#root.dm.noMatch'
                             }
                         ],
@@ -375,6 +379,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '.right_troll',
                                 cond: (context) => menu['right'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
                                 target: '#root.dm.noMatch',
@@ -428,6 +435,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
                                 target: '#root.dm.noMatch'
                             },
 
@@ -455,7 +465,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 target: 'leave',
                                 cond: (context) => context.recResult[0].utterance.includes("leave"),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
-
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
                                 target: 'lookforacorns',
@@ -497,6 +509,14 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
+                                target: '#root.dm.init',
+                                cond: (context) => menu['left'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
                                 target: '#root.dm.noMatch'
                             },
                         ]
@@ -535,6 +555,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
  
                             },
                             {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
                                 target: '#root.dm.noMatch'
                             },
                         ]
@@ -565,6 +588,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '.trollskill',
                                 cond: (context) => menu['talk'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
                                 target: 'anotherpath',
@@ -601,6 +627,26 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 anotherpath: {
                     initial: 'prompt',
+                    on: {
+                        RECOGNISED: [
+                            {
+                                target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'anotherpath',
+                                cond: (context) => menu['path'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            },
+
+                        ]
+                    },
                     states: {
                         prompt: {
                             ...prompt("You're back to that crossroads again."),
@@ -689,6 +735,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
                             },
                             {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
                                 target: '#root.dm.noMatch'
                             }
                         ]
@@ -732,6 +781,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'offer_money_squirrel',
                                 cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -783,6 +835,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '.palm_tree',
                                 cond: (context) => context.recResult[0].utterance.includes("tree") || context.recResult[0].utterance.includes("right"),
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
                                 target: '#root.dm.noMatch'
