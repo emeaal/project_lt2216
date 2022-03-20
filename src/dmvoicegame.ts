@@ -113,7 +113,7 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'path': [ "Try another path.", "Find another path.", "Try to find another path.", "Take another path.", "Go on another path.",  "Try to go on another path.", "Another path.", "Another path"
     ],
-    'somwehere_else': [ "Go somewhere else.", "I want to go somewhere else."
+    'else': [ "Go somewhere else.", "I want to go somewhere else."
     ],
     'wait': [ "Wait.", "Wait here.", "Let's wait.", "Let's wait a bit.", "Wait a bit."
     ]
@@ -670,7 +670,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: '.somewhere_else',
-                                cond: (context) => menu['somewhere_else'].includes(context.recResult[0].utterance),
+                                cond: (context) => menu['else'].includes(context.recResult[0].utterance),
                             },
                             {
                                 target: 'climb_tree',
@@ -691,7 +691,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'ask'
                         },
                         ask: {
-                            ...promptAndAsk(" Not much to see here actually.  Not much to see here actually. Do you like, want to wait here for a bit, or go somewhere else?"),
+                            ...promptAndAsk("Not much to see here actually. Do you like, want to wait here for a bit, or go somewhere else?"),
                         },
                         somewhere_else: {
                             initial: 'sayprompt',
