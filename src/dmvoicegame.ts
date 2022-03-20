@@ -112,7 +112,12 @@ const menu : { [index: string]: Array<string> } = {
     'talk': [ "Try to talk to the trolls.", "Talk to the trolls.", "Try to talk to the trolls again.", "Talk to the trolls again.", "Talk.", "Talk"
     ],
     'path': [ "Try another path.", "Find another path.", "Try to find another path.", "Take another path.", "Go on another path.",  "Try to go on another path.", "Another path.", "Another path"
+    ],
+    'somwehere_else': [ "Go somewhere else.", "I want to go somewhere else."
+    ],
+    'wait': [ "Wait.", "Wait here.", "Let's wait.", "Let's wait a bit.", "Wait a bit."
     ]
+    
 
 }
 
@@ -271,7 +276,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'leave',
+            initial: 'forest',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -664,8 +669,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '.shake_tree',
-                                cond: (context) => menu['shake'].includes(context.recResult[0].utterance),
+                                target: '.somewhere_else',
+                                cond: (context) => menu['somewhere_else'].includes(context.recResult[0].utterance),
                             },
                             {
                                 target: 'climb_tree',
@@ -678,22 +683,21 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     states: {
                         prompt: {
-                            ...prompt("You get to the river. Not much to see here actually."),
+                            ...prompt("You get to a river."),
                             on: { ENDSPEECH: 'backgroundChanger' },
                         },
                         backgroundChanger: {
                             entry: ['changeBackground'],
-                            always: 'tellforeststory'
+                            always: 'ask'
                         },
-                        tellforeststory: {
-                            ...promptAndAsk("Do you shake it or try to climb it?"),
+                        ask: {
+                            ...promptAndAsk(" Not much to see here actually.  Not much to see here actually. Do you like, want to wait here for a bit, or go somewhere else?"),
                         },
-                        shake_tree: {
+                        somewhere_else: {
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "You shake the tree as hard as you can. A squirrel falls down and scratches at your eyes. The damage is so bad that you eventually die. Sorry."),
-                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
+                                    entry: [say(() => "Ugh I don't know about that. I mean you just got here but I also work on the alternative paths and it's been a long way to get here from the cave. I'm a bit tired.")],
                                     on: { ENDSPEECH: '#root.dm.endofgame' },
                                 },
                             },
