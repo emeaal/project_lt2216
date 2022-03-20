@@ -341,7 +341,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         ],
                         TIMEOUT: '..',
                     },
-                    ...promptAndAsk("You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "),
+                    ...promptAndAsk("You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think it is? "),
                 },
                 forest: {
                     initial: 'sayforest',
@@ -801,7 +801,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             on: { ENDSPEECH: 'ask' },
                         },
                         ask: {
-                            ...promptAndAsk("Do you try to: cross the river, shout profanities at the squirrel, or try to lure it with that 5 euros bill you had left?"),
+                            ...promptAndAsk("Do you try to: cross the river, shout profanities at the squirrel, or try to lure it with money?"),
                         },
                         cross: {
                             initial: 'sayprompt',
