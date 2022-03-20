@@ -677,6 +677,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['wait'].includes(context.recResult[0].utterance),
                             },
                             {
+                                target: '#root.dm.voicegameapp.river1.look'
+                            },
+                            {
                                 target: '#root.dm.noMatch'
                             }
                         ]
@@ -712,7 +715,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 },
                                 ask: {
                                     entry: send('LISTEN'),
-                                    on: {ENDSPEECH:'#root.dm.voicegameapp.river1.look' }
                                 }
                             },
                         },
