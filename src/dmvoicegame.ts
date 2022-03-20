@@ -483,16 +483,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'anotherpath',
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
-                                actions: assign({ lifecounter: (context) => context.lifecounter - 1 })
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+
                             },
                             {
                                 target: 'backtocave',
                                 cond: (context) => menu['right'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
-                            },
-                            {
-                                target: '#root.dm.init',
-                                cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
