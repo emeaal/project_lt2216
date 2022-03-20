@@ -673,8 +673,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['else'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: 'climb_tree',
-                                cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
+                                target: '.look',
+                                cond: (context) => menu['wait'].includes(context.recResult[0].utterance),
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -697,7 +697,30 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "Ugh I don't know about that. I mean you just got here but I also work on the alternative paths and it's been a long way to get here from the cave. I'm a bit tired.")],
+                                    entry: [say(() => "Ugh I don't know about that. I mean, you just got here but I also work on the alternative paths and it's been a long way to get here from the cave. I'm a bit tired.")],
+                                    on: { ENDSPEECH: '#root.dm.voicegameapp.river1.wait' },
+                                },
+                            },
+                        },
+                        wait: {
+                            initial: 'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    
+                                    ...prompt("Let's wait then. So have you seen a good movie lately? "),
+                                    on: { ENDSPEECH: 'ask' },
+                                },
+                                ask: {
+                                    entry: send('LISTEN'),
+                                    on: {ENDSPEECH:'#root.dm.voicegameapp.river1.look' }
+                                }
+                            },
+                        },
+                        look: {
+                            initial: 'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry: [say(() => "Nevermind! Look! A squirrel has your wallet! Do something!")],
                                     on: { ENDSPEECH: '#root.dm.endofgame' },
                                 },
                             },
