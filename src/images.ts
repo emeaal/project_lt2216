@@ -43,7 +43,8 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Try to offer it the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Offer it the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Offer the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
-    "Offer money to it.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' }
+    "Offer money to it.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
+    "Try to give it the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' }
 
 
 
