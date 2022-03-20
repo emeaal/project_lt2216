@@ -271,7 +271,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'leave',
+            initial: 'welcome',
             entry: 'changeBackground',
             states: {
                 hist: {
