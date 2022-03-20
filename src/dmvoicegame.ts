@@ -787,9 +787,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown and lost all of your lives."),
+                                    entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown."),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
-                                    on: { ENDSPEECH: '#root.dm.init' },
+                                    on: { ENDSPEECH: '#root.dm.endofgamebeach' },
                                 },
                             },
                         },
@@ -797,9 +797,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game."),
+                                    entry: [say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game, your wallet is gone forever."),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
-                                    on: { ENDSPEECH: '#root.dm.endofgamebeach' },
+                                    on: { ENDSPEECH: '#root.dm.init' },
                                 },
                             },
                         },
