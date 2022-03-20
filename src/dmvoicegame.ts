@@ -341,7 +341,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         ],
                         TIMEOUT: '..',
                     },
-                    ...promptAndAsk("Welcome. You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "),
+                    ...promptAndAsk("You wake up and find yourself in a strange place. But you can't quite tell where. I think you have something in your eyes. Could it be a forest…or more like a beach? What do you think? "),
                 },
                 forest: {
                     initial: 'sayforest',
