@@ -867,7 +867,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     initial: 'prompt',
                     states: {
                         prompt: {
-                            ...prompt("I didn't think you could do it, but you really are trying to fight this squirrel. This squirrel is suspiciously strong too. After a good tussle, you manage to rip your wallet out of its grasp. The squirrel scratches at your face one last time and scurries away. Congratulations! You're now left alone, with your wallet but no idea of how to get back home. I think you're on your own with this one, buddy. Goodbye."),
+                            ...prompt("I didn't think you could do it, but you really are trying to fight this squirrel. It's suspiciously strong too. After a good tussle, you manage to rip your wallet out of its grasp. The squirrel scratches at your face one last time and scurries away. Congratulations! You're now left alone, with your wallet but no idea of how to get back home. I think you're on your own with this one, buddy. Goodbye."),
                             on: { ENDSPEECH: '#root.dm.init' },
                         },
                     },
@@ -933,8 +933,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['steal'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: 'offer_money_squirrel',
+                                target: '.offermoneysquirrel',
                                 cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -961,17 +962,66 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                     on: { ENDSPEECH: '#root.dm.endofgame' },
                                 }
                             },
+                        },
+                        offermoneysquirrel: {
+                            initial: 'prompt',
+                            states: {
+                                prompt: {
+                                    ...prompt("The squirrel accepts the transaction. You now have the acorns and go back to the trolls, but you wonder why a squirrel needs money."),
+                                    on: { ENDSPEECH: 'backgroundChanger' },
+
+                                },
+                                backgroundChanger: {
+                                    entry: ['changeBackground'],
+                                    always: '#root.dm.voicegameapp.cave2'
+                                },
+                            },
                         }
                     }
                 },
-                offer_money_squirrel: {
+                cave2: {
                     initial: 'prompt',
+                    on: {
+                        RECOGNISED: [
+                            {
+                                target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '#root.dm.endofgame',
+                                cond: (context) => menu['steal'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '#root.dm.endofgame',
+                                cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            },
+                        ]
+                    },
                     states: {
                         prompt: {
-                            ...prompt("The squirrel accepts the transaction. You now have the acorns and go back to the trolls, but you wonder why a squirrel needs money."),
-                            on: { ENDSPEECH: '#root.dm.init' },
+                            ...prompt("You climb the tree and find a squirrel's nest, with exactly 10 acorns."),
+                            on: { ENDSPEECH: '#root.dm.endofgame' },
                         },
-                    },
+                        climbchoices: {
+                            ...promptAndAsk("Do you try to steal them or try to give the squirrel the 10 euros?")
+                        },
+                        steal: {
+                            initial: 'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry: [say(() => "Did you really think you would survive this? The squirrel immediately takes its revenge."),
+                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
+                                    on: { ENDSPEECH: '#root.dm.endofgame' },
+                                }
+                            },
+                        }
+                    }
                 },
                 beach: {
                     initial: 'saybeach',
