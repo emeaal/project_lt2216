@@ -311,7 +311,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     always: '#root.dm.idle'
                 },
                 hello: {
-                    entry: say(() => "Hello! And welcome to our game, The Lost Wallet. Before we begin, I am going to explain the rules to you. After a night of partying, you realise you have lost your wallet under curious circumstances. You have to navigate an unknown territory in order to find it, and be very careful to the choices you are presented with. You have three lives. When you die, you respawn to the nearest checkpoint, but if you lose all of them, it's game over. Good luck and have fun!"), 
+                    entry: say(() => "Hello! And welcome to our game, The Lost Wallet. Before we begin, I am going to explain the rules to you. After a night of partying, you realise you have lost your wallet under curious circumstances. You have to navigate an unknown territory in order to find it, and be very careful to the choices you are presented with. You have three lives. When you die, you respawn to the nearest checkpoint, but if you lose all of them, it's game over. You have nothing with you except for two 5 euros bills. Good luck and have fun!"), 
                     on: { ENDSPEECH: 'welcome' },               
                 },
                 welcome: {
@@ -472,7 +472,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             on: { ENDSPEECH: 'cavealternatives' },
                         },
                         cavealternatives: {
-                            ...promptAndAsk("You can leave, offer them some money you have on you or look for acorns.")
+                            ...promptAndAsk("You can leave, offer them money or look for acorns.")
                         }
                     }
                 },
@@ -1072,9 +1072,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                     }
                 },
-
-
-
 
                 beach: {
                     initial: 'saybeach',
