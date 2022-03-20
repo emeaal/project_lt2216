@@ -723,6 +723,50 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             states: {
                                 sayprompt: {
                                     entry: [say(() => "Nevermind! Look! A squirrel has your wallet! Do something!")],
+                                    on: { ENDSPEECH: 'squirrelriver' },
+                                },
+                            },
+                        },
+                    },
+                },
+                squirrelriver: {
+                    initial: 'prompt',
+                    on: {
+                        RECOGNISED: [
+                            {
+                                target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '.shake_tree',
+                                cond: (context) => menu['shake'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'climb_tree',
+                                cond: (context) => menu['climb'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            }
+                        ]
+                    },
+                    states: {
+                        sayacorns: {
+                            ...prompt("The squirrel crosses the river before you can reach it."),
+                            on: { ENDSPEECH: 'ask' },
+                        },
+                        ask: {
+                            ...promptAndAsk("Do you try to: cross the river, shout profanities at the squirrel, or try to lure it with that 10 euros bill you had?"),
+                        },
+                        cross: {
+                            initial: 'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown."),
+                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
                                     on: { ENDSPEECH: '#root.dm.endofgame' },
                                 },
                             },
