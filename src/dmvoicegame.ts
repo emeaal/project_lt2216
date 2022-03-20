@@ -447,7 +447,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-
                         ]
                     },
                     states: {
@@ -653,7 +652,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-
                         ]
                     },
                     states: {
@@ -670,8 +668,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         what: {
                             ...prompt("What do you mean, no? We're chasing it. Come on."),
-                            on: { ENDSPEECH: '#root.dm.voicegameapp.river2' },
-                       
+                            on: { ENDSPEECH: '#root.dm.voicegameapp.river2' },    
                         }
                     }                
                 },
@@ -816,9 +813,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
 
 
 
-                
-
-
 
                 lookforacorns: {
                     initial: 'sayacorns',
@@ -890,7 +884,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-
                         ]
                     },
                     states: {
