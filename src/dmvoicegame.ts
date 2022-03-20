@@ -270,7 +270,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'leave',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -347,7 +347,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'tellforeststory'
                         },
                         tellforeststory: {
-                            ...promptAndAsk("To your right a river is flowing, and to the left there's a cave. Where would you like to go?"),
+                            ...promptAndAsk("Down south you hear a river flowing, and up north there's a cave. Where would you like to go?"),
                         },
                     },
                 },
@@ -481,7 +481,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['help'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '#root.dm.endofgame',
+                                target: 'anotherpath',
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                                 actions: assign({ lifecounter: (context) => context.lifecounter - 1 })
                             },
@@ -530,6 +530,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'anotherpath',
                                 cond: (context) => menu['path'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+ 
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -598,24 +600,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 anotherpath: {
                     initial: 'prompt',
-                    on: {
-                        RECOGNISED: [
-                            {
-                                target: '#root.dm.getHelp',
-                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
-                            },
-                            {
-                                target: 'anotherpath',
-                                cond: (context) => menu['path'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
-
-                            },
-                            {
-                                target: '#root.dm.noMatch'
-                            },
-
-                        ]
-                    },
                     states: {
                         prompt: {
                             ...prompt("You're back to that crossroads again."),
@@ -626,7 +610,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'omg'
                         },
                         omg: {
-                            ...promptAndAsk("Omg look! A squirrel has your wallet. Let's catch it! Hurry"),
+                            ...prompt("Omg look! A squirrel has your wallet. Let's catch it! Hurry"),
                             on: { ENDSPEECH: '#root.dm.init' },
                         },
                     }                
