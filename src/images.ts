@@ -49,11 +49,11 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Offer the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Offer money to it.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Try to give it the money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
-    "Go inside.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
-    "I go inside.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
-    "Inside.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
-    "Go inside The Cave.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
-    "I go inside The Cave.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
+    "Go inside.": { background: 'https://i.imgur.com/pqnAabX.jpg' },
+    "I go inside.": { background: 'https://i.imgur.com/pqnAabX.jpg' },
+    "Inside.": { background: 'https://i.imgur.com/pqnAabX.jpg' },
+    "Go inside The Cave.": { background: 'https://i.imgur.com/pqnAabX.jpg' },
+    "I go inside The Cave.": { background: 'https://i.imgur.com/pqnAabX.jpg' },
 
 
 
