@@ -104,7 +104,7 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'leave': [ "Leave.","I want to leave."
     ],
-    'money': [ "Money.", "Offer money.","Give them money"
+    'money': [ "Money.", "Offer money.","Give them money", "Give it the bill.", "Give it the money.", "Try to give it the bill.", "Try to give it the money."
     ],
     'help': [ "Help.","What should I do?.","I don't know what to do.","The right troll.", "To the right troll."
     ],
@@ -127,6 +127,8 @@ const menu : { [index: string]: Array<string> } = {
     'no': ["No."
 ],
     'lure': ["Try to lure it.", "Lure it.", "Lure.", "Lure"
+],
+'take': ["Take the wallet.", "Try to take the wallet.", "Take it.", "Try to take it."
 ]
 
 
@@ -778,7 +780,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['shout'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '#root.dm.voicegameapp.squirrelriver.shout',
+                                target: '#root.dm.voicegameapp.lure',
                                 cond: (context) => menu['lure'].includes(context.recResult[0].utterance) || context.recResult[0].utterance.includes("river"),
                             },
                             {
@@ -815,6 +817,40 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                     on: { ENDSPEECH: '#root.dm.init' },
                                 },
                             },
+                        },
+                    },
+                },
+                lure: {
+                    initial: 'prompt',
+                    on: {
+                        RECOGNISED: [
+                            {
+                                target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '#root.dm.voicegameapp.ending1',
+                                cond: (context) => menu['money'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '#root.dm.voicegameapp.ending2',
+                                cond: (context) => menu['take'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            }
+                        ]
+                    },
+                    states: {
+                        prompt: {
+                            ...prompt("You whip out your shiny bill and wave it around. The squirrel is immediately attracted to it and crosses the river back to you."),
+                            on: { ENDSPEECH: 'ask' },
+                        },
+                        ask: {
+                            ...promptAndAsk("Do you try to give it the bill in exchange for your wallet, or try to take it forcibly?"),
                         },
                     },
                 },
