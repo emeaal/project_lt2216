@@ -16,7 +16,7 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Give them money": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Give it money.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Offer it money." : { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
-    "To the left.": { background: 'https://i.imgur.com/WCrueUG.jpg' },
+    "To the left.": { background: 'https://jooinn.com/images/river-in-forest-1.jpg' },
     "To the right.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Up north.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Go north.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
