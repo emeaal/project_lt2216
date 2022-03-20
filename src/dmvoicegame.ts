@@ -337,7 +337,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'cave',
-                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("North"),
+                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("North") || context.recResult[0].utterance.includes("north"),
                                 actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
@@ -789,7 +789,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 sayprompt: {
                                     entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown."),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
-                                    on: { ENDSPEECH: '#root.dm.endofgame' },
+                                    on: { ENDSPEECH: '#root.dm.init' },
                                 },
                             },
                         },
@@ -797,9 +797,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game. You can try playing again from the beginnig."),
+                                    entry: [say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game."),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
-                                    on: { ENDSPEECH: '#root.dm.init' },
+                                    on: { ENDSPEECH: '#root.dm.endofgamebeach' },
                                 },
                             },
                         },
