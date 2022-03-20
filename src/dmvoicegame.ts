@@ -132,8 +132,9 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'change': ["I change my mind.", "I changed my mind.", "Changed my mind", "Change your mind."
     ],
-    'inside': ["Go inside.", "I go inside.", "Inside."
+    'inside': ["Go inside.", "I go inside.", "Inside.", "Go inside The Cave.", "I go inside The Cave."
     ],
+    'buy': ["Buy an ice cream.", "Buy.", "I buy an ice cream."]
 
     
 
@@ -471,7 +472,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             on: { ENDSPEECH: 'cavealternatives' },
                         },
                         cavealternatives: {
-                            ...promptAndAsk("You can leave, offer them money or look for acorns.")
+                            ...promptAndAsk("You can leave, offer them some money you have on you or look for acorns.")
                         }
                     }
                 },
@@ -503,7 +504,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     states: {
                         prompt: {
-                            ...prompt("You say you don't have acorns, but you have 10 euros in your pocket. The trolls laugh."),
+                            ...prompt("You say you don't have acorns, but you have two 5 euros bills in your pocket. The trolls laugh."),
                             on: { ENDSPEECH: 'cavealternatives' },
                         },
                         cavealternatives: {
@@ -800,7 +801,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             on: { ENDSPEECH: 'ask' },
                         },
                         ask: {
-                            ...promptAndAsk("Do you try to: cross the river, shout profanities at the squirrel, or try to lure it with that 10 euros bill you had?"),
+                            ...promptAndAsk("Do you try to: cross the river, shout profanities at the squirrel, or try to lure it with that 5 euros bill you had left?"),
                         },
                         cross: {
                             initial: 'sayprompt',
@@ -861,7 +862,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     initial: 'prompt',
                     states: {
                         prompt: {
-                            ...prompt("The squirrel actually takes the bill and gives you the wallet. Dumb squirrel, you think to yourself, but then again, how could it know the difference between a lot of money and a few? Maybe it just likes the color green more. Congratulations! You have won the game! And it seems like the squirrel has offered to help lead you out of the forest and find your way home. I think you're in good hands. Goodbye!"),
+                            ...prompt("The squirrel actually takes the bill and gives you the wallet. Dumb squirrel, you think to yourself, but then again, how could it know the difference between a lot of money and a few? Maybe it just likes the color green more. Congratulations! You have won the game! And it seems like the squirrel has offered to help lead you out of the forest and find your way home. I think you're in good hands. Goodbye and congratulations!"),
                             on: { ENDSPEECH: '#root.dm.init' },
                         },
                     },
@@ -954,7 +955,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             on: { ENDSPEECH: 'climbchoices' },
                         },
                         climbchoices: {
-                            ...promptAndAsk("Do you try to steal them or try to give the squirrel the 10 euros?")
+                            ...promptAndAsk("Do you try to steal them or try to give the squirrel 5 euros?")
                         },
                         steal: {
                             initial: 'sayprompt',
@@ -1019,8 +1020,32 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         
                     }
                 },
+
                 insidecave: {
                     initial: 'prompt',
+                    on: {
+                        RECOGNISED: [
+                            {
+                                target: '#root.dm.getHelp',
+                                cond: (context) => menu['help'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '.buy',
+                                cond: (context) => menu['buy'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '#root.dm.voicegameapp.leave',
+                                cond: (context) => menu['leave'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                            },
+                            {
+                                target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
+                            },
+                            {
+                                target: '#root.dm.noMatch'
+                            },
+                        ]
+                    },
                     states: {
                         prompt: {
                             entry: say(() => "You are now inside the cave."),
@@ -1029,27 +1054,27 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         backgroundChanger: {
                             entry: ['changeBackground'],
                             always: [
-                                {target: 'tellbeachstory1'},
+                                {target: 'inside'},
                             ],
                         },
-                        tellbeachstory1: {
-                            ...promptAndAsk("You take a few steps forward to see more of your surroundings. To your left there's a stranded boat and to your right you see a few palm trees. Where do you go?"),
+                        inside: {
+                            ...promptAndAsk("Out of all the things you expected to see here, you find the unexpected. There's an ice cream stand inside the cave. Do you buy an ice cream or leave?"),
                         },
-                        tellbeachstory2: {
-                            ...promptAndAsk("You've been here before. You take a look at your surroundings. Do you go to the boat to the left or to the palm trees on the right?")
-                        },
-                        boat: {
+                        buy: {
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. I told you it wasn't a beach...Too bad"),
+                                    entry: [say(() => "You buy a strawberry ice cream with the 5 euros you had left, but you unexpectedly lose a life. Weird. "),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
-                                    on: { ENDSPEECH: '#root.dm.endofgamebeach' },
+                                    on: { ENDSPEECH: '#root.dm.endofgame' },
                                 },
                             },
                         },
                     }
                 },
+
+
+
 
                 beach: {
                     initial: 'saybeach',

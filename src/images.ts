@@ -52,6 +52,9 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Go inside.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
     "I go inside.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
     "Inside.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
+    "Go inside The Cave.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
+    "I go inside The Cave.": { background: 'https://media.cntraveler.com/photos/5b0eb5087f70e97cf7c0df28/master/w_1600%2Cc_limit/Son_Doong_16.jpg' },
+
 
 
 }  
