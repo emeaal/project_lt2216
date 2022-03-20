@@ -410,7 +410,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch',
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         cavestory: {
@@ -451,7 +452,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'offer_money_trolls',
-                                cond: (context) => context.recResult[0].utterance.includes("money") || context.recResult[0].utterance.includes("offer"),
+                                cond: (context) => context.recResult[0].utterance.includes("money") || context.recResult[0].utterance.includes("offer") || context.recResult[0].utterance.includes("Money") || context.recResult[0].utterance.includes("Offer"),
                             },
                             {
                                 target: 'lookforacorns',
@@ -464,7 +465,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         cavestory: {
@@ -500,7 +502,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -537,7 +540,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -578,7 +582,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -619,7 +624,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -669,7 +675,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -720,7 +727,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: '#root.dm.voicegameapp.river1.look',                            },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -793,7 +801,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             }
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -846,7 +855,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             }
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -898,7 +908,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             }
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         sayacorns: {
@@ -947,7 +958,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -1007,7 +1019,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -1016,8 +1029,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         choices: {
                             ...promptAndAsk("Do you go inside the cave or do you change your mind?")
-                        },
-                        
+                        },   
                     }
                 },
 
@@ -1044,7 +1056,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             },
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         prompt: {
@@ -1095,7 +1108,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.noMatch'
                             }
-                        ]
+                        ],
+                        TIMEOUT: '..',
                     },
                     states: {
                         saybeach: {
