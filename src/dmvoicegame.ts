@@ -116,6 +116,10 @@ const menu : { [index: string]: Array<string> } = {
     'else': [ "Go somewhere else.", "I want to go somewhere else."
     ],
     'wait': [ "Wait.", "Wait here.", "Let's wait.", "Let's wait a bit.", "Wait a bit."
+    ],
+    'shout': [ "Shout.", "Shout profanities.", "Shout at it.", "Shout profanities at it."
+    ],
+    'cross': [ "Cross.", "Cross the river.", "Try to cross.", "Try to cross the river."
     ]
     
 
