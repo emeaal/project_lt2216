@@ -334,10 +334,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 actions: assign({ background: (context) => img_grammar["River."].background! })
                             },
                             {
-                                target: '#root.dm.init',
-                                cond: (context) => menu['left'].includes(context.recResult[0].utterance),
-                            },
-                            {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
                             },
                             {
@@ -506,11 +502,6 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'backtocave',
                                 cond: (context) => menu['right'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
-                            },
-                            {
-                                target: '#root.dm.init',
-                                cond: (context) => menu['left'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
