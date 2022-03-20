@@ -9,6 +9,7 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Cave.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "River.": {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
     "Yes.": {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
+    "No.": {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
     "South." : {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
     "To the South." : {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},
     "Go down South." : {background: 'https://jooinn.com/images/river-in-forest-1.jpg'},

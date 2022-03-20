@@ -122,7 +122,7 @@ const menu : { [index: string]: Array<string> } = {
     'cross': [ "Cross.", "Cross the river.", "Try to cross.", "Try to cross the river."
     ],
     'yes': ["Yes."],
-    'no': ["No"]
+    'no': ["No."]
     
 
 }
@@ -645,7 +645,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
 
                             },
                             {
-                                target: '#root.dm.voicegameapp.river1',
+                                target: '.what',
                                 cond: (context) => menu['no'].includes(context.recResult[0].utterance),
                                 actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
 
@@ -670,7 +670,8 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         },
                         what: {
                             ...prompt("What do you mean, no? We're chasing it. Come on."),
-                            on: { ENDSPEECH: 'river1' }
+                            on: { ENDSPEECH: '#root.dm.voicegameapp.river1' },
+                       
                         }
                     }                
                 },
