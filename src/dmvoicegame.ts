@@ -122,8 +122,14 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'cross': [ "Cross.", "Cross the river.", "Try to cross.", "Try to cross the river."
     ],
-    'yes': ["Yes."],
-    'no': ["No."]
+    'yes': ["Yes."
+],
+    'no': ["No."
+],
+    'lure': ["Try to lure it.", "Lure it.", "Lure.", "Lure"
+]
+
+
     
 
 }
@@ -770,6 +776,10 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: '#root.dm.voicegameapp.squirrelriver.shout',
                                 cond: (context) => menu['shout'].includes(context.recResult[0].utterance),
+                            },
+                            {
+                                target: '#root.dm.voicegameapp.squirrelriver.shout',
+                                cond: (context) => menu['lure'].includes(context.recResult[0].utterance),
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
