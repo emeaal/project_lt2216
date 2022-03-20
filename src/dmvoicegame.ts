@@ -104,7 +104,7 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'leave': [ "Leave.","I want to leave."
     ],
-    'money': [ "Money.", "Offer money.","Give them money", "Give it the bill.", "Give it the money.", "Try to give it the bill.", "Try to give it the money."
+    'money': [ "Money.", "Offer money.","Offer it money", "Try to offer it money", "Offer money to it", "Give them money", "Give it the bill.", "Give it the money.", "Try to give it the bill.", "Try to give it the money."
     ],
     'help': [ "Help.","What should I do?.","I don't know what to do.","The right troll.", "To the right troll."
     ],
@@ -128,7 +128,7 @@ const menu : { [index: string]: Array<string> } = {
 ],
     'lure': ["Try to lure it.", "Lure it.", "Lure.", "Lure"
 ],
-'take': ["Take the wallet.", "Try to take the wallet.", "Take it.", "Try to take it."
+    'take': ["Take the wallet.", "Try to take the wallet.", "Take it.", "Try to take it."
 ]
 
 
