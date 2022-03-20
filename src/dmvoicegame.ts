@@ -779,7 +779,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: '#root.dm.voicegameapp.squirrelriver.shout',
-                                cond: (context) => menu['lure'].includes(context.recResult[0].utterance),
+                                cond: (context) => menu['lure'].includes(context.recResult[0].utterance) || context.recResult[0].utterance.includes("river"),
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
