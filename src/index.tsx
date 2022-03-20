@@ -313,7 +313,7 @@ function App() {
             recStop: asEffect((context) => {
                 context.asr.abort()
                 /* console.log('Recognition stopped.'); */
-            }),
+            }), 
             ttsStart: asEffect((context) => {
                 let content = `<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="en-US"><voice name="${context.voice.name}">`
                 content = content + (process.env.REACT_APP_TTS_LEXICON ? `<lexicon uri="${process.env.REACT_APP_TTS_LEXICON}"/>` : "")

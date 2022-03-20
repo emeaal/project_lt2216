@@ -46,12 +46,13 @@ const notmatchedsentences = [
     "Don't be shy.",
     "Are you eating and speaking?",
     "Take a breath and try again.",
-    "Are you slow?"
+    "Are you slow?",
+    "Could you repeat that?",
 ]
 
 const helpmessages = [
     "Didn't you pay attention to the rules?",
-    "I don't think is so hard to figure out.",
+    "I don't think it is so hard to figure out.",
     "Think harder.",
     "Let me say that again.",
     "You have a short memory it seems.",
@@ -303,12 +304,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         RECOGNISED: [
                             { //There's probably a way to make these into lowercase so we don't have to type all alternatives with both Capital letter and without
                                 target: 'forest',
-                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest."), // seems like we need this as well...                            
+                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest"), // seems like we need this as well...                            
                                 actions: assign({ background: (context) => img_grammar["Forest."].background! })
                             },
                             {
                                 target: 'beach',
-                                cond: (context) => context.recResult[0].utterance.includes("beach"),
+                                cond: (context) => context.recResult[0].utterance.includes("beach") || context.recResult[0].utterance.includes("Beach"),
                                 actions: assign({ background: (context) => img_grammar["Beach."].background! })
                             },
                             {
@@ -336,12 +337,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'cave',
-                                cond: (context) => context.recResult[0].utterance.includes("cave") || context.recResult[0].utterance.includes("left"),
+                                cond: (context) => context.recResult[0].utterance.includes("Cave") || context.recResult[0].utterance.includes("North") || context.recResult[0].utterance.includes("north"),
                                 actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
                                 target: 'river1',
-                                cond: (context) => context.recResult[0].utterance.includes("river") || context.recResult[0].utterance.includes("north"),
+                                cond: (context) => context.recResult[0].utterance.includes("river") || context.recResult[0].utterance.includes("South"),
                                 actions: assign({ background: (context) => img_grammar["River."].background! })
                             },
                             {
@@ -430,7 +431,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'leave',
                                 cond: (context) => context.recResult[0].utterance.includes("leave"),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Leave."].background! })
                             },
                             {
                                 target: 'offer_money_trolls',
@@ -439,7 +440,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'lookforacorns',
                                 cond: (context) => context.recResult[0].utterance.includes("acorns") || context.recResult[0].utterance.includes("look"),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Acorns."].background! })
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -470,7 +471,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'leave',
                                 cond: (context) => context.recResult[0].utterance.includes("leave"),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Leave."].background! })
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -478,7 +479,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'lookforacorns',
                                 cond: (context) => context.recResult[0].utterance.includes("acorn") || context.recResult[0].utterance.includes("look"),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Acorns."].background! })
                             },
                             {
                                 target: '#root.dm.noMatch'
@@ -487,7 +488,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     },
                     states: {
                         prompt: {
-                            ...prompt("You say you don't have acorns, but you have 10 euros in your pocket . The trolls laugh."),
+                            ...prompt("You say you don't have acorns, but you have 10 euros in your pocket. The trolls laugh."),
                             on: { ENDSPEECH: 'cavealternatives' },
                         },
                         cavealternatives: {
@@ -506,13 +507,13 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'river1',
                                 cond: (context) => menu['left'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["River."].background! })
 
                             },
                             {
                                 target: 'backtocave',
                                 cond: (context) => menu['right'].includes(context.recResult[0].utterance),
-                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
+                                actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -702,11 +703,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                                 cond: (context) => menu['wait'].includes(context.recResult[0].utterance),
                             },
                             {
-                                target: '#root.dm.voicegameapp.river1.look'
-                            },
-                            {
-                                target: '#root.dm.noMatch'
-                            },
+                                target: '#root.dm.voicegameapp.river1.look',                            },
                         ]
                     },
                     states: {
@@ -719,7 +716,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             always: 'ask'
                         },
                         ask: {
-                            ...promptAndAsk("Not much to see here actually. Do you like, want to wait here for a bit, or go somewhere else?"),
+                            ...promptAndAsk("Not much to see here actually. Do you want to wait here for a bit, or go somewhere else?"),
                         },
                         somewhere_else: {
                             initial: 'sayprompt',
@@ -764,7 +761,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: '#root.dm.voicegameapp.squirrelriver.cross',
-                                cond: (context) => menu['cross'].includes(context.recResult[0].utterance),
+                                cond: (context) => context.recResult[0].utterance.includes("cross") || context.recResult[0].utterance.includes("river"),
                             },
                             {
                                 target: '#root.dm.voicegameapp.squirrelriver.shout',
@@ -790,9 +787,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown."),
+                                    entry: [say(() => "You try to cross the river but you lose your balance and you fall in it. You drown and lost all of your lives."),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
-                                    on: { ENDSPEECH: '#root.dm.endofgame' },
+                                    on: { ENDSPEECH: '#root.dm.init' },
                                 },
                             },
                         },
@@ -800,9 +797,9 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game. You can try playing again from the beginnig."),
+                                    entry: [say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game."),
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
-                                    on: { ENDSPEECH: '#root.dm.init' },
+                                    on: { ENDSPEECH: '#root.dm.endofgamebeach' },
                                 },
                             },
                         },
