@@ -797,8 +797,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game, your wallet is gone forever."),
-                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
+                                    entry: say(() => "Out of frustration you shout some pretty heavy stuff at the squirrel. I guess somehow it understood you, because it throws your wallet in the river. Nice job genius. You lose the game, your wallet is gone forever."),
                                     on: { ENDSPEECH: '#root.dm.init' },
                                 },
                             },
