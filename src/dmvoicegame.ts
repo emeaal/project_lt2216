@@ -294,7 +294,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'climb_tree',
+            initial: 'cave2',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -993,10 +993,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             {
                                 target: 'insidecave',
                                 cond: (context) => menu['inside'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
-                                target: '#root.dm.leave',
+                                target: '#root.dm.voicegameapp.leave',
                                 cond: (context) => menu['change'].includes(context.recResult[0].utterance),
+                                actions: assign({ background: (context) => img_grammar[context.recResult[0].utterance].background! })
                             },
                             {
                                 target: 'stop', cond: (context) => "stop" in (stopwords[context.recResult[0].utterance] || {}) 
@@ -1017,6 +1019,38 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         
                     }
                 },
+                insidecave: {
+                    initial: 'prompt',
+                    states: {
+                        prompt: {
+                            entry: say(() => "You are now inside the cave."),
+                            on: { ENDSPEECH: 'backgroundChanger' },
+                        },
+                        backgroundChanger: {
+                            entry: ['changeBackground'],
+                            always: [
+                                {target: 'tellbeachstory1'},
+                            ],
+                        },
+                        tellbeachstory1: {
+                            ...promptAndAsk("You take a few steps forward to see more of your surroundings. To your left there's a stranded boat and to your right you see a few palm trees. Where do you go?"),
+                        },
+                        tellbeachstory2: {
+                            ...promptAndAsk("You've been here before. You take a look at your surroundings. Do you go to the boat to the left or to the palm trees on the right?")
+                        },
+                        boat: {
+                            initial: 'sayprompt',
+                            states: {
+                                sayprompt: {
+                                    entry: [say(() => "Oh no! A shark was swimming right next to the boat. It attacks you and you don't survive. I told you it wasn't a beach...Too bad"),
+                                    assign({ lifecounter: (context) => context.lifecounter - 1 })],
+                                    on: { ENDSPEECH: '#root.dm.endofgamebeach' },
+                                },
+                            },
+                        },
+                    }
+                },
+
                 beach: {
                     initial: 'saybeach',
                     on: {
