@@ -165,7 +165,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 backgroundChanger: {
                     entry: ['changeBackground'],
-                    always: '#root.dm.voicegameapp.hist'
+                    always: '#root.dm.voicegameapp.histforask'
                 },
             }
         },
