@@ -295,7 +295,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'welcome',
+            initial: 'hello',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -429,7 +429,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             initial: 'sayprompt',
                             states: {
                                 sayprompt: {
-                                    entry: [say(() => "You get hit in the head with a bat. You're now dead. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
+                                    entry: [say(() => "You get hit in the head with a bat. Turns out, the one you talked to was the second in command. The older brother wants people to recognise he's in charge and you upset him."), 
                                     assign({ lifecounter: (context) => context.lifecounter - 1 })],
                                     on: { ENDSPEECH: '#root.dm.endofgame' },
                                 },
