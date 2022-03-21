@@ -447,7 +447,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'leave',
-                                cond: (context) => context.recResult[0].utterance.includes("leave"),
+                                cond: (context) => context.recResult[0].utterance.includes("leave" || "Leave"),
                                 actions: assign({ background: (context) => img_grammar["Leave."].background! })
                             },
                             {
