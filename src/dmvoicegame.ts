@@ -126,7 +126,7 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'no': ["No."
     ],
-    'lure': ["Try to lure it.", "Lure it.", "Lure.", "Lure"
+    'lure': ["Try to lure it.", "Lure it.", "Lure.", "Lure", "I want to lure it", 
     ],
     'take': ["Take the wallet.", "Try to take the wallet.", "Take it.", "Try to take it."
     ],
