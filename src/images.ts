@@ -28,7 +28,7 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Up north.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "Go north.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' },
     "To the north.": { background: 'https://i.imgur.com/LN6RQOJ.jpg' }, 
-    "Acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
+    "Acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
     "Find acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
     "Find some acorns": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },
     "Find some acorns.": { background: 'https://wallpaperaccess.com/full/4101978.jpg' },

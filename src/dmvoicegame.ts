@@ -398,7 +398,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'left_troll',
-                                cond: (context) => menu['left'].includes(context.recResult[0].utterance)
+                                cond: (context) => context.recResult[0].utterance.includes("left" || "Left"),
                             },
                             {
                                 target: '.right_troll',
