@@ -165,7 +165,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                 },
                 backgroundChanger: {
                     entry: ['changeBackground'],
-                    always: '#root.dm.voicegameapp.histforask'
+                    always: '#root.dm.voicegameapp.hist'
                 },
             }
         },
@@ -174,7 +174,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             states: {
                 helpmessage: {
                     entry: say(() => helpmessages[Math.floor(Math.random() * (helpmessages.length))]),
-                    on: { ENDSPEECH: '#root.dm.voicegameapp' },
+                    on: { ENDSPEECH: '#root.dm.voicegameapp.histforask' },
                 }
             }
         },
