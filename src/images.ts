@@ -57,6 +57,4 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "Go inside The Cave.": { background: 'https://i.imgur.com/pqnAabX.jpg' },
     "I go inside The Cave.": { background: 'https://i.imgur.com/pqnAabX.jpg' },
 
-
-
 }  
