@@ -285,11 +285,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                     on: { ENDSPEECH: '#root.dm.idle' },
                 },
                 twolivesleft: {
-                    entry: [say((context) => `You still have ${context.lifecounter} lives left. Try finding the right path`), 'changeBackground'],
+                    entry: [say((context) => `You still have ${context.lifecounter} lives left. Try finding the right path. Where should you go?`), 'changeBackground'],
                     on: { ENDSPEECH: '#root.dm.voicegameapp.welcome.hist' }
                 },
                 onelifeleft: {
-                    entry: [say((context) => `You still have ${context.lifecounter} life left. Try finding the right path`), 'changeBackground'],
+                    entry: [say((context) => `You still have ${context.lifecounter} life left. Try finding the right path. Where should you go?`), 'changeBackground'],
                     on: { ENDSPEECH: '#root.dm.voicegameapp.welcome.hist' },
                 },
             },
