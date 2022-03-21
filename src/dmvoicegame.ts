@@ -295,7 +295,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
             },
         },
         voicegameapp: {
-            initial: 'hello',
+            initial: 'welcome',
             entry: 'changeBackground',
             states: {
                 hist: {
@@ -320,12 +320,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                         RECOGNISED: [
                             { //There's probably a way to make these into lowercase so we don't have to type all alternatives with both Capital letter and without
                                 target: 'forest',
-                                cond: (context) => context.recResult[0].utterance.includes("forest") || context.recResult[0].utterance.includes("Forest"), // seems like we need this as well...                            
+                                cond: (context) => context.recResult[0].utterance.includes("forest" || "Forest"), // seems like we need this as well...                            
                                 actions: assign({ background: (context) => img_grammar["Forest."].background! })
                             },
                             {
                                 target: 'beach',
-                                cond: (context) => context.recResult[0].utterance.includes("beach") || context.recResult[0].utterance.includes("Beach"),
+                                cond: (context) => context.recResult[0].utterance.includes("beach" || "Beach"),
                                 actions: assign({ background: (context) => img_grammar["Beach."].background! })
                             },
                             {
@@ -353,12 +353,12 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'cave',
-                                cond: (context) => context.recResult[0].utterance.includes("Cave") || context.recResult[0].utterance.includes("North") || context.recResult[0].utterance.includes("north"),
+                                cond: (context) => context.recResult[0].utterance.includes("Cave" || "North" || "north"),
                                 actions: assign({ background: (context) => img_grammar["Cave."].background! })
                             },
                             {
                                 target: 'river1',
-                                cond: (context) => context.recResult[0].utterance.includes("river") || context.recResult[0].utterance.includes("South"),
+                                cond: (context) => context.recResult[0].utterance.includes("river" || "South"),
                                 actions: assign({ background: (context) => img_grammar["River."].background! })
                             },
                             {
@@ -452,11 +452,11 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'offer_money_trolls',
-                                cond: (context) => context.recResult[0].utterance.includes("money") || context.recResult[0].utterance.includes("offer") || context.recResult[0].utterance.includes("Money") || context.recResult[0].utterance.includes("Offer"),
+                                cond: (context) => context.recResult[0].utterance.includes("money" || "offer" || "Offer"),
                             },
                             {
                                 target: 'lookforacorns',
-                                cond: (context) => context.recResult[0].utterance.includes("acorns") || context.recResult[0].utterance.includes("look"),
+                                cond: (context) => context.recResult[0].utterance.includes("acorns" || "look"),
                                 actions: assign({ background: (context) => img_grammar["Acorns."].background! })
                             },
                             {
@@ -488,7 +488,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'leave',
-                                cond: (context) => context.recResult[0].utterance.includes("leave") || context.recResult[0].utterance.includes("Leave"), 
+                                cond: (context) => context.recResult[0].utterance.includes("leave" || "Leave"), 
                                 actions: assign({ background: (context) => img_grammar["Leave."].background! })
                             },
                             {
@@ -496,7 +496,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: 'lookforacorns',
-                                cond: (context) => context.recResult[0].utterance.includes("acorn") || context.recResult[0].utterance.includes("look"),
+                                cond: (context) => context.recResult[0].utterance.includes("acorn" || "look"),
                                 actions: assign({ background: (context) => img_grammar["Acorns."].background! })
                             },
                             {
@@ -785,7 +785,7 @@ export const dmMachine: MachineConfig<SDSContext, any, SDSEvent> = ({
                             },
                             {
                                 target: '#root.dm.voicegameapp.squirrelriver.cross',
-                                cond: (context) => context.recResult[0].utterance.includes("cross") || context.recResult[0].utterance.includes("river"),
+                                cond: (context) => context.recResult[0].utterance.includes("cross" || "river"),
                             },
                             {
                                 target: '#root.dm.voicegameapp.squirrelriver.shout',
