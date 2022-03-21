@@ -102,7 +102,7 @@ const menu : { [index: string]: Array<string> } = {
     ],
     'right': [ "Right.","To the right.",  "The right one.", "To the right one.", "I want to go to the right.", "The right troll.","To the right troll.", "Right?",
     ],
-    'leave': [ "Leave.","I want to leave."
+    'leave': [ "Leave.","I want to leave.", "Leave", "Live"
     ],
     'money': [ "Money.", "Offer money.","Offer it money", "Try to offer it money", "Offer money to it", "Give them money", "Give it the bill.", "Give it the money.", "Try to give it the bill.", "Try to give it the money."
     ],
