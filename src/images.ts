@@ -4,6 +4,8 @@ const img_grammar: { [index: string]: { background?: any } } = {
     "A forest.": { background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg' },
     "Forest.": { background: 'https://nordicforestresearch.org/wp-content/uploads/2020/05/forest-4181023_1280.jpg' },
     "Leave.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
+    "Leave": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
+    "I want to leave.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
     "I change my mind.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
     "I changed my mind.": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
     "Changed my mind": { background: 'https://thumbs.dreamstime.com/b/crossroads-forest-3448364.jpg' },
